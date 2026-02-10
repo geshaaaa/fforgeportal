@@ -314,9 +314,9 @@ export default function OnboardingPage() {
               </div>
             </div>
 
-            {/* What You'll Need Panel */}
+            {/* What You&apos;ll Need Panel */}
             <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg border border-blue-200 p-6 hover:from-blue-100 hover:to-blue-200 hover:shadow-md transition-all duration-200">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">What You'll Need</h2>
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">What You&apos;ll Need</h2>
               <div className="space-y-4">
                 <div className="flex items-start gap-3 p-2 rounded-lg hover:bg-white/50 transition-colors duration-200 group">
                   <Server className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0 group-hover:scale-110 transition-transform duration-200" />
