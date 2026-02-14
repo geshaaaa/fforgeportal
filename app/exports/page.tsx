@@ -6,7 +6,8 @@ import {
   Search, Filter, Plus, Building2, CheckCircle2, XCircle, Clock, 
   Play, Settings, Copy, Eye, Download, AlertCircle, Server, 
   FileText, Calendar, Mail, Key, Folder, FileCode, MapPin,
-  Globe, Send, Webhook, Database, Zap
+  Globe, Send, Webhook, Database, Zap, RotateCcw, Save, Circle, Minus,
+  ChevronLeft, ChevronRight
 } from 'lucide-react';
 
 interface Site {
@@ -42,6 +43,37 @@ interface ExportRun {
   errorDetails?: string;
 }
 
+interface ExportFile {
+  id: number;
+  siteName: string;
+  exportName: string;
+  fileName: string;
+  path: string;
+  sftp: string;
+  delimiter: string;
+  sortBy: string;
+  isActive: boolean;
+  isAllEnabled: boolean;
+}
+
+interface ExportProfile {
+  id: number;
+  displayName: string;
+  protocol: string;
+  serverName: string;
+  userName: string;
+  modifiedOn: string;
+  isActive: boolean;
+}
+
+interface ExportFieldMapping {
+  id: number;
+  dbField: string;
+  exportFieldName: string;
+  sortOrder: number;
+  isMapped: boolean;
+}
+
 export default function ExportsPage() {
   const [selectedSite, setSelectedSite] = useState<string>('1');
   const [searchQuery, setSearchQuery] = useState('');
@@ -50,12 +82,104 @@ export default function ExportsPage() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [selectedChannel, setSelectedChannel] = useState<ExportChannel | null>(null);
   const [activeTab, setActiveTab] = useState<'destination' | 'exportContent' | 'format' | 'schedule' | 'notifications'>('destination');
+  
+  // New sections state
+  const [activeSection, setActiveSection] = useState<'exportFiles' | 'exportProfile' | 'fieldMapping'>('exportFiles');
+  const [exportFileSearchQuery, setExportFileSearchQuery] = useState('');
+  const [exportProfileSearchQuery, setExportProfileSearchQuery] = useState('');
+  const [fieldMappingSearchQuery, setFieldMappingSearchQuery] = useState('');
+  const [isExportFileModalOpen, setIsExportFileModalOpen] = useState(false);
+  const [isExportProfileModalOpen, setIsExportProfileModalOpen] = useState(false);
+  const [selectedExportFile, setSelectedExportFile] = useState<ExportFile | null>(null);
+  const [selectedExportProfile, setSelectedExportProfile] = useState<ExportProfile | null>(null);
+  const [selectedCustomer, setSelectedCustomer] = useState('Potpourri');
+  const [selectedSiteForMapping, setSelectedSiteForMapping] = useState('Back In The Saddle');
+  const [selectedExportForMapping, setSelectedExportForMapping] = useState('Bing Export');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
-  const sites: Site[] = [
+  const [sites, setSites] = useState<Site[]>([
     { id: '1', name: 'Main Office', code: 'SITE001', status: 'active', lastExportStatus: 'success', lastExportTime: '1 hour ago' },
     { id: '2', name: 'Warehouse A', code: 'SITE002', status: 'active', lastExportStatus: 'success', lastExportTime: '3 hours ago' },
     { id: '3', name: 'Retail Store', code: 'SITE003', status: 'paused', lastExportStatus: 'failed', lastExportTime: '1 day ago' },
     { id: '4', name: 'Distribution Center', code: 'SITE004', status: 'active', lastExportStatus: 'success', lastExportTime: '30 min ago' },
+  ]);
+
+  const toggleSiteStatus = (siteId: string) => {
+    setSites(prevSites => 
+      prevSites.map(site => 
+        site.id === siteId 
+          ? { ...site, status: site.status === 'active' ? 'paused' : 'active' }
+          : site
+      )
+    );
+  };
+
+  const [exportFiles, setExportFiles] = useState<ExportFile[]>([
+    { id: 600, siteName: 'Signals', exportName: 'CJ Export', fileName: 'signals_cj.txt', path: 'C:\\Production\\Pr...', sftp: 'FTP for Signals', delimiter: 'TAB', sortBy: 'id', isActive: true, isAllEnabled: false },
+    { id: 449, siteName: 'Basbleu', exportName: 'Google Shopping', fileName: 'basbleu_google.txt', path: 'C:\\Production\\Pr...', sftp: 'Basbleu Criteo', delimiter: 'TAB', sortBy: 'id', isActive: true, isAllEnabled: false },
+    { id: 9, siteName: 'Natures Jewelry', exportName: 'Criteo Export', fileName: 'naturesjewelry_criteo.txt', path: 'C:\\Production\\Pr...', sftp: 'NaturesJewelry Micro...', delimiter: 'TAB', sortBy: 'id', isActive: true, isAllEnabled: false },
+    { id: 10, siteName: 'Young Explorers', exportName: 'Bing Shopping', fileName: 'youngexplorers_bing.txt', path: 'C:\\Production\\Pr...', sftp: 'data-sftp.criteo.com', delimiter: 'TAB', sortBy: 'id', isActive: true, isAllEnabled: false },
+    { id: 11, siteName: 'Signals Al', exportName: 'Google Shopping', fileName: 'signals_google_Al.txt', path: 'C:\\Production\\Pr...', sftp: 'FTP for Signal Al', delimiter: 'TAB', sortBy: 'id', isActive: true, isAllEnabled: true },
+    { id: 12, siteName: 'Chadwicks', exportName: 'Links', fileName: 'links.csv', path: 'C:\\Production\\Pr...', sftp: 'FTP for Chadwicks', delimiter: '', sortBy: 'id', isActive: true, isAllEnabled: false },
+    { id: 13, siteName: 'Whatever Works', exportName: '404 Checker', fileName: 'whateverworks_404.txt', path: 'C:\\Production\\Pr...', sftp: 'FTP for Whatever Works', delimiter: 'TAB', sortBy: 'id', isActive: false, isAllEnabled: false },
+    { id: 14, siteName: 'In The Company of Dogs', exportName: 'Crawl Breadcrumbs Lin...', fileName: 'companydogs404Checker.txt', path: 'C:\\Production\\Pr...', sftp: 'FTP for Company Dogs', delimiter: 'TAB', sortBy: 'id', isActive: true, isAllEnabled: false },
+  ]);
+
+  const [exportProfiles, setExportProfiles] = useState<ExportProfile[]>([
+    { id: 1, displayName: 'FTP for Northstyle', protocol: 'FTP', serverName: '103.235.104.206', userName: 'ETLUser', modifiedOn: 'Apr 26 2025 1:04AM', isActive: true },
+    { id: 2, displayName: 'FTP for Signals', protocol: 'FTP', serverName: '103.235.104.206', userName: 'ETLUser', modifiedOn: 'Apr 26 2025 1:04AM', isActive: true },
+    { id: 3, displayName: 'Read Only (Test SFTP Server)', protocol: 'SFTP', serverName: 'test.rebex.net', userName: 'demo', modifiedOn: 'Oct 5 2024 6:08AM', isActive: false },
+    { id: 4, displayName: 'FTP for Basbleu', protocol: 'FTP', serverName: '103.235.104.206', userName: 'ETLUser', modifiedOn: 'Apr 26 2025 1:04AM', isActive: true },
+    { id: 5, displayName: 'FTP for Chadwicks', protocol: 'FTP', serverName: '103.235.104.206', userName: 'ETLUser', modifiedOn: 'Apr 26 2025 1:04AM', isActive: true },
+    { id: 6, displayName: 'FTP for Whatever Works', protocol: 'FTP', serverName: '103.235.104.206', userName: 'ETLUser', modifiedOn: 'Apr 26 2025 1:04AM', isActive: true },
+    { id: 7, displayName: 'Our New SFTP Server', protocol: 'SFTP', serverName: '198.38.89.166', userName: 'MagellansUser', modifiedOn: 'Mar 25 2025 1:52AM', isActive: false },
+  ]);
+
+  const toggleExportFileActive = (fileId: number) => {
+    setExportFiles(prevFiles => 
+      prevFiles.map(file => 
+        file.id === fileId 
+          ? { ...file, isActive: !file.isActive }
+          : file
+      )
+    );
+  };
+
+  const toggleExportFileAllEnabled = (fileId: number) => {
+    setExportFiles(prevFiles => 
+      prevFiles.map(file => 
+        file.id === fileId 
+          ? { ...file, isAllEnabled: !file.isAllEnabled }
+          : file
+      )
+    );
+  };
+
+  const toggleExportProfileActive = (profileId: number) => {
+    setExportProfiles(prevProfiles => 
+      prevProfiles.map(profile => 
+        profile.id === profileId 
+          ? { ...profile, isActive: !profile.isActive }
+          : profile
+      )
+    );
+  };
+
+  const exportFieldMappings: ExportFieldMapping[] = [
+    { id: 1, dbField: 'id', exportFieldName: 'id', sortOrder: 10, isMapped: true },
+    { id: 2, dbField: 'title', exportFieldName: 'title', sortOrder: 20, isMapped: true },
+    { id: 3, dbField: 'description', exportFieldName: 'description', sortOrder: 30, isMapped: true },
+    { id: 4, dbField: 'bing_link', exportFieldName: 'link', sortOrder: 40, isMapped: true },
+    { id: 5, dbField: 'price', exportFieldName: 'price', sortOrder: 50, isMapped: true },
+    { id: 6, dbField: 'availability', exportFieldName: 'availability', sortOrder: 60, isMapped: true },
+    { id: 7, dbField: 'image_link', exportFieldName: 'image_link', sortOrder: 70, isMapped: true },
+    { id: 8, dbField: 'brand', exportFieldName: 'brand', sortOrder: 80, isMapped: true },
+    { id: 9, dbField: 'condition', exportFieldName: 'condition', sortOrder: 90, isMapped: true },
+    { id: 10, dbField: 'gtin', exportFieldName: 'gtin', sortOrder: 100, isMapped: true },
+    { id: 11, dbField: 'mpn', exportFieldName: 'mpn', sortOrder: 110, isMapped: true },
+    { id: 12, dbField: 'google_product_category', exportFieldName: 'product_category', sortOrder: 130, isMapped: true },
+    { id: 13, dbField: 'color', exportFieldName: 'color', sortOrder: 140, isMapped: true },
+    { id: 14, dbField: 'gender', exportFieldName: 'gender', sortOrder: 150, isMapped: true },
   ];
 
   const exportChannels: ExportChannel[] = [
@@ -242,28 +366,41 @@ export default function ExportsPage() {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 flex overflow-hidden">
+      <main className="flex-1 flex overflow-hidden relative">
+        {/* Slider Toggle Button - Always visible, positioned outside sidebar */}
+        <button
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+          className={`absolute ${isSidebarOpen ? 'left-full sm:left-80 lg:left-96 -ml-8' : 'left-0'} top-1/2 -translate-y-1/2 z-30 bg-white border border-gray-300 ${isSidebarOpen ? 'rounded-l-lg' : 'rounded-r-lg'} p-2 shadow-md hover:bg-gray-50 transition-all duration-300 ease-in-out hover:shadow-lg`}
+          title={isSidebarOpen ? 'Hide Sidebar' : 'Show Sidebar'}
+        >
+          {isSidebarOpen ? (
+            <ChevronLeft className="w-4 h-4 text-gray-600" />
+          ) : (
+            <ChevronRight className="w-4 h-4 text-gray-600" />
+          )}
+        </button>
+
         {/* Left Sidebar - Sites List */}
-        <aside className="w-full sm:w-80 lg:w-96 border-r border-gray-200 bg-gray-50 overflow-y-auto">
-          <div className="p-4 space-y-2">
-            <h2 className="text-sm font-semibold text-gray-700 mb-3 px-2">Sites</h2>
+        <aside className={`${isSidebarOpen ? 'w-full sm:w-80 lg:w-96' : 'w-0'} border-r border-gray-200 bg-gray-50 overflow-y-auto transition-all duration-300 ease-in-out relative`}>
+          <div className={`p-3 space-y-1.5 ${isSidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+            <h2 className="text-sm font-semibold text-gray-700 mb-2 px-2">Sites</h2>
             {filteredSites.map((site) => (
               <div
                 key={site.id}
                 onClick={() => setSelectedSite(site.id)}
-                className={`p-4 rounded-lg border cursor-pointer transition-all duration-200 ${
+                className={`p-2.5 rounded-lg border cursor-pointer transition-all duration-200 ${
                   selectedSite === site.id
                     ? 'bg-blue-50 border-blue-300 shadow-md'
                     : 'bg-white border-gray-200 hover:border-blue-200 hover:bg-blue-50/50 hover:shadow-sm'
                 }`}
               >
-                <div className="flex items-start justify-between mb-2">
+                <div className="flex items-start justify-between mb-1">
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-gray-900 truncate">{site.name}</h3>
+                    <h3 className="font-semibold text-sm text-gray-900 truncate">{site.name}</h3>
                     <p className="text-xs text-gray-500 mt-0.5">{site.code}</p>
                   </div>
                   <div className="flex items-center gap-1.5 ml-2">
-                    <span className={`px-2 py-0.5 rounded text-xs font-medium ${
+                    <span className={`px-1.5 py-0.5 rounded text-xs font-medium ${
                       site.status === 'active' 
                         ? 'bg-green-100 text-green-700' 
                         : 'bg-gray-100 text-gray-700'
@@ -273,13 +410,13 @@ export default function ExportsPage() {
                   </div>
                 </div>
                 
-                <div className="flex items-center gap-2 mt-3">
+                <div className="flex items-center gap-1.5 mt-2">
                   {site.lastExportStatus === 'success' ? (
-                    <CheckCircle2 className="w-4 h-4 text-green-600" />
+                    <CheckCircle2 className="w-3.5 h-3.5 text-green-600" />
                   ) : site.lastExportStatus === 'failed' ? (
-                    <XCircle className="w-4 h-4 text-red-600" />
+                    <XCircle className="w-3.5 h-3.5 text-red-600" />
                   ) : (
-                    <Clock className="w-4 h-4 text-yellow-600" />
+                    <Clock className="w-3.5 h-3.5 text-yellow-600" />
                   )}
                   <span className="text-xs text-gray-600">Last export: {site.lastExportTime}</span>
                 </div>
@@ -304,7 +441,11 @@ export default function ExportsPage() {
                       <input
                         type="checkbox"
                         checked={currentSite.status === 'active'}
-                        onChange={() => {}}
+                        onChange={(e) => {
+                          e.stopPropagation();
+                          toggleSiteStatus(currentSite.id);
+                        }}
+                        onClick={(e) => e.stopPropagation()}
                         className="sr-only peer"
                       />
                       <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
@@ -324,181 +465,622 @@ export default function ExportsPage() {
                 </div>
               </div>
 
-              {/* Export Channels Table */}
-              <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
-                <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
-                  <div className="overflow-x-auto">
-                    <table className="w-full">
-                      <thead className="bg-gray-50 border-b border-gray-200">
-                        <tr>
-                          <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Channel Name</th>
-                          <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Type</th>
-                          <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Destination</th>
-                          <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Format</th>
-                          <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Schedule</th>
-                          <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Status</th>
-                          <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Last Run</th>
-                          <th className="px-4 py-3 text-right text-xs font-semibold text-gray-700 uppercase tracking-wider">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody className="bg-white divide-y divide-gray-200">
-                        {filteredChannels.map((channel) => {
-                          const Icon = getChannelIcon(channel.channelType);
-                          return (
-                            <tr
-                              key={channel.id}
-                              className="hover:bg-blue-50/50 transition-colors duration-150 cursor-pointer"
-                              onClick={() => openDrawer(channel)}
-                            >
-                              <td className="px-4 py-4 whitespace-nowrap">
-                                <div className="font-medium text-gray-900">{channel.name}</div>
-                              </td>
-                              <td className="px-4 py-4 whitespace-nowrap">
-                                <div className="flex items-center gap-2">
-                                  <Icon className="w-4 h-4 text-blue-600" />
-                                  <span className={`px-2 py-1 rounded text-xs font-medium ${
-                                    channel.channelType === 'SFTP' ? 'bg-blue-100 text-blue-700' :
-                                    channel.channelType === 'HTML Drop' ? 'bg-green-100 text-green-700' :
-                                    channel.channelType === 'Email' ? 'bg-purple-100 text-purple-700' :
-                                    'bg-orange-100 text-orange-700'
-                                  }`}>
-                                    {channel.channelType}
-                                  </span>
-                                </div>
-                              </td>
-                              <td className="px-4 py-4">
-                                <div className="text-sm text-gray-600 truncate max-w-xs">{channel.destination}</div>
-                              </td>
-                              <td className="px-4 py-4 whitespace-nowrap">
-                                <span className="text-sm text-gray-600">{channel.format}</span>
-                              </td>
-                              <td className="px-4 py-4 whitespace-nowrap">
-                                <div className="flex items-center gap-1.5 text-sm text-gray-600">
-                                  <Calendar className="w-4 h-4" />
-                                  {channel.schedule}
-                                </div>
-                              </td>
-                              <td className="px-4 py-4 whitespace-nowrap">
-                                <span className={`px-2 py-1 rounded text-xs font-medium ${
-                                  channel.status === 'enabled'
-                                    ? 'bg-green-100 text-green-700'
-                                    : 'bg-gray-100 text-gray-700'
-                                }`}>
-                                  {channel.status === 'enabled' ? 'Enabled' : 'Disabled'}
-                                </span>
-                              </td>
-                              <td className="px-4 py-4 whitespace-nowrap">
-                                <div className="flex items-center gap-2">
-                                  {channel.lastRunStatus === 'success' ? (
-                                    <CheckCircle2 className="w-4 h-4 text-green-600" />
-                                  ) : (
-                                    <XCircle className="w-4 h-4 text-red-600" />
-                                  )}
-                                  <span className="text-sm text-gray-600">{channel.lastRun}</span>
-                                </div>
-                              </td>
-                              <td className="px-4 py-4 whitespace-nowrap text-right">
-                                <div className="flex items-center justify-end gap-1" onClick={(e) => e.stopPropagation()}>
-                                  <button
-                                    onClick={() => openDrawer(channel)}
-                                    className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded transition-all duration-200"
-                                    title="Edit"
-                                  >
-                                    <Settings className="w-4 h-4" />
-                                  </button>
-                                  <button
-                                    className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded transition-all duration-200"
-                                    title="Duplicate"
-                                  >
-                                    <Copy className="w-4 h-4" />
-                                  </button>
-                                  <button
-                                    className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded transition-all duration-200"
-                                    title="Disable"
-                                  >
-                                    <XCircle className="w-4 h-4" />
-                                  </button>
-                                  <button
-                                    className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded transition-all duration-200"
-                                    title="View history"
-                                  >
-                                    <Eye className="w-4 h-4" />
-                                  </button>
-                                </div>
-                              </td>
-                            </tr>
-                          );
-                        })}
-                      </tbody>
-                    </table>
-                  </div>
+              {/* Section Tabs */}
+              <div className="border-b border-gray-200 bg-white">
+                <div className="flex space-x-1 px-4 sm:px-6 lg:px-8">
+                  {[
+                    { id: 'exportFiles', label: 'Manage Export Files', icon: FileText },
+                    { id: 'exportProfile', label: 'Export Profile', icon: Server },
+                    { id: 'fieldMapping', label: 'Export File Field Mapping', icon: MapPin },
+                  ].map((section) => {
+                    const Icon = section.icon;
+                    return (
+                      <button
+                        key={section.id}
+                        onClick={() => setActiveSection(section.id as any)}
+                        className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-all duration-200 whitespace-nowrap ${
+                          activeSection === section.id
+                            ? 'border-blue-600 text-blue-600'
+                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                        }`}
+                      >
+                        <Icon className="w-4 h-4" />
+                        {section.label}
+                      </button>
+                    );
+                  })}
                 </div>
+              </div>
 
-                {/* Export History */}
-                <div className="mt-8">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Export History</h3>
-                  <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
-                    <div className="overflow-x-auto">
-                      <table className="w-full">
-                        <thead className="bg-gray-50 border-b border-gray-200">
-                          <tr>
-                            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Start Time</th>
-                            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Output File</th>
-                            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">File Size</th>
-                            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Record Count</th>
-                            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Status</th>
-                            <th className="px-4 py-3 text-right text-xs font-semibold text-gray-700 uppercase tracking-wider">Actions</th>
-                          </tr>
-                        </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
-                          {exportRuns.map((run) => (
-                            <tr key={run.id} className="hover:bg-blue-50/50 transition-colors duration-150">
-                              <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-600">{run.startTime}</td>
-                              <td className="px-4 py-4 whitespace-nowrap">
-                                <div className="flex items-center gap-2">
-                                  <FileText className="w-4 h-4 text-gray-400" />
-                                  <span className="text-sm text-gray-900 font-medium">{run.outputFileName}</span>
-                                </div>
-                              </td>
-                              <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-600">{run.fileSize}</td>
-                              <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-600">{run.recordCount.toLocaleString()}</td>
-                              <td className="px-4 py-4 whitespace-nowrap">
-                                <span className={`px-2 py-1 rounded text-xs font-medium ${
-                                  run.status === 'success'
-                                    ? 'bg-green-100 text-green-700'
-                                    : 'bg-red-100 text-red-700'
-                                }`}>
-                                  {run.status === 'success' ? 'Success' : 'Failed'}
-                                </span>
-                              </td>
-                              <td className="px-4 py-4 whitespace-nowrap text-right">
-                                <div className="flex items-center justify-end gap-2">
-                                  {run.status === 'success' && (
-                                    <button className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-blue-600 hover:bg-blue-50 rounded transition-all duration-200">
-                                      <Download className="w-4 h-4" />
-                                      Download
-                                    </button>
-                                  )}
-                                  {run.status === 'failed' && run.errorDetails && (
-                                    <button className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-red-600 hover:bg-red-50 rounded transition-all duration-200">
-                                      <AlertCircle className="w-4 h-4" />
-                                      View Error
-                                    </button>
-                                  )}
-                                </div>
-                              </td>
+              {/* Section Content */}
+              <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+                {/* Manage Export Files Section */}
+                {activeSection === 'exportFiles' && (
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h2 className="text-xl font-bold text-gray-900">Manage Export Files</h2>
+                      <button
+                        onClick={() => {
+                          setSelectedExportFile(null);
+                          setIsExportFileModalOpen(true);
+                        }}
+                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-200"
+                      >
+                        <Plus className="w-4 h-4" />
+                        Add Export File
+                      </button>
+                    </div>
+
+                    {/* Search Bar */}
+                    <div className="flex items-center gap-2">
+                      <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded transition-all">
+                        <RotateCcw className="w-4 h-4" />
+                      </button>
+                      <div className="relative flex-1">
+                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                        <input
+                          type="text"
+                          value={exportFileSearchQuery}
+                          onChange={(e) => setExportFileSearchQuery(e.target.value)}
+                          placeholder="Search All Fields"
+                          className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                        />
+                        <Filter className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      </div>
+                    </div>
+
+                    {/* Export Files Table */}
+                    <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                      <div className="overflow-x-auto">
+                        <table className="w-full">
+                          <thead className="bg-gray-50 border-b border-gray-200">
+                            <tr>
+                              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">A</th>
+                              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Al En...</th>
+                              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Id</th>
+                              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">SiteName</th>
+                              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">ExportName</th>
+                              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">File Name</th>
+                              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Path</th>
+                              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">S-FTP</th>
+                              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Deli...</th>
+                              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">SortB</th>
                             </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                          </thead>
+                          <tbody className="bg-white divide-y divide-gray-200">
+                            {exportFiles
+                              .filter(file => 
+                                Object.values(file).some(val => 
+                                  String(val).toLowerCase().includes(exportFileSearchQuery.toLowerCase())
+                                )
+                              )
+                              .map((file) => (
+                                <tr
+                                  key={file.id}
+                                  className="hover:bg-blue-50/50 transition-colors cursor-pointer"
+                                  onClick={() => {
+                                    setSelectedExportFile(file);
+                                    setIsExportFileModalOpen(true);
+                                  }}
+                                >
+                                  <td className="px-4 py-3">
+                                    <button
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        toggleExportFileActive(file.id);
+                                      }}
+                                      className={`w-3 h-3 rounded-full ${file.isActive ? 'bg-green-500' : 'bg-red-500'} hover:opacity-80 transition-opacity`}
+                                    ></button>
+                                  </td>
+                                  <td className="px-4 py-3">
+                                    <button
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        toggleExportFileAllEnabled(file.id);
+                                      }}
+                                    >
+                                      {file.isAllEnabled ? (
+                                        <CheckCircle2 className="w-4 h-4 text-green-600" />
+                                      ) : (
+                                        <div className="w-4 h-4 rounded-full border-2 border-red-500 flex items-center justify-center">
+                                          <Minus className="w-3 h-3 text-red-500" />
+                                        </div>
+                                      )}
+                                    </button>
+                                  </td>
+                                  <td className="px-4 py-3 text-sm text-gray-900">{file.id}</td>
+                                  <td className="px-4 py-3 text-sm text-gray-900">{file.siteName}</td>
+                                  <td className="px-4 py-3 text-sm text-gray-900">{file.exportName}</td>
+                                  <td className="px-4 py-3 text-sm text-gray-600">{file.fileName}</td>
+                                  <td className="px-4 py-3 text-sm text-gray-600">{file.path}</td>
+                                  <td className="px-4 py-3 text-sm text-gray-600">{file.sftp}</td>
+                                  <td className="px-4 py-3 text-sm text-gray-600">{file.delimiter || '-'}</td>
+                                  <td className="px-4 py-3 text-sm text-gray-600">{file.sortBy}</td>
+                                </tr>
+                              ))}
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
                   </div>
-                </div>
+                )}
+
+                {/* Export Profile Section */}
+                {activeSection === 'exportProfile' && (
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h2 className="text-xl font-bold text-gray-900">Export Profile</h2>
+                      <button
+                        onClick={() => {
+                          setSelectedExportProfile(null);
+                          setIsExportProfileModalOpen(true);
+                        }}
+                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-200"
+                      >
+                        <Plus className="w-4 h-4" />
+                        Add Profile
+                      </button>
+                    </div>
+
+                    {/* Search Bar */}
+                    <div className="flex items-center gap-2">
+                      <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded transition-all">
+                        <RotateCcw className="w-4 h-4" />
+                      </button>
+                      <div className="relative flex-1">
+                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                        <input
+                          type="text"
+                          value={exportProfileSearchQuery}
+                          onChange={(e) => setExportProfileSearchQuery(e.target.value)}
+                          placeholder="Search All Fields"
+                          className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                        />
+                        <Filter className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      </div>
+                    </div>
+
+                    {/* Export Profiles Table */}
+                    <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                      <div className="overflow-x-auto">
+                        <table className="w-full">
+                          <thead className="bg-gray-50 border-b border-gray-200">
+                            <tr>
+                              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Active</th>
+                              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">ID</th>
+                              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">DisplayName</th>
+                              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Protocol</th>
+                              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">ServerName</th>
+                              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">UserName</th>
+                              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">ModifiedOn</th>
+                            </tr>
+                          </thead>
+                          <tbody className="bg-white divide-y divide-gray-200">
+                            {exportProfiles
+                              .filter(profile => 
+                                Object.values(profile).some(val => 
+                                  String(val).toLowerCase().includes(exportProfileSearchQuery.toLowerCase())
+                                )
+                              )
+                              .map((profile) => (
+                                <tr
+                                  key={profile.id}
+                                  className="hover:bg-blue-50/50 transition-colors cursor-pointer"
+                                  onClick={() => {
+                                    setSelectedExportProfile(profile);
+                                    setIsExportProfileModalOpen(true);
+                                  }}
+                                >
+                                  <td className="px-4 py-3">
+                                    <button
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        toggleExportProfileActive(profile.id);
+                                      }}
+                                      className={`w-3 h-3 rounded-full ${profile.isActive ? 'bg-green-500' : 'bg-red-500'} hover:opacity-80 transition-opacity`}
+                                    ></button>
+                                  </td>
+                                  <td className="px-4 py-3 text-sm text-gray-900">{profile.id}</td>
+                                  <td className="px-4 py-3 text-sm text-gray-900">{profile.displayName}</td>
+                                  <td className="px-4 py-3 text-sm text-gray-600">{profile.protocol}</td>
+                                  <td className="px-4 py-3 text-sm text-gray-600">{profile.serverName}</td>
+                                  <td className="px-4 py-3 text-sm text-gray-600">{profile.userName}</td>
+                                  <td className="px-4 py-3 text-sm text-gray-600">{profile.modifiedOn}</td>
+                                </tr>
+                              ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Export File Field Mapping Section */}
+                {activeSection === 'fieldMapping' && (
+                  <div className="space-y-4">
+                    {/* Header with Dropdowns */}
+                    <div className="bg-teal-50 border border-teal-200 rounded-lg p-4">
+                      <div className="flex flex-wrap items-center gap-4">
+                        <div>
+                          <label className="block text-xs font-medium text-gray-700 mb-1">Customers</label>
+                          <select
+                            value={selectedCustomer}
+                            onChange={(e) => setSelectedCustomer(e.target.value)}
+                            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-white text-sm"
+                          >
+                            <option>Potpourri</option>
+                            <option>Customer 2</option>
+                            <option>Customer 3</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-xs font-medium text-gray-700 mb-1">Sites</label>
+                          <select
+                            value={selectedSiteForMapping}
+                            onChange={(e) => setSelectedSiteForMapping(e.target.value)}
+                            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-white text-sm"
+                          >
+                            <option>Back In The Saddle</option>
+                            <option>Site 2</option>
+                            <option>Site 3</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-xs font-medium text-gray-700 mb-1">Exports</label>
+                          <select
+                            value={selectedExportForMapping}
+                            onChange={(e) => setSelectedExportForMapping(e.target.value)}
+                            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-white text-sm"
+                          >
+                            <option>Bing Export</option>
+                            <option>CJ Export</option>
+                            <option>Google Export</option>
+                            <option>Criteo Export</option>
+                            <option>Commission Junction Export</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <h2 className="text-xl font-bold text-gray-900">Export File Field Mapping</h2>
+                      <div className="flex items-center gap-2">
+                        <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-all duration-200">
+                          <Plus className="w-4 h-4" />
+                          Add New
+                        </button>
+                        <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-200">
+                          <Save className="w-4 h-4" />
+                          Save
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Search Bar */}
+                    <div className="flex items-center gap-2">
+                      <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded transition-all">
+                        <RotateCcw className="w-4 h-4" />
+                      </button>
+                      <div className="relative flex-1">
+                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                        <input
+                          type="text"
+                          value={fieldMappingSearchQuery}
+                          onChange={(e) => setFieldMappingSearchQuery(e.target.value)}
+                          placeholder="Search All Fields"
+                          className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                        />
+                        <Filter className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      </div>
+                    </div>
+
+                    {/* Field Mapping Table */}
+                    <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                      <div className="overflow-x-auto">
+                        <table className="w-full">
+                          <thead className="bg-gray-50 border-b border-gray-200">
+                            <tr>
+                              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">ID</th>
+                              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Mapped?</th>
+                              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">DB Field</th>
+                              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Export Field Name</th>
+                              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Sort Order</th>
+                            </tr>
+                          </thead>
+                          <tbody className="bg-white divide-y divide-gray-200">
+                            {exportFieldMappings
+                              .filter(mapping => 
+                                Object.values(mapping).some(val => 
+                                  String(val).toLowerCase().includes(fieldMappingSearchQuery.toLowerCase())
+                                )
+                              )
+                              .map((mapping) => (
+                                <tr key={mapping.id} className="hover:bg-blue-50/50 transition-colors">
+                                  <td className="px-4 py-3 text-sm text-gray-900">{mapping.id}</td>
+                                  <td className="px-4 py-3">
+                                    {mapping.isMapped ? (
+                                      <CheckCircle2 className="w-5 h-5 text-blue-600" />
+                                    ) : (
+                                      <Circle className="w-5 h-5 text-gray-300" />
+                                    )}
+                                  </td>
+                                  <td className="px-4 py-3 text-sm text-gray-900">{mapping.dbField}</td>
+                                  <td className="px-4 py-3 text-sm text-gray-600">{mapping.exportFieldName}</td>
+                                  <td className="px-4 py-3 text-sm text-gray-600">{mapping.sortOrder}</td>
+                                </tr>
+                              ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </>
           )}
         </div>
       </main>
+
+      {/* Export File Modal */}
+      {isExportFileModalOpen && (
+        <div className="fixed inset-0 z-50 overflow-hidden">
+          <div className="absolute inset-0 bg-black bg-opacity-50" onClick={() => setIsExportFileModalOpen(false)}></div>
+          <div className="absolute right-0 top-0 h-full w-full sm:w-[600px] bg-white shadow-2xl flex flex-col">
+            <div className="flex items-center justify-between p-6 border-b border-gray-200">
+              <h2 className="text-xl font-semibold text-gray-900">Edit Record</h2>
+              <button
+                onClick={() => setIsExportFileModalOpen(false)}
+                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded transition-all"
+              >
+                <XCircle className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="flex-1 overflow-y-auto p-6">
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">ID</label>
+                  <input
+                    type="text"
+                    defaultValue={selectedExportFile?.id || ''}
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Site</label>
+                  <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none cursor-pointer bg-white">
+                    <option>Select Site...</option>
+                    <option>Signals</option>
+                    <option>Basbleu</option>
+                    <option>Natures Jewelry</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">ExportName <span className="text-red-500">*</span></label>
+                  <input
+                    type="text"
+                    defaultValue={selectedExportFile?.exportName || ''}
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">LocalFilePath <span className="text-red-500">*</span></label>
+                  <input
+                    type="text"
+                    defaultValue={selectedExportFile?.path || ''}
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">LocalFileName <span className="text-red-500">*</span></label>
+                  <input
+                    type="text"
+                    defaultValue={selectedExportFile?.fileName || ''}
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">ExportProfileId</label>
+                  <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none cursor-pointer bg-white">
+                    <option>Select Profile...</option>
+                    <option>FTP for Signals</option>
+                    <option>FTP for Basbleu</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Delimiter <span className="text-red-500">*</span></label>
+                  <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none cursor-pointer bg-white">
+                    <option>TAB</option>
+                    <option>,</option>
+                    <option>PIPE</option>
+                    <option>XML</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">SortBy <span className="text-red-500">*</span></label>
+                  <input
+                    type="text"
+                    defaultValue={selectedExportFile?.sortBy || 'id'}
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Sort Direction <span className="text-red-500">*</span></label>
+                  <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none cursor-pointer bg-white">
+                    <option>Ascending</option>
+                    <option>Descending</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Export Method <span className="text-red-500">*</span></label>
+                  <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none cursor-pointer bg-white">
+                    <option>SFTP</option>
+                    <option>FTP</option>
+                    <option>Local</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Export SQL</label>
+                  <textarea
+                    rows={4}
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none resize-none"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <span className="text-sm text-gray-700">Use AI</span>
+                  </label>
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      defaultChecked={selectedExportFile?.isActive || false}
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <span className="text-sm text-gray-700">isActive</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div className="border-t border-gray-200 p-6 flex items-center justify-end gap-3">
+              <button
+                onClick={() => setIsExportFileModalOpen(false)}
+                className="px-6 py-2.5 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-all font-medium"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => setIsExportFileModalOpen(false)}
+                className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all font-medium"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Export Profile Modal */}
+      {isExportProfileModalOpen && (
+        <div className="fixed inset-0 z-50 overflow-hidden">
+          <div className="absolute inset-0 bg-black bg-opacity-50" onClick={() => setIsExportProfileModalOpen(false)}></div>
+          <div className="absolute right-0 top-0 h-full w-full sm:w-[600px] bg-white shadow-2xl flex flex-col">
+            <div className="flex items-center justify-between p-6 border-b border-gray-200">
+              <h2 className="text-xl font-semibold text-gray-900">Edit Record</h2>
+              <button
+                onClick={() => setIsExportProfileModalOpen(false)}
+                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded transition-all"
+              >
+                <XCircle className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="flex-1 overflow-y-auto p-6">
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">ID</label>
+                  <input
+                    type="text"
+                    defaultValue={selectedExportProfile?.id || ''}
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">DisplayName <span className="text-red-500">*</span></label>
+                  <input
+                    type="text"
+                    defaultValue={selectedExportProfile?.displayName || ''}
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Protocol <span className="text-red-500">*</span></label>
+                  <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none cursor-pointer bg-white">
+                    <option>FTP</option>
+                    <option>SFTP</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">ServerName <span className="text-red-500">*</span></label>
+                  <input
+                    type="text"
+                    defaultValue={selectedExportProfile?.serverName || ''}
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">UserName <span className="text-red-500">*</span></label>
+                  <input
+                    type="text"
+                    defaultValue={selectedExportProfile?.userName || ''}
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Pwd <span className="text-red-500">*</span></label>
+                  <input
+                    type="password"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">hostkey <span className="text-red-500">*</span></label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Operation <span className="text-red-500">*</span></label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">DestinationPath <span className="text-red-500">*</span></label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Schedule <span className="text-red-500">*</span></label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      defaultChecked={selectedExportProfile?.isActive || false}
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <span className="text-sm text-gray-700">isActive</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div className="border-t border-gray-200 p-6 flex items-center justify-end gap-3">
+              <button
+                onClick={() => setIsExportProfileModalOpen(false)}
+                className="px-6 py-2.5 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-all font-medium"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => setIsExportProfileModalOpen(false)}
+                className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all font-medium"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Export Channel Detail Drawer */}
       {isDrawerOpen && (

@@ -12,6 +12,7 @@ interface Site {
 }
 
 export default function OnboardingPage() {
+  const [currentStep, setCurrentStep] = useState(1);
   const [companyName, setCompanyName] = useState('');
   const [contactName, setContactName] = useState('');
   const [contactEmail, setContactEmail] = useState('');
@@ -46,8 +47,8 @@ export default function OnboardingPage() {
   const checklistItems = [
     { id: 1, label: 'Add company', completed: companyName.length > 0 },
     { id: 2, label: 'Add at least 1 site', completed: sites.length > 0 },
-    { id: 3, label: 'Configure first import', completed: false },
-    { id: 4, label: 'Configure first export', completed: false },
+    { id: 3, label: 'Configure first import', completed: currentStep >= 2 },
+    { id: 4, label: 'Configure first export', completed: currentStep >= 3 },
   ];
 
   return (
@@ -78,9 +79,12 @@ export default function OnboardingPage() {
                 </Link>
               </nav>
               <div className="flex items-center gap-3">
-                <span className="text-sm font-medium text-gray-700 whitespace-nowrap">Step 1 of 3</span>
+                <span className="text-sm font-medium text-gray-700 whitespace-nowrap">Step {currentStep} of 3</span>
                 <div className="w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
-                  <div className="w-1/3 h-full bg-blue-600 rounded-full transition-all duration-300"></div>
+                  <div 
+                    className="h-full bg-blue-600 rounded-full transition-all duration-300"
+                    style={{ width: `${(currentStep / 3) * 100}%` }}
+                  ></div>
                 </div>
               </div>
               <a href="#" className="text-sm text-blue-600 hover:text-blue-700 font-medium transition-colors duration-200 hover:underline whitespace-nowrap">
@@ -96,6 +100,9 @@ export default function OnboardingPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column - Setup Form */}
           <div className="lg:col-span-2 space-y-8">
+            {/* Step 1: Company & Sites Setup */}
+            {currentStep === 1 && (
+              <>
             {/* Company Profile */}
             <section className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200">
               <h2 className="text-lg font-semibold text-gray-900 mb-6">Company Profile</h2>
@@ -291,6 +298,201 @@ export default function OnboardingPage() {
                 </div>
               </div>
             </section>
+              </>
+            )}
+
+            {/* Step 2: Import Configuration */}
+            {currentStep === 2 && (
+              <section className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200">
+                <h2 className="text-lg font-semibold text-gray-900 mb-6">Configure First Import</h2>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Import Source Type <span className="text-red-500">*</span>
+                    </label>
+                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-white">
+                      <option>SFTP</option>
+                      <option>FTP</option>
+                      <option>API</option>
+                      <option>File Upload</option>
+                    </select>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Server/Host <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400"
+                        placeholder="sftp.example.com"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Port
+                      </label>
+                      <input
+                        type="number"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400"
+                        placeholder="22"
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Username <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400"
+                        placeholder="username"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Password <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="password"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400"
+                        placeholder="••••••••"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Source Path <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400"
+                      placeholder="/data/imports"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      File Format <span className="text-red-500">*</span>
+                    </label>
+                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-white">
+                      <option>CSV</option>
+                      <option>JSON</option>
+                      <option>XML</option>
+                      <option>Excel</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Schedule
+                    </label>
+                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-white">
+                      <option>Daily</option>
+                      <option>Hourly</option>
+                      <option>Weekly</option>
+                      <option>Manual</option>
+                    </select>
+                  </div>
+                </div>
+              </section>
+            )}
+
+            {/* Step 3: Export Configuration */}
+            {currentStep === 3 && (
+              <section className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200">
+                <h2 className="text-lg font-semibold text-gray-900 mb-6">Configure First Export</h2>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Export Destination Type <span className="text-red-500">*</span>
+                    </label>
+                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-white">
+                      <option>SFTP</option>
+                      <option>FTP</option>
+                      <option>Email</option>
+                      <option>API/Webhook</option>
+                      <option>Local Storage</option>
+                    </select>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Server/Host <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400"
+                        placeholder="sftp.example.com"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Port
+                      </label>
+                      <input
+                        type="number"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400"
+                        placeholder="22"
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Username <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400"
+                        placeholder="username"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Password <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="password"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400"
+                        placeholder="••••••••"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Destination Path <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400"
+                      placeholder="/data/exports"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Export Format <span className="text-red-500">*</span>
+                    </label>
+                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-white">
+                      <option>CSV</option>
+                      <option>JSON</option>
+                      <option>XML</option>
+                      <option>Excel</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Schedule
+                    </label>
+                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-white">
+                      <option>Daily</option>
+                      <option>Hourly</option>
+                      <option>Weekly</option>
+                      <option>Manual</option>
+                    </select>
+                  </div>
+                </div>
+              </section>
+            )}
           </div>
 
           {/* Right Column - Checklist / Summary */}
@@ -356,16 +558,29 @@ export default function OnboardingPage() {
       <footer className="bg-white border-t border-gray-200 sticky bottom-0 z-10 mt-auto shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between gap-4">
-            <button className="px-6 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 hover:border-gray-400 active:bg-gray-100 transition-all duration-200 font-medium">
+            <button 
+              onClick={() => setCurrentStep(Math.max(1, currentStep - 1))}
+              disabled={currentStep === 1}
+              className="px-6 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 hover:border-gray-400 active:bg-gray-100 transition-all duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+            >
               Back
             </button>
             <div className="flex items-center gap-4">
               <button className="px-6 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 hover:border-gray-400 active:bg-gray-100 transition-all duration-200 font-medium">
                 Save Draft
               </button>
-              <Link href="/imports" className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 active:bg-blue-800 transition-all duration-200 font-medium">
-                Next: Configure Imports
-              </Link>
+              {currentStep < 3 ? (
+                <button 
+                  onClick={() => setCurrentStep(currentStep + 1)}
+                  className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 active:bg-blue-800 transition-all duration-200 font-medium"
+                >
+                  Next{currentStep === 1 ? ': Configure Imports' : currentStep === 2 ? ': Configure Exports' : ''}
+                </button>
+              ) : (
+                <Link href="/imports" className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 active:bg-blue-800 transition-all duration-200 font-medium">
+                  Complete Setup
+                </Link>
+              )}
             </div>
           </div>
         </div>

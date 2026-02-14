@@ -5,7 +5,8 @@ import Link from 'next/link';
 import { 
   Search, Filter, Plus, Building2, CheckCircle2, XCircle, Clock, 
   Play, Settings, Copy, Eye, MoreVertical, Download, AlertCircle,
-  Server, FileText, Calendar, Mail, Key, Folder, FileCode, MapPin
+  Server, FileText, Calendar, Mail, Key, Folder, FileCode, MapPin,
+  RotateCcw, Save, Link2, Circle, ChevronLeft, ChevronRight
 } from 'lucide-react';
 
 interface Site {
@@ -40,6 +41,35 @@ interface ImportRun {
   status: 'success' | 'failed';
 }
 
+interface SftpProfile {
+  id: number;
+  displayName: string;
+  protocol: string;
+  serverName: string;
+  userName: string;
+  sourcePath: string;
+  destinationPath: string;
+  isActive: boolean;
+}
+
+interface JoinFile {
+  id: number;
+  displayName: string;
+  fileName: string;
+  joinTableName: string;
+  separator: string;
+  modifiedOn: string;
+  isActive: boolean;
+}
+
+interface FieldMapping {
+  id: number;
+  fieldName: string;
+  xmlField: string;
+  xmlParent: string;
+  isMapped: boolean;
+}
+
 export default function ImportsPage() {
   const [selectedSite, setSelectedSite] = useState<string>('1');
   const [searchQuery, setSearchQuery] = useState('');
@@ -49,12 +79,33 @@ export default function ImportsPage() {
   const [selectedConfig, setSelectedConfig] = useState<ImportConfig | null>(null);
   const [activeTab, setActiveTab] = useState<'connection' | 'fileRules' | 'mapping' | 'schedule' | 'notifications'>('connection');
 
-  const sites: Site[] = [
+  // New sections state
+  const [activeSection, setActiveSection] = useState<'profiles' | 'joinFiles' | 'fieldMapping'>('profiles');
+  const [sftpSearchQuery, setSftpSearchQuery] = useState('');
+  const [joinFileSearchQuery, setJoinFileSearchQuery] = useState('');
+  const [fieldMappingSearchQuery, setFieldMappingSearchQuery] = useState('');
+  const [isSftpModalOpen, setIsSftpModalOpen] = useState(false);
+  const [isJoinFileModalOpen, setIsJoinFileModalOpen] = useState(false);
+  const [selectedSftpProfile, setSelectedSftpProfile] = useState<SftpProfile | null>(null);
+  const [selectedJoinFile, setSelectedJoinFile] = useState<JoinFile | null>(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+  const [sites, setSites] = useState<Site[]>([
     { id: '1', name: 'Main Office', code: 'SITE001', status: 'active', lastImportStatus: 'success', lastImportTime: '2 hours ago' },
     { id: '2', name: 'Warehouse A', code: 'SITE002', status: 'active', lastImportStatus: 'failed', lastImportTime: '5 hours ago' },
     { id: '3', name: 'Retail Store', code: 'SITE003', status: 'paused', lastImportStatus: 'success', lastImportTime: '1 day ago' },
     { id: '4', name: 'Distribution Center', code: 'SITE004', status: 'active', lastImportStatus: 'success', lastImportTime: '30 min ago' },
-  ];
+  ]);
+
+  const toggleSiteStatus = (siteId: string) => {
+    setSites(prevSites => 
+      prevSites.map(site => 
+        site.id === siteId 
+          ? { ...site, status: site.status === 'active' ? 'paused' : 'active' }
+          : site
+      )
+    );
+  };
 
   const importConfigs: ImportConfig[] = [
     { 
@@ -102,6 +153,41 @@ export default function ImportsPage() {
     { id: '1', runTime: '2024-01-15 14:30:00', duration: '2m 15s', processedRows: 1250, failedRows: 0, status: 'success' },
     { id: '2', runTime: '2024-01-15 13:30:00', duration: '1m 45s', processedRows: 1200, failedRows: 5, status: 'success' },
     { id: '3', runTime: '2024-01-15 12:30:00', duration: '3m 20s', processedRows: 1180, failedRows: 20, status: 'failed' },
+  ];
+
+  const sftpProfiles: SftpProfile[] = [
+    { id: 1, displayName: 'Potpourri Product Feed (Feedon...', protocol: 'SFTP', serverName: 'sftpgo.feedonomics.com', userName: 'otoro_digital', sourcePath: '/incoming', destinationPath: 'C:\\Production\\Proc', isActive: false },
+    { id: 2, displayName: 'Dummy Import Profile as place...', protocol: 'SFTP', serverName: '1.2.3.4', userName: 'abcd', sourcePath: '/', destinationPath: 'C:\\testdata', isActive: false },
+    { id: 3, displayName: 'Join File Import', protocol: 'SFTP', serverName: 'sftpgo.feedonomics.com', userName: 'a367433f20709', sourcePath: '/incoming', destinationPath: 'C:\\Production\\Proc', isActive: false },
+    { id: 4, displayName: 'sftp.blocklogic.tech Incoming', protocol: 'SFTP', serverName: 'sftp.blocklogic.tech', userName: 'otoro_digital', sourcePath: '/incoming', destinationPath: 'C:\\Production\\Proc', isActive: true },
+    { id: 5, displayName: 'Join File Import sftp blocklogic t', protocol: 'SFTP', serverName: 'sftp.blocklogic.tech', userName: 'SGJoinFileUser', sourcePath: '/', destinationPath: 'C:\\Production\\Prod', isActive: true },
+  ];
+
+  const joinFiles: JoinFile[] = [
+    { id: 1, displayName: 'Sagefind ID PT GPC join', fileName: 'sagefind_id_pt_gpc.txt', joinTableName: 'dbo.SagefindJoin', separator: 'TAB', modifiedOn: 'Apr 5 2025 6:00AM', isActive: true },
+    { id: 2, displayName: 'Image Link Update #494498', fileName: 'Image Link Update #49498...', joinTableName: '[dbo].[Updatelmagel...', separator: ',', modifiedOn: 'Oct 5 2024 6:08AM', isActive: true },
+    { id: 3, displayName: 'Size Issue Join #272402', fileName: 'Size Issue Join #272402.csv', joinTableName: '[dbo].[Sizelssuelmpo...', separator: ',', modifiedOn: 'Oct 5 2024 6:08AM', isActive: true },
+    { id: 4, displayName: 'Custom Label 0 Join #321504', fileName: 'Custom Label 0 Join #32150...', joinTableName: '[dbo].[CustomeLabel]', separator: ',', modifiedOn: 'Oct 5 2024 6:08AM', isActive: true },
+    { id: 5, displayName: 'Image Update #537919', fileName: 'Image Update #537919.csv', joinTableName: '[dbo].[IsImageUpdat...', separator: ',', modifiedOn: 'Oct 5 2024 6:08AM', isActive: true },
+    { id: 6, displayName: 'MC Join', fileName: 'MC Join.txt', joinTableName: 'dbo.MCImport', separator: 'PIPE', modifiedOn: 'Oct 5 2024 6:08AM', isActive: true },
+    { id: 7, displayName: 'Product Type 7:8', fileName: 'Product Types 7_8.xml', joinTableName: 'JoinFileProductType', separator: 'XML', modifiedOn: 'Oct 5 2024 6:08AM', isActive: true },
+  ];
+
+  const fieldMappings: FieldMapping[] = [
+    { id: 1, fieldName: 'adwords_redirect', xmlField: 'g:adwords_redirect', xmlParent: 'entry', isMapped: true },
+    { id: 2, fieldName: 'age_group', xmlField: 'g:age_group', xmlParent: 'entry', isMapped: true },
+    { id: 3, fieldName: 'brand', xmlField: 'g:brand', xmlParent: 'entry', isMapped: true },
+    { id: 4, fieldName: 'color', xmlField: 'g:color', xmlParent: 'entry', isMapped: true },
+    { id: 5, fieldName: 'condition', xmlField: 'g:condition', xmlParent: 'entry', isMapped: true },
+    { id: 6, fieldName: 'description', xmlField: 'summary', xmlParent: 'entry', isMapped: true },
+    { id: 7, fieldName: 'gender', xmlField: 'g:gender', xmlParent: 'entry', isMapped: true },
+    { id: 8, fieldName: 'id', xmlField: 'id', xmlParent: 'entry', isMapped: true },
+    { id: 9, fieldName: 'image_link', xmlField: 'g:image_link', xmlParent: 'entry', isMapped: true },
+    { id: 10, fieldName: 'keywords', xmlField: 'c:keywords', xmlParent: 'entry', isMapped: true },
+    { id: 11, fieldName: 'link', xmlField: 'link', xmlParent: 'entry', isMapped: true },
+    { id: 12, fieldName: 'mpn', xmlField: 'g:mpn', xmlParent: 'entry', isMapped: true },
+    { id: 13, fieldName: 'price', xmlField: 'g:price', xmlParent: 'entry', isMapped: true },
+    { id: 14, fieldName: 'sale_price', xmlField: 'g:sale_price', xmlParent: 'entry', isMapped: true },
   ];
 
   const currentSite = sites.find(s => s.id === selectedSite);
@@ -216,28 +302,41 @@ export default function ImportsPage() {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 flex overflow-hidden">
+      <main className="flex-1 flex overflow-hidden relative">
+        {/* Slider Toggle Button - Always visible, positioned outside sidebar */}
+        <button
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+          className={`absolute ${isSidebarOpen ? 'left-full sm:left-80 lg:left-96 -ml-8' : 'left-0'} top-1/2 -translate-y-1/2 z-30 bg-white border border-gray-300 ${isSidebarOpen ? 'rounded-l-lg' : 'rounded-r-lg'} p-2 shadow-md hover:bg-gray-50 transition-all duration-300 ease-in-out hover:shadow-lg`}
+          title={isSidebarOpen ? 'Hide Sidebar' : 'Show Sidebar'}
+        >
+          {isSidebarOpen ? (
+            <ChevronLeft className="w-4 h-4 text-gray-600" />
+          ) : (
+            <ChevronRight className="w-4 h-4 text-gray-600" />
+          )}
+        </button>
+
         {/* Left Sidebar - Sites List */}
-        <aside className="w-full sm:w-80 lg:w-96 border-r border-gray-200 bg-gray-50 overflow-y-auto">
-          <div className="p-4 space-y-2">
-            <h2 className="text-sm font-semibold text-gray-700 mb-3 px-2">Sites</h2>
+        <aside className={`${isSidebarOpen ? 'w-full sm:w-80 lg:w-96' : 'w-0'} border-r border-gray-200 bg-gray-50 overflow-y-auto transition-all duration-300 ease-in-out relative`}>
+          <div className={`p-3 space-y-1.5 ${isSidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+            <h2 className="text-sm font-semibold text-gray-700 mb-2 px-2">Sites</h2>
             {filteredSites.map((site) => (
               <div
                 key={site.id}
                 onClick={() => setSelectedSite(site.id)}
-                className={`p-4 rounded-lg border cursor-pointer transition-all duration-200 ${
+                className={`p-2.5 rounded-lg border cursor-pointer transition-all duration-200 ${
                   selectedSite === site.id
                     ? 'bg-blue-50 border-blue-300 shadow-md'
                     : 'bg-white border-gray-200 hover:border-blue-200 hover:bg-blue-50/50 hover:shadow-sm'
                 }`}
               >
-                <div className="flex items-start justify-between mb-2">
+                <div className="flex items-start justify-between mb-1">
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-gray-900 truncate">{site.name}</h3>
+                    <h3 className="font-semibold text-sm text-gray-900 truncate">{site.name}</h3>
                     <p className="text-xs text-gray-500 mt-0.5">{site.code}</p>
                   </div>
                   <div className="flex items-center gap-1.5 ml-2">
-                    <span className={`px-2 py-0.5 rounded text-xs font-medium ${
+                    <span className={`px-1.5 py-0.5 rounded text-xs font-medium ${
                       site.status === 'active' 
                         ? 'bg-green-100 text-green-700' 
                         : 'bg-gray-100 text-gray-700'
@@ -247,32 +346,32 @@ export default function ImportsPage() {
                   </div>
                 </div>
                 
-                <div className="flex items-center justify-between mt-3">
-                  <div className="flex items-center gap-2">
+                <div className="flex items-center justify-between mt-2">
+                  <div className="flex items-center gap-1.5">
                     {site.lastImportStatus === 'success' ? (
-                      <CheckCircle2 className="w-4 h-4 text-green-600" />
+                      <CheckCircle2 className="w-3.5 h-3.5 text-green-600" />
                     ) : site.lastImportStatus === 'failed' ? (
-                      <XCircle className="w-4 h-4 text-red-600" />
+                      <XCircle className="w-3.5 h-3.5 text-red-600" />
                     ) : (
-                      <Clock className="w-4 h-4 text-yellow-600" />
+                      <Clock className="w-3.5 h-3.5 text-yellow-600" />
                     )}
                     <span className="text-xs text-gray-600">{site.lastImportTime}</span>
                   </div>
                   
-                  <div className="flex items-center gap-1">
+                  <div className="flex items-center gap-0.5">
                     <button
                       onClick={(e) => { e.stopPropagation(); }}
-                      className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded transition-all duration-200"
+                      className="p-1 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded transition-all duration-200"
                       title="Manage site"
                     >
-                      <Settings className="w-4 h-4" />
+                      <Settings className="w-3.5 h-3.5" />
                     </button>
                     <button
                       onClick={(e) => { e.stopPropagation(); }}
-                      className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded transition-all duration-200"
+                      className="p-1 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded transition-all duration-200"
                       title="View logs"
                     >
-                      <Eye className="w-4 h-4" />
+                      <Eye className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 </div>
@@ -297,7 +396,11 @@ export default function ImportsPage() {
                       <input
                         type="checkbox"
                         checked={currentSite.status === 'active'}
-                        onChange={() => {}}
+                        onChange={(e) => {
+                          e.stopPropagation();
+                          toggleSiteStatus(currentSite.id);
+                        }}
+                        onClick={(e) => e.stopPropagation()}
                         className="sr-only peer"
                       />
                       <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
@@ -317,161 +420,267 @@ export default function ImportsPage() {
                 </div>
               </div>
 
-              {/* Import Configurations Table */}
+              {/* Section Tabs */}
+              <div className="border-b border-gray-200 bg-white">
+                <div className="flex space-x-1 px-4 sm:px-6 lg:px-8">
+                  {[
+                    { id: 'profiles', label: 'SFTP/FTP Profiles', icon: Server },
+                    { id: 'joinFiles', label: 'Manage Join Files', icon: FileText },
+                    { id: 'fieldMapping', label: 'Field Mapping', icon: MapPin },
+                  ].map((section) => {
+                    const Icon = section.icon;
+                    return (
+                      <button
+                        key={section.id}
+                        onClick={() => setActiveSection(section.id as any)}
+                        className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-all duration-200 whitespace-nowrap ${
+                          activeSection === section.id
+                            ? 'border-blue-600 text-blue-600'
+                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                        }`}
+                      >
+                        <Icon className="w-4 h-4" />
+                        {section.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Section Content */}
               <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+                {/* SFTP/FTP Profiles Section */}
+                {activeSection === 'profiles' && (
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h2 className="text-xl font-bold text-gray-900">SFTP/FTP Profiles</h2>
+                      <button
+                        onClick={() => {
+                          setSelectedSftpProfile(null);
+                          setIsSftpModalOpen(true);
+                        }}
+                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-200"
+                      >
+                        <Plus className="w-4 h-4" />
+                        Add Profile
+                      </button>
+                    </div>
+
+                    {/* Search Bar */}
+                    <div className="flex items-center gap-2">
+                      <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded transition-all">
+                        <RotateCcw className="w-4 h-4" />
+                      </button>
+                      <div className="relative flex-1">
+                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                        <input
+                          type="text"
+                          value={sftpSearchQuery}
+                          onChange={(e) => setSftpSearchQuery(e.target.value)}
+                          placeholder="Search All Fields"
+                          className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                        />
+                        <Filter className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      </div>
+                    </div>
+
+                    {/* Profiles Table */}
                 <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
                   <div className="overflow-x-auto">
                     <table className="w-full">
                       <thead className="bg-gray-50 border-b border-gray-200">
                         <tr>
-                          <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Import Name</th>
-                          <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Source Type</th>
-                          <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Source Path</th>
-                          <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Format</th>
-                          <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Schedule</th>
-                          <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Status</th>
-                          <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Last Run</th>
-                          <th className="px-4 py-3 text-right text-xs font-semibold text-gray-700 uppercase tracking-wider">Actions</th>
+                              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Ac...</th>
+                              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Id</th>
+                              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">DisplayName</th>
+                              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Prot...</th>
+                              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">ServerName</th>
+                              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">UserName</th>
+                              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">SourcePath</th>
+                              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">DestinationPath</th>
                         </tr>
                       </thead>
                       <tbody className="bg-white divide-y divide-gray-200">
-                        {filteredConfigs.map((config) => (
-                          <tr
-                            key={config.id}
-                            className="hover:bg-blue-50/50 transition-colors duration-150 cursor-pointer"
-                            onClick={() => openDrawer(config)}
-                          >
-                            <td className="px-4 py-4 whitespace-nowrap">
-                              <div className="font-medium text-gray-900">{config.name}</div>
+                            {sftpProfiles
+                              .filter(profile => 
+                                Object.values(profile).some(val => 
+                                  String(val).toLowerCase().includes(sftpSearchQuery.toLowerCase())
+                                )
+                              )
+                              .map((profile) => (
+                                <tr
+                                  key={profile.id}
+                                  className="hover:bg-blue-50/50 transition-colors cursor-pointer"
+                                  onClick={() => {
+                                    setSelectedSftpProfile(profile);
+                                    setIsSftpModalOpen(true);
+                                  }}
+                                >
+                                  <td className="px-4 py-3">
+                                    <div className={`w-3 h-3 rounded-full ${profile.isActive ? 'bg-green-500' : 'bg-red-500'}`}></div>
                             </td>
-                            <td className="px-4 py-4 whitespace-nowrap">
-                              <span className={`px-2 py-1 rounded text-xs font-medium ${
-                                config.sourceType === 'SFTP' ? 'bg-blue-100 text-blue-700' :
-                                config.sourceType === 'API' ? 'bg-purple-100 text-purple-700' :
-                                'bg-green-100 text-green-700'
-                              }`}>
-                                {config.sourceType}
-                              </span>
-                            </td>
-                            <td className="px-4 py-4">
-                              <div className="text-sm text-gray-600 truncate max-w-xs">{config.sourcePath}</div>
-                            </td>
-                            <td className="px-4 py-4 whitespace-nowrap">
-                              <span className="text-sm text-gray-600">{config.format}</span>
-                            </td>
-                            <td className="px-4 py-4 whitespace-nowrap">
-                              <div className="flex items-center gap-1.5 text-sm text-gray-600">
-                                <Calendar className="w-4 h-4" />
-                                {config.schedule}
+                                  <td className="px-4 py-3 text-sm text-gray-900">{profile.id}</td>
+                                  <td className="px-4 py-3 text-sm text-gray-900">{profile.displayName}</td>
+                                  <td className="px-4 py-3 text-sm text-gray-600">{profile.protocol}</td>
+                                  <td className="px-4 py-3 text-sm text-gray-600">{profile.serverName}</td>
+                                  <td className="px-4 py-3 text-sm text-gray-600">{profile.userName}</td>
+                                  <td className="px-4 py-3 text-sm text-gray-600">{profile.sourcePath}</td>
+                                  <td className="px-4 py-3 text-sm text-gray-600">{profile.destinationPath}</td>
+                                </tr>
+                              ))}
+                          </tbody>
+                        </table>
                               </div>
-                            </td>
-                            <td className="px-4 py-4 whitespace-nowrap">
-                              <span className={`px-2 py-1 rounded text-xs font-medium ${
-                                config.status === 'enabled'
-                                  ? 'bg-green-100 text-green-700'
-                                  : 'bg-gray-100 text-gray-700'
-                              }`}>
-                                {config.status === 'enabled' ? 'Enabled' : 'Disabled'}
-                              </span>
-                            </td>
-                            <td className="px-4 py-4 whitespace-nowrap">
-                              <div className="flex items-center gap-2">
-                                {config.lastRunStatus === 'success' ? (
-                                  <CheckCircle2 className="w-4 h-4 text-green-600" />
-                                ) : (
-                                  <XCircle className="w-4 h-4 text-red-600" />
-                                )}
-                                <span className="text-sm text-gray-600">{config.lastRun}</span>
                               </div>
-                            </td>
-                            <td className="px-4 py-4 whitespace-nowrap text-right">
-                              <div className="flex items-center justify-end gap-1" onClick={(e) => e.stopPropagation()}>
+                  </div>
+                )}
+
+                {/* Join Files Section */}
+                {activeSection === 'joinFiles' && (
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h2 className="text-xl font-bold text-gray-900">Manage Join Files</h2>
                                 <button
-                                  onClick={() => openDrawer(config)}
-                                  className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded transition-all duration-200"
-                                  title="Edit"
-                                >
-                                  <Settings className="w-4 h-4" />
+                        onClick={() => {
+                          setSelectedJoinFile(null);
+                          setIsJoinFileModalOpen(true);
+                        }}
+                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-200"
+                      >
+                        <Plus className="w-4 h-4" />
+                        Add Join File
                                 </button>
-                                <button
-                                  className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded transition-all duration-200"
-                                  title="Duplicate"
-                                >
-                                  <Copy className="w-4 h-4" />
+                    </div>
+
+                    {/* Search Bar */}
+                    <div className="flex items-center gap-2">
+                      <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded transition-all">
+                        <RotateCcw className="w-4 h-4" />
                                 </button>
-                                <button
-                                  className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded transition-all duration-200"
-                                  title="Disable"
-                                >
-                                  <XCircle className="w-4 h-4" />
-                                </button>
-                                <button
-                                  className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded transition-all duration-200"
-                                  title="View history"
-                                >
-                                  <Eye className="w-4 h-4" />
-                                </button>
+                      <div className="relative flex-1">
+                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                        <input
+                          type="text"
+                          value={joinFileSearchQuery}
+                          onChange={(e) => setJoinFileSearchQuery(e.target.value)}
+                          placeholder="Search All Fields"
+                          className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                        />
+                        <Filter className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                               </div>
+                    </div>
+
+                    {/* Join Files Table */}
+                    <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                      <div className="overflow-x-auto">
+                        <table className="w-full">
+                          <thead className="bg-gray-50 border-b border-gray-200">
+                            <tr>
+                              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Ac...</th>
+                              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Id</th>
+                              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">DisplayName</th>
+                              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">FileName</th>
+                              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">JoinTableName</th>
+                              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Separator</th>
+                              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">ModifiedOn</th>
+                            </tr>
+                          </thead>
+                          <tbody className="bg-white divide-y divide-gray-200">
+                            {joinFiles
+                              .filter(file => 
+                                Object.values(file).some(val => 
+                                  String(val).toLowerCase().includes(joinFileSearchQuery.toLowerCase())
+                                )
+                              )
+                              .map((file) => (
+                                <tr
+                                  key={file.id}
+                                  className="hover:bg-blue-50/50 transition-colors cursor-pointer"
+                                  onClick={() => {
+                                    setSelectedJoinFile(file);
+                                    setIsJoinFileModalOpen(true);
+                                  }}
+                                >
+                                  <td className="px-4 py-3">
+                                    <div className={`w-3 h-3 rounded-full ${file.isActive ? 'bg-green-500' : 'bg-red-500'}`}></div>
                             </td>
+                                  <td className="px-4 py-3 text-sm text-gray-900">{file.id}</td>
+                                  <td className="px-4 py-3 text-sm text-gray-900">{file.displayName}</td>
+                                  <td className="px-4 py-3 text-sm text-gray-600">{file.fileName}</td>
+                                  <td className="px-4 py-3 text-sm text-gray-600">{file.joinTableName}</td>
+                                  <td className="px-4 py-3 text-sm text-gray-600">{file.separator}</td>
+                                  <td className="px-4 py-3 text-sm text-gray-600">{file.modifiedOn}</td>
                           </tr>
                         ))}
                       </tbody>
                     </table>
                   </div>
                 </div>
+                  </div>
+                )}
 
-                {/* Import Run History */}
-                <div className="mt-8">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Import Run History</h3>
+                {/* Field Mapping Section */}
+                {activeSection === 'fieldMapping' && (
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h2 className="text-xl font-bold text-gray-900">Field Mapping</h2>
+                      <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-200">
+                        <Save className="w-4 h-4" />
+                        Save
+                      </button>
+                    </div>
+
+                    {/* Search Bar */}
+                    <div className="flex items-center gap-2">
+                      <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded transition-all">
+                        <RotateCcw className="w-4 h-4" />
+                      </button>
+                      <div className="relative flex-1">
+                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                        <input
+                          type="text"
+                          value={fieldMappingSearchQuery}
+                          onChange={(e) => setFieldMappingSearchQuery(e.target.value)}
+                          placeholder="Search All Fields"
+                          className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                        />
+                        <Filter className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      </div>
+                    </div>
+
+                    {/* Field Mapping Table */}
                   <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
                     <div className="overflow-x-auto">
                       <table className="w-full">
                         <thead className="bg-gray-50 border-b border-gray-200">
                           <tr>
-                            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Run Time</th>
-                            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Duration</th>
-                            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Processed Rows</th>
-                            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Failed Rows</th>
-                            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Status</th>
-                            <th className="px-4 py-3 text-right text-xs font-semibold text-gray-700 uppercase tracking-wider">Actions</th>
+                              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">ID</th>
+                              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Mapped?</th>
+                              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Field Name</th>
+                              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">XML Field</th>
+                              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">XML Parent</th>
                           </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
-                          {importRuns.map((run) => (
-                            <tr key={run.id} className="hover:bg-blue-50/50 transition-colors duration-150">
-                              <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-600">{run.runTime}</td>
-                              <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-600">{run.duration}</td>
-                              <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-600">{run.processedRows.toLocaleString()}</td>
-                              <td className="px-4 py-4 whitespace-nowrap">
-                                <span className={`text-sm ${run.failedRows > 0 ? 'text-red-600 font-medium' : 'text-gray-600'}`}>
-                                  {run.failedRows.toLocaleString()}
-                                </span>
+                            {fieldMappings
+                              .filter(mapping => 
+                                Object.values(mapping).some(val => 
+                                  String(val).toLowerCase().includes(fieldMappingSearchQuery.toLowerCase())
+                                )
+                              )
+                              .map((mapping) => (
+                                <tr key={mapping.id} className="hover:bg-blue-50/50 transition-colors">
+                                  <td className="px-4 py-3 text-sm text-gray-900">{mapping.id}</td>
+                                  <td className="px-4 py-3">
+                                    {mapping.isMapped ? (
+                                      <CheckCircle2 className="w-5 h-5 text-blue-600" />
+                                    ) : (
+                                      <Circle className="w-5 h-5 text-gray-300" />
+                                    )}
                               </td>
-                              <td className="px-4 py-4 whitespace-nowrap">
-                                <span className={`px-2 py-1 rounded text-xs font-medium ${
-                                  run.status === 'success'
-                                    ? 'bg-green-100 text-green-700'
-                                    : 'bg-red-100 text-red-700'
-                                }`}>
-                                  {run.status === 'success' ? 'Success' : 'Failed'}
-                                </span>
-                              </td>
-                              <td className="px-4 py-4 whitespace-nowrap text-right">
-                                <div className="flex items-center justify-end gap-2">
-                                  {run.failedRows > 0 && (
-                                    <>
-                                      <button className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-blue-600 hover:bg-blue-50 rounded transition-all duration-200">
-                                        <Download className="w-4 h-4" />
-                                        Error Report
-                                      </button>
-                                      <button className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-blue-600 hover:bg-blue-50 rounded transition-all duration-200">
-                                        <AlertCircle className="w-4 h-4" />
-                                        View Errors
-                                      </button>
-                                    </>
-                                  )}
-                                </div>
-                              </td>
+                                  <td className="px-4 py-3 text-sm text-gray-900">{mapping.fieldName}</td>
+                                  <td className="px-4 py-3 text-sm text-gray-600">{mapping.xmlField}</td>
+                                  <td className="px-4 py-3 text-sm text-gray-600">{mapping.xmlParent}</td>
                             </tr>
                           ))}
                         </tbody>
@@ -479,11 +688,275 @@ export default function ImportsPage() {
                     </div>
                   </div>
                 </div>
+                )}
               </div>
             </>
           )}
         </div>
       </main>
+
+      {/* SFTP Profile Modal */}
+      {isSftpModalOpen && (
+        <div className="fixed inset-0 z-50 overflow-hidden">
+          <div className="absolute inset-0 bg-black bg-opacity-50" onClick={() => setIsSftpModalOpen(false)}></div>
+          <div className="absolute right-0 top-0 h-full w-full sm:w-[600px] bg-white shadow-2xl flex flex-col">
+            <div className="flex items-center justify-between p-6 border-b border-gray-200">
+              <h2 className="text-xl font-semibold text-gray-900">Edit Record</h2>
+              <button
+                onClick={() => setIsSftpModalOpen(false)}
+                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded transition-all"
+              >
+                <XCircle className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="flex-1 overflow-y-auto p-6">
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">ID</label>
+                  <input
+                    type="text"
+                    defaultValue={selectedSftpProfile?.id || ''}
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">DisplayName <span className="text-red-500">*</span></label>
+                  <input
+                    type="text"
+                    defaultValue={selectedSftpProfile?.displayName || ''}
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Protocol <span className="text-red-500">*</span></label>
+                  <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none cursor-pointer bg-white">
+                    <option>SFTP</option>
+                    <option>FTP</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">ServerName <span className="text-red-500">*</span></label>
+                  <input
+                    type="text"
+                    defaultValue={selectedSftpProfile?.serverName || ''}
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">UserName <span className="text-red-500">*</span></label>
+                  <input
+                    type="text"
+                    defaultValue={selectedSftpProfile?.userName || ''}
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Pwd <span className="text-red-500">*</span></label>
+                  <input
+                    type="password"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">hostkey <span className="text-red-500">*</span></label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Operation <span className="text-red-500">*</span></label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">SourcePath <span className="text-red-500">*</span></label>
+                  <input
+                    type="text"
+                    defaultValue={selectedSftpProfile?.sourcePath || ''}
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">DestinationPath <span className="text-red-500">*</span></label>
+                  <input
+                    type="text"
+                    defaultValue={selectedSftpProfile?.destinationPath || ''}
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Schedule <span className="text-red-500">*</span></label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      defaultChecked={selectedSftpProfile?.isActive || false}
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <span className="text-sm text-gray-700">isActive</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div className="border-t border-gray-200 p-6 flex items-center justify-end gap-3">
+              <button
+                onClick={() => setIsSftpModalOpen(false)}
+                className="px-6 py-2.5 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-all font-medium"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => setIsSftpModalOpen(false)}
+                className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all font-medium"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Join File Modal */}
+      {isJoinFileModalOpen && (
+        <div className="fixed inset-0 z-50 overflow-hidden">
+          <div className="absolute inset-0 bg-black bg-opacity-50" onClick={() => setIsJoinFileModalOpen(false)}></div>
+          <div className="absolute right-0 top-0 h-full w-full sm:w-[600px] bg-white shadow-2xl flex flex-col">
+            <div className="flex items-center justify-between p-6 border-b border-gray-200">
+              <h2 className="text-xl font-semibold text-gray-900">Edit Record</h2>
+              <button
+                onClick={() => setIsJoinFileModalOpen(false)}
+                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded transition-all"
+              >
+                <XCircle className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="flex-1 overflow-y-auto p-6">
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">ID</label>
+                  <input
+                    type="text"
+                    defaultValue={selectedJoinFile?.id || ''}
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Display Name <span className="text-red-500">*</span></label>
+                  <input
+                    type="text"
+                    defaultValue={selectedJoinFile?.displayName || ''}
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Internal Name (DO ...) <span className="text-red-500">*</span></label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">SFTP/FTP Source</label>
+                  <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none cursor-pointer bg-white">
+                    <option>Select...</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Source of Join File</label>
+                  <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none cursor-pointer bg-white">
+                    <option>Select...</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">File Name <span className="text-red-500">*</span></label>
+                  <input
+                    type="text"
+                    defaultValue={selectedJoinFile?.fileName || ''}
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Location of File (If N...) <span className="text-red-500">*</span></label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Separator <span className="text-red-500">*</span></label>
+                  <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none cursor-pointer bg-white">
+                    <option>TAB</option>
+                    <option>,</option>
+                    <option>PIPE</option>
+                    <option>XML</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Field Mapping) <span className="text-red-500">*</span></label>
+                  <textarea
+                    rows={4}
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none resize-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">DB Table Name to s... <span className="text-red-500">*</span></label>
+                  <input
+                    type="text"
+                    defaultValue={selectedJoinFile?.joinTableName || ''}
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Schedule Info <span className="text-red-500">*</span></label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <span className="text-sm text-gray-700">Use Bulk Load</span>
+                  </label>
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      defaultChecked={selectedJoinFile?.isActive || false}
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <span className="text-sm text-gray-700">isActive</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div className="border-t border-gray-200 p-6 flex items-center justify-end gap-3">
+              <button
+                onClick={() => setIsJoinFileModalOpen(false)}
+                className="px-6 py-2.5 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-all font-medium"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => setIsJoinFileModalOpen(false)}
+                className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all font-medium"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Import Config Detail Drawer */}
       {isDrawerOpen && (
