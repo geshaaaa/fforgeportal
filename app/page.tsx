@@ -77,6 +77,12 @@ export default function OnboardingPage() {
                 <Link href="/exports" className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200">
                   Exports
                 </Link>
+                <Link href="/sites" className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200">
+                  Sites
+                </Link>
+                <Link href="/reports" className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200">
+                  Reports
+                </Link>
               </nav>
               <div className="flex items-center gap-3">
                 <span className="text-sm font-medium text-gray-700 whitespace-nowrap">Step {currentStep} of 3</span>

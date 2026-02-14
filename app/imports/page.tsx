@@ -240,6 +240,12 @@ export default function ImportsPage() {
                 <Link href="/exports" className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200">
                   Exports
                 </Link>
+                <Link href="/sites" className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200">
+                  Sites
+                </Link>
+                <Link href="/reports" className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200">
+                  Reports
+                </Link>
               </nav>
             </div>
             
@@ -958,11 +964,14 @@ export default function ImportsPage() {
         </div>
       )}
 
-      {/* Import Config Detail Drawer */}
+      {/* Import Config Detail Modal */}
       {isDrawerOpen && (
-        <div className="fixed inset-0 z-50 overflow-hidden">
-          <div className="absolute inset-0 bg-black bg-opacity-50" onClick={closeDrawer}></div>
-          <div className="absolute right-0 top-0 h-full w-full sm:w-[600px] lg:w-[700px] bg-white shadow-2xl flex flex-col">
+        <div className="fixed inset-0 z-50 overflow-hidden flex items-center justify-center p-4">
+          <div 
+            className="absolute inset-0 bg-black bg-opacity-50 transition-opacity duration-300 ease-out"
+            onClick={closeDrawer}
+          ></div>
+          <div className="relative w-full max-w-3xl max-h-[90vh] bg-white rounded-lg shadow-2xl flex flex-col animate-scale-in">
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
               <h2 className="text-xl font-semibold text-gray-900">
                 {selectedConfig ? 'Edit Import Configuration' : 'Add Import Configuration'}
@@ -1005,7 +1014,7 @@ export default function ImportsPage() {
             </div>
 
             {/* Tab Content */}
-            <div className="flex-1 overflow-y-auto p-6">
+            <div className="flex-1 overflow-y-auto p-6 max-h-[calc(90vh-200px)]">
               {activeTab === 'connection' && (
                 <div className="space-y-4">
                   <div>

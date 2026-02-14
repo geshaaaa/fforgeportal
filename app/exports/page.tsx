@@ -82,7 +82,7 @@ export default function ExportsPage() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [selectedChannel, setSelectedChannel] = useState<ExportChannel | null>(null);
   const [activeTab, setActiveTab] = useState<'destination' | 'exportContent' | 'format' | 'schedule' | 'notifications'>('destination');
-  
+
   // New sections state
   const [activeSection, setActiveSection] = useState<'exportFiles' | 'exportProfile' | 'fieldMapping'>('exportFiles');
   const [exportFileSearchQuery, setExportFileSearchQuery] = useState('');
@@ -302,6 +302,12 @@ export default function ExportsPage() {
                 </Link>
                 <Link href="/exports" className="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors duration-200">
                   Exports
+                </Link>
+                <Link href="/sites" className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200">
+                  Sites
+                </Link>
+                <Link href="/reports" className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200">
+                  Reports
                 </Link>
               </nav>
             </div>
@@ -530,11 +536,11 @@ export default function ExportsPage() {
                     </div>
 
                     {/* Export Files Table */}
-                    <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
-                      <div className="overflow-x-auto">
-                        <table className="w-full">
-                          <thead className="bg-gray-50 border-b border-gray-200">
-                            <tr>
+                <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead className="bg-gray-50 border-b border-gray-200">
+                        <tr>
                               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">A</th>
                               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Al En...</th>
                               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Id</th>
@@ -545,9 +551,9 @@ export default function ExportsPage() {
                               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">S-FTP</th>
                               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Deli...</th>
                               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">SortB</th>
-                            </tr>
-                          </thead>
-                          <tbody className="bg-white divide-y divide-gray-200">
+                        </tr>
+                      </thead>
+                      <tbody className="bg-white divide-y divide-gray-200">
                             {exportFiles
                               .filter(file => 
                                 Object.values(file).some(val => 
@@ -571,7 +577,7 @@ export default function ExportsPage() {
                                       }}
                                       className={`w-3 h-3 rounded-full ${file.isActive ? 'bg-green-500' : 'bg-red-500'} hover:opacity-80 transition-opacity`}
                                     ></button>
-                                  </td>
+                              </td>
                                   <td className="px-4 py-3">
                                     <button
                                       onClick={(e) => {
@@ -580,14 +586,14 @@ export default function ExportsPage() {
                                       }}
                                     >
                                       {file.isAllEnabled ? (
-                                        <CheckCircle2 className="w-4 h-4 text-green-600" />
-                                      ) : (
+                                    <CheckCircle2 className="w-4 h-4 text-green-600" />
+                                  ) : (
                                         <div className="w-4 h-4 rounded-full border-2 border-red-500 flex items-center justify-center">
                                           <Minus className="w-3 h-3 text-red-500" />
-                                        </div>
+                                </div>
                                       )}
                                     </button>
-                                  </td>
+                              </td>
                                   <td className="px-4 py-3 text-sm text-gray-900">{file.id}</td>
                                   <td className="px-4 py-3 text-sm text-gray-900">{file.siteName}</td>
                                   <td className="px-4 py-3 text-sm text-gray-900">{file.exportName}</td>
@@ -610,7 +616,7 @@ export default function ExportsPage() {
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <h2 className="text-xl font-bold text-gray-900">Export Profile</h2>
-                      <button
+                                  <button
                         onClick={() => {
                           setSelectedExportProfile(null);
                           setIsExportProfileModalOpen(true);
@@ -619,14 +625,14 @@ export default function ExportsPage() {
                       >
                         <Plus className="w-4 h-4" />
                         Add Profile
-                      </button>
+                                  </button>
                     </div>
 
                     {/* Search Bar */}
                     <div className="flex items-center gap-2">
                       <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded transition-all">
                         <RotateCcw className="w-4 h-4" />
-                      </button>
+                                  </button>
                       <div className="relative flex-1">
                         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                         <input
@@ -672,26 +678,26 @@ export default function ExportsPage() {
                                   }}
                                 >
                                   <td className="px-4 py-3">
-                                    <button
+                                  <button
                                       onClick={(e) => {
                                         e.stopPropagation();
                                         toggleExportProfileActive(profile.id);
                                       }}
                                       className={`w-3 h-3 rounded-full ${profile.isActive ? 'bg-green-500' : 'bg-red-500'} hover:opacity-80 transition-opacity`}
                                     ></button>
-                                  </td>
+                              </td>
                                   <td className="px-4 py-3 text-sm text-gray-900">{profile.id}</td>
                                   <td className="px-4 py-3 text-sm text-gray-900">{profile.displayName}</td>
                                   <td className="px-4 py-3 text-sm text-gray-600">{profile.protocol}</td>
                                   <td className="px-4 py-3 text-sm text-gray-600">{profile.serverName}</td>
                                   <td className="px-4 py-3 text-sm text-gray-600">{profile.userName}</td>
                                   <td className="px-4 py-3 text-sm text-gray-600">{profile.modifiedOn}</td>
-                                </tr>
+                            </tr>
                               ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
                   </div>
                 )}
 
@@ -775,19 +781,19 @@ export default function ExportsPage() {
                     </div>
 
                     {/* Field Mapping Table */}
-                    <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
-                      <div className="overflow-x-auto">
-                        <table className="w-full">
-                          <thead className="bg-gray-50 border-b border-gray-200">
-                            <tr>
+                  <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                    <div className="overflow-x-auto">
+                      <table className="w-full">
+                        <thead className="bg-gray-50 border-b border-gray-200">
+                          <tr>
                               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">ID</th>
                               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Mapped?</th>
                               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">DB Field</th>
                               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Export Field Name</th>
                               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Sort Order</th>
-                            </tr>
-                          </thead>
-                          <tbody className="bg-white divide-y divide-gray-200">
+                          </tr>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-gray-200">
                             {exportFieldMappings
                               .filter(mapping => 
                                 Object.values(mapping).some(val => 
@@ -803,17 +809,17 @@ export default function ExportsPage() {
                                     ) : (
                                       <Circle className="w-5 h-5 text-gray-300" />
                                     )}
-                                  </td>
+                              </td>
                                   <td className="px-4 py-3 text-sm text-gray-900">{mapping.dbField}</td>
                                   <td className="px-4 py-3 text-sm text-gray-600">{mapping.exportFieldName}</td>
                                   <td className="px-4 py-3 text-sm text-gray-600">{mapping.sortOrder}</td>
-                                </tr>
-                              ))}
-                          </tbody>
-                        </table>
-                      </div>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
                     </div>
                   </div>
+                </div>
                 )}
               </div>
             </>
@@ -1082,11 +1088,14 @@ export default function ExportsPage() {
         </div>
       )}
 
-      {/* Export Channel Detail Drawer */}
+      {/* Export Channel Detail Modal */}
       {isDrawerOpen && (
-        <div className="fixed inset-0 z-50 overflow-hidden">
-          <div className="absolute inset-0 bg-black bg-opacity-50" onClick={closeDrawer}></div>
-          <div className="absolute right-0 top-0 h-full w-full sm:w-[600px] lg:w-[700px] bg-white shadow-2xl flex flex-col">
+        <div className="fixed inset-0 z-50 overflow-hidden flex items-center justify-center p-4">
+          <div 
+            className="absolute inset-0 bg-black bg-opacity-50 transition-opacity duration-300 ease-out"
+            onClick={closeDrawer}
+          ></div>
+          <div className="relative w-full max-w-3xl max-h-[90vh] bg-white rounded-lg shadow-2xl flex flex-col animate-scale-in">
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
               <h2 className="text-xl font-semibold text-gray-900">
                 {selectedChannel ? 'Edit Export Channel' : 'Add Export Channel'}
@@ -1129,7 +1138,7 @@ export default function ExportsPage() {
             </div>
 
             {/* Tab Content */}
-            <div className="flex-1 overflow-y-auto p-6">
+            <div className="flex-1 overflow-y-auto p-6 max-h-[calc(90vh-200px)]">
               {activeTab === 'destination' && (
                 <div className="space-y-4">
                   <div>
