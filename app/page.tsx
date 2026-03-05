@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Building2, Plus, X, CheckCircle2, Circle, FileText, Server, Download, FileCode, ChevronLeft, ChevronRight, BarChart3, Upload, Activity } from 'lucide-react';
 
 interface Site {
@@ -15,6 +16,7 @@ export default function OnboardingPage() {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [mounted, setMounted] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     setMounted(true);
@@ -31,6 +33,13 @@ export default function OnboardingPage() {
   const [defaultFormat, setDefaultFormat] = useState('CSV');
   const [fileNaming, setFileNaming] = useState('');
   const [dataRetention, setDataRetention] = useState('');
+
+  const completeOnboarding = () => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('onboardingCompleted', 'true');
+      router.replace('/dashboard');
+    }
+  };
 
   const addSite = () => {
     if (newSiteName && newSiteCode) {
@@ -58,71 +67,11 @@ export default function OnboardingPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#fbf0ea] flex">
-      {/* Left Navigation Sidebar */}
-      <aside className={`${mounted && isSidebarOpen ? 'w-64' : mounted ? 'w-20' : 'w-64'} bg-[#fbf0ea] border-r border-gray-200 flex flex-col sticky top-0 h-screen transition-all duration-300 ease-in-out`} suppressHydrationWarning>
-        <div className="p-4 border-b border-gray-200">
-          <div className="flex items-center justify-between mb-6">
-            <Link href="/" className={`flex items-center gap-3 ${mounted && !isSidebarOpen ? 'justify-center w-full' : ''}`}>
-              <div className="w-10 h-10 bg-gradient-to-br from-[#07011c] to-[#07011c] rounded-lg flex items-center justify-center hover:from-[#07011c] hover:to-[#07011c] transition-all duration-200 cursor-pointer shadow-md hover:shadow-lg flex-shrink-0">
-                <Building2 className="w-6 h-6 text-white" />
-              </div>
-              {(!mounted || isSidebarOpen) && (
-                <div>
-                  <h1 className="text-lg font-bold text-gray-900">FeedForge</h1>
-                  <p className="text-xs text-gray-500">Data Feeding Portal</p>
-                </div>
-              )}
-            </Link>
-          </div>
-          <button
-            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            className="w-full flex items-center justify-center p-2 hover:bg-[#f5dcc4] rounded-lg transition-colors duration-200"
-            title={isSidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
-          >
-            {(!mounted || isSidebarOpen) ? (
-              <ChevronLeft className="w-5 h-5 text-gray-600" />
-            ) : (
-              <ChevronRight className="w-5 h-5 text-gray-600" />
-            )}
-          </button>
-        </div>
-        <nav className="flex-1 p-4 space-y-1">
-          <Link href="/dashboard" className={`flex items-center ${mounted && isSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#07011c]  rounded-lg transition-colors duration-200`}>
-            <BarChart3 className="w-5 h-5 flex-shrink-0" />
-            {(!mounted || isSidebarOpen) && <span>Dashboard</span>}
-          </Link>
-          <Link href="/" className={`flex items-center ${mounted && isSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-white bg-[#1a0d3d] rounded-lg transition-colors duration-200`}>
-            <FileText className="w-5 h-5 flex-shrink-0" />
-            {(!mounted || isSidebarOpen) && <span>Onboarding</span>}
-          </Link>
-          <Link href="/imports" className={`flex items-center ${mounted && isSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#07011c]  rounded-lg transition-colors duration-200`}>
-            <Download className="w-5 h-5 flex-shrink-0" />
-            {(!mounted || isSidebarOpen) && <span>Imports</span>}
-          </Link>
-          <Link href="/exports" className={`flex items-center ${mounted && isSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#07011c]  rounded-lg transition-colors duration-200`}>
-            <Upload className="w-5 h-5 flex-shrink-0" />
-            {(!mounted || isSidebarOpen) && <span>Exports</span>}
-          </Link>
-          <Link href="/sites" className={`flex items-center ${mounted && isSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#07011c]  rounded-lg transition-colors duration-200`}>
-            <Building2 className="w-5 h-5 flex-shrink-0" />
-            {(!mounted || isSidebarOpen) && <span>Sites</span>}
-          </Link>
-          <Link href="/reports" className={`flex items-center ${mounted && isSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#07011c]  rounded-lg transition-colors duration-200`}>
-            <FileText className="w-5 h-5 flex-shrink-0" />
-            {(!mounted || isSidebarOpen) && <span>Reports</span>}
-          </Link>
-          <Link href="/execution-logs" className={`flex items-center ${mounted && isSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#07011c]  rounded-lg transition-colors duration-200`}>
-            <Activity className="w-5 h-5 flex-shrink-0" />
-            {(!mounted || isSidebarOpen) && <span>Execution Logs</span>}
-          </Link>
-        </nav>
-      </aside>
-
-      {/* Main Content Area */}
+    <div className="min-h-screen bg-[#EDE8D0] flex">
+      {/* Main Content Area (no sidebar while onboarding) */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
-        <header className="bg-[#fbf0ea] border-b border-gray-200 sticky top-0 z-10 shadow-sm">
+        <header className="bg-[#fbf0ea] border-b border-gray-300 sticky top-0 z-10 shadow-sm">
           <div className="px-4 sm:px-6 lg:px-8 py-4">
             <div className="flex items-center justify-between gap-4">
               <div>
@@ -153,7 +102,7 @@ export default function OnboardingPage() {
             {currentStep === 1 && (
               <>
             {/* Company Profile */}
-            <section className="bg-[#fbf0ea] rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200">
+            <section className="bg-[#fbf0ea] rounded-lg shadow-sm border border-gray-300 p-6 hover:shadow-md transition-shadow duration-200">
               <h2 className="text-lg font-semibold text-gray-900 mb-6">Company Profile</h2>
               <div className="space-y-4">
                 <div>
@@ -229,7 +178,7 @@ export default function OnboardingPage() {
             </section>
 
             {/* Sites Setup */}
-            <section className="bg-[#fbf0ea] rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200">
+            <section className="bg-[#fbf0ea] rounded-lg shadow-sm border border-gray-300 p-6 hover:shadow-md transition-shadow duration-200">
               <h2 className="text-lg font-semibold text-gray-900 mb-6">Sites Setup</h2>
               <div className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -283,8 +232,8 @@ export default function OnboardingPage() {
               {sites.length > 0 && (
                 <div className="mt-6 space-y-2">
                   <h3 className="text-sm font-medium text-gray-700 mb-3">Added Sites</h3>
-                  {sites.map((site) => (
-                    <div key={site.id} className="flex items-center justify-between p-3 bg-[#f5dcc4] rounded-lg border border-gray-200  hover:border-[#2d1a5c] transition-all duration-200 group">
+                    {sites.map((site) => (
+                    <div key={site.id} className="flex items-center justify-between p-3 bg-[#f5dcc4] rounded-lg border border-gray-300  hover:border-[#2d1a5c] transition-all duration-200 group">
                       <div className="flex-1 min-w-0">
                         <p className="font-medium text-gray-900 truncate">{site.name}</p>
                         <p className="text-sm text-gray-500 truncate">Code: {site.code} {site.location && `• ${site.location}`}</p>
@@ -303,7 +252,7 @@ export default function OnboardingPage() {
             </section>
 
             {/* Default Standards */}
-            <section className="bg-[#fbf0ea] rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200">
+            <section className="bg-[#fbf0ea] rounded-lg shadow-sm border border-gray-300 p-6 hover:shadow-md transition-shadow duration-200">
               <h2 className="text-lg font-semibold text-gray-900 mb-6">Default Standards</h2>
               <div className="space-y-4">
                 <div>
@@ -352,7 +301,7 @@ export default function OnboardingPage() {
 
             {/* Step 2: Import Configuration */}
             {currentStep === 2 && (
-              <section className="bg-[#fbf0ea] rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200">
+            <section className="bg-[#fbf0ea] rounded-lg shadow-sm border border-gray-300 p-6 hover:shadow-md transition-shadow duration-200">
                 <h2 className="text-lg font-semibold text-gray-900 mb-6">Configure First Import</h2>
                 <div className="space-y-4">
                   <div>
@@ -448,7 +397,7 @@ export default function OnboardingPage() {
 
             {/* Step 3: Export Configuration */}
             {currentStep === 3 && (
-              <section className="bg-[#fbf0ea] rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200">
+            <section className="bg-[#fbf0ea] rounded-lg shadow-sm border border-gray-300 p-6 hover:shadow-md transition-shadow duration-200">
                 <h2 className="text-lg font-semibold text-gray-900 mb-6">Configure First Export</h2>
                 <div className="space-y-4">
                   <div>
@@ -619,16 +568,19 @@ export default function OnboardingPage() {
                 Save Draft
               </button>
               {currentStep < 3 ? (
-                <button 
+                <button
                   onClick={() => setCurrentStep(currentStep + 1)}
                   className="px-6 py-2 bg-[#07011c] text-white rounded-lg hover:bg-[#07011c] active:bg-[#07011c] transition-all duration-200 font-medium"
                 >
                   Next{currentStep === 1 ? ': Configure Imports' : currentStep === 2 ? ': Configure Exports' : ''}
                 </button>
               ) : (
-                <Link href="/imports" className="px-6 py-2 bg-[#07011c] text-white rounded-lg hover:bg-[#07011c] active:bg-[#07011c] transition-all duration-200 font-medium">
+                <button
+                  onClick={completeOnboarding}
+                  className="px-6 py-2 bg-[#07011c] text-white rounded-lg hover:bg-[#07011c] active:bg-[#07011c] transition-all duration-200 font-medium"
+                >
                   Complete Setup
-                </Link>
+                </button>
               )}
             </div>
           </div>

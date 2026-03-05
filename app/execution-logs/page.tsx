@@ -261,7 +261,7 @@ export default function ExecutionLogsPage() {
   const failedCount = executionLogs.filter(log => log.status === 'failed').length;
 
   return (
-    <div className="min-h-screen bg-[#fbf0ea] flex">
+    <div className="min-h-screen bg-[#fbf0ea] flex relative">
       {/* Left Navigation Sidebar */}
       <aside className={`${mounted && isSidebarOpen ? 'w-64' : mounted ? 'w-20' : 'w-64'} bg-[#fbf0ea] border-r border-gray-200 flex flex-col sticky top-0 h-screen transition-all duration-300 ease-in-out`} suppressHydrationWarning>
         <div className="p-4 border-b border-gray-200">
@@ -278,17 +278,6 @@ export default function ExecutionLogsPage() {
               )}
             </Link>
           </div>
-          <button
-            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            className="w-full flex items-center justify-center p-2 hover:bg-[#f5dcc4] rounded-lg transition-colors duration-200"
-            title={isSidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
-          >
-            {isSidebarOpen ? (
-              <ChevronLeft className="w-5 h-5 text-gray-600" />
-            ) : (
-              <ChevronRight className="w-5 h-5 text-gray-600" />
-            )}
-          </button>
         </div>
         <nav className="flex-1 p-4 space-y-1">
           <Link href="/dashboard" className={`flex items-center ${isSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#07011c]  rounded-lg transition-colors duration-200`}>
@@ -321,6 +310,20 @@ export default function ExecutionLogsPage() {
           </Link>
         </nav>
       </aside>
+
+      {/* Sidebar Toggle Button - Attached to sidebar edge */}
+      <button
+        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+        className={`absolute ${mounted && isSidebarOpen ? 'left-64' : mounted ? 'left-20' : 'left-64'} top-1/2 -translate-y-1/2 z-30 bg-[#fbf0ea] border border-gray-300 ${mounted && isSidebarOpen ? 'rounded-r-lg rounded-l-none' : 'rounded-l-lg rounded-r-none'} p-2 shadow-md hover:bg-[#f5dcc4] transition-all duration-300 ease-in-out hover:shadow-lg`}
+        title={isSidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
+        suppressHydrationWarning
+      >
+        {mounted && isSidebarOpen ? (
+          <ChevronLeft className="w-4 h-4 text-gray-600" />
+        ) : (
+          <ChevronRight className="w-4 h-4 text-gray-600" />
+        )}
+      </button>
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col overflow-hidden">
@@ -363,27 +366,29 @@ export default function ExecutionLogsPage() {
                 </tr>
               </thead>
               <tbody className="bg-[#fbf0ea] divide-y divide-gray-200">
-                {batches.map((batch, index) => (
+                {batches.map((batch, index) => {
+                  const isSelected = selectedBatch === batch.id;
+                  return (
                   <tr
                     key={batch.id}
                     onClick={() => setSelectedBatch(batch.id)}
                     className={`cursor-pointer transition-colors ${
-                      selectedBatch === batch.id
-                        ? 'bg-[#1a0d3d] '
+                      isSelected
+                        ? 'bg-[#1a0d3d] text-white'
                         : 'hover:bg-[#f5dcc4]'
                     }`}
                   >
-                    <td className="px-4 py-3 text-sm text-gray-900">{batch.id}</td>
-                    <td className="px-4 py-3 text-sm text-gray-600">{batch.createdOn}</td>
+                    <td className={`px-4 py-3 text-sm ${isSelected ? 'text-white' : 'text-gray-900'}`}>{batch.id}</td>
+                    <td className={`px-4 py-3 text-sm ${isSelected ? 'text-white' : 'text-gray-600'}`}>{batch.createdOn}</td>
                     <td className="px-4 py-3">
                       {batch.status === 'success' ? (
-                        <CheckCircle2 className="w-5 h-5 text-[#07011c]" />
+                        <CheckCircle2 className={`w-5 h-5 ${isSelected ? 'text-white' : 'text-[#07011c]'}`} />
                       ) : (
-                        <AlertTriangle className="w-5 h-5 text-red-600" />
+                        <AlertTriangle className={`w-5 h-5 ${isSelected ? 'text-red-300' : 'text-red-600'}`} />
                       )}
                     </td>
                   </tr>
-                ))}
+                )})}
               </tbody>
             </table>
           </div>

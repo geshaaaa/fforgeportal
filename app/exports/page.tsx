@@ -284,7 +284,7 @@ export default function ExportsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#fbf0ea] flex">
+    <div className="min-h-screen bg-[#fbf0ea] flex relative">
       {/* Left Navigation Sidebar */}
       <aside className={`${mounted && isNavSidebarOpen ? 'w-64' : mounted ? 'w-20' : 'w-64'} bg-[#fbf0ea] border-r border-gray-200 flex flex-col sticky top-0 h-screen transition-all duration-300 ease-in-out`} suppressHydrationWarning>
         <div className="p-4 border-b border-gray-200">
@@ -301,17 +301,6 @@ export default function ExportsPage() {
               )}
             </Link>
           </div>
-          <button
-            onClick={() => setIsNavSidebarOpen(!isNavSidebarOpen)}
-            className="w-full flex items-center justify-center p-2 hover:bg-[#f5dcc4] rounded-lg transition-colors duration-200"
-            title={isNavSidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
-          >
-            {isNavSidebarOpen ? (
-              <ChevronLeft className="w-5 h-5 text-gray-600" />
-            ) : (
-              <ChevronRight className="w-5 h-5 text-gray-600" />
-            )}
-          </button>
         </div>
         <nav className="flex-1 p-4 space-y-1">
           <Link href="/dashboard" className={`flex items-center ${isNavSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#07011c]  rounded-lg transition-colors duration-200`}>
@@ -344,6 +333,20 @@ export default function ExportsPage() {
           </Link>
         </nav>
       </aside>
+
+      {/* Sidebar Toggle Button - Attached to sidebar edge */}
+      <button
+        onClick={() => setIsNavSidebarOpen(!isNavSidebarOpen)}
+        className={`absolute ${mounted && isNavSidebarOpen ? 'left-64' : mounted ? 'left-20' : 'left-64'} top-1/2 -translate-y-1/2 z-30 bg-[#fbf0ea] border border-gray-300 ${mounted && isNavSidebarOpen ? 'rounded-r-lg rounded-l-none' : 'rounded-l-lg rounded-r-none'} p-2 shadow-md hover:bg-[#f5dcc4] transition-all duration-300 ease-in-out hover:shadow-lg`}
+        title={isNavSidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
+        suppressHydrationWarning
+      >
+        {mounted && isNavSidebarOpen ? (
+          <ChevronLeft className="w-4 h-4 text-gray-600" />
+        ) : (
+          <ChevronRight className="w-4 h-4 text-gray-600" />
+        )}
+      </button>
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col overflow-hidden">
@@ -453,9 +456,13 @@ export default function ExportsPage() {
                   </div>
                   <div className="flex items-center gap-1.5 ml-2">
                     <span className={`px-1.5 py-0.5 rounded text-xs font-medium ${
-                      site.status === 'active' 
-                        ? 'bg-green-100 text-green-700' 
-                        : 'bg-[#f5dcc4] text-gray-700'
+                      isSelected
+                        ? site.status === 'active'
+                          ? 'bg-green-200 text-green-800'
+                          : 'bg-white/20 text-white'
+                        : site.status === 'active'
+                          ? 'bg-green-100 text-green-700'
+                          : 'bg-[#EDE8D0] text-gray-700'
                     }`}>
                       {site.status === 'active' ? 'Active' : 'Paused'}
                     </span>
@@ -464,13 +471,13 @@ export default function ExportsPage() {
                 
                 <div className="flex items-center gap-1.5 mt-2">
                   {site.lastExportStatus === 'success' ? (
-                    <CheckCircle2 className="w-3.5 h-3.5 text-green-600" />
+                    <CheckCircle2 className={`w-3.5 h-3.5 ${isSelected ? 'text-green-300' : 'text-green-600'}`} />
                   ) : site.lastExportStatus === 'failed' ? (
-                    <XCircle className="w-3.5 h-3.5 text-red-600" />
+                    <XCircle className={`w-3.5 h-3.5 ${isSelected ? 'text-red-300' : 'text-red-600'}`} />
                   ) : (
-                    <Clock className="w-3.5 h-3.5 text-yellow-600" />
+                    <Clock className={`w-3.5 h-3.5 ${isSelected ? 'text-yellow-300' : 'text-yellow-600'}`} />
                   )}
-                  <span className={`text-xs ${isSelected ? 'text-indigo-100' : 'text-gray-600'}`}>Last export: {site.lastExportTime}</span>
+                  <span className={`text-xs ${isSelected ? 'text-white' : 'text-gray-600'}`}>Last export: {site.lastExportTime}</span>
                 </div>
               </div>
             )})}

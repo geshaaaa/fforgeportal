@@ -53,12 +53,20 @@ export default function DashboardPage() {
     { label: 'Pending', value: 2, color: 'bg-yellow-500', percentage: 0.8 },
   ];
 
+  const developedAreas = [
+    { label: 'Feed freshness', value: 82, color: 'bg-[#07011c]' },
+    { label: 'Import reliability', value: 91, color: 'bg-green-600' },
+    { label: 'Export coverage', value: 74, color: 'bg-purple-600' },
+    { label: 'Channel health', value: 68, color: 'bg-orange-500' },
+    { label: 'Data quality', value: 88, color: 'bg-blue-500' },
+  ];
+
   const maxValue = Math.max(...chartData.exports, ...chartData.imports);
 
   return (
-    <div className="min-h-screen bg-[#fbf0ea] flex">
+    <div className="min-h-screen bg-[#EDE8D0] flex relative">
       {/* Left Navigation Sidebar */}
-      <aside className={`${isSidebarOpen ? 'w-64' : 'w-20'} bg-[#fbf0ea] border-r border-gray-200 flex flex-col sticky top-0 h-screen transition-all duration-300 ease-in-out`}>
+      <aside className={`${isSidebarOpen ? 'w-64' : 'w-20'} bg-[#EDE8D0] border-r border-gray-200 flex flex-col sticky top-0 h-screen transition-all duration-300 ease-in-out`}>
         <div className="p-4 border-b border-gray-200">
           <div className="flex items-center justify-between mb-6">
             <Link href="/" className={`flex items-center gap-3 ${mounted && !isSidebarOpen ? 'justify-center w-full' : ''}`}>
@@ -73,17 +81,6 @@ export default function DashboardPage() {
               )}
             </Link>
           </div>
-          <button
-            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            className="w-full flex items-center justify-center p-2 hover:bg-[#f5dcc4] rounded-lg transition-colors duration-200"
-            title={isSidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
-          >
-            {isSidebarOpen ? (
-              <ChevronLeft className="w-5 h-5 text-gray-600" />
-            ) : (
-              <ChevronRight className="w-5 h-5 text-gray-600" />
-            )}
-          </button>
         </div>
         <nav className="flex-1 p-4 space-y-1">
           <Link href="/dashboard" className={`flex items-center ${mounted && isSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-white bg-[#1a0d3d] rounded-lg transition-colors duration-200`}>
@@ -117,260 +114,360 @@ export default function DashboardPage() {
         </nav>
       </aside>
 
+      {/* Sidebar Toggle Button - Attached to sidebar edge */}
+      <button
+        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+        className={`absolute ${isSidebarOpen ? 'left-64' : 'left-20'} top-1/2 -translate-y-1/2 z-30 bg-white border border-gray-300 ${isSidebarOpen ? 'rounded-r-lg rounded-l-none' : 'rounded-l-lg rounded-r-none'} p-2 shadow-lg hover:bg-[#EDE8D0] transition-all duration-300 ease-in-out hover:shadow-xl`}
+        title={isSidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
+      >
+        {isSidebarOpen ? (
+          <ChevronLeft className="w-4 h-4 text-gray-700" />
+        ) : (
+          <ChevronRight className="w-4 h-4 text-gray-700" />
+        )}
+      </button>
+
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
-        <header className="bg-[#fbf0ea] border-b border-gray-200 sticky top-0 z-20 shadow-sm">
-          <div className="px-4 sm:px-6 lg:px-8 py-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Dashboard</h1>
-                <p className="text-xs sm:text-sm text-gray-500">Overview of your data feeding operations</p>
+        <header className="bg-[#EDE8D0] border-b border-gray-300 sticky top-0 z-20 shadow-sm">
+          <div className="px-4 sm:px-6 lg:px-10 py-5">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex items-center gap-4">
+                <div className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-[#07011c] via-[#1a0d3d] to-[#07011c] flex items-center justify-center shadow-lg ring-2 ring-[#07011c]/10">
+                  <span className="text-lg font-bold text-white">FF</span>
+                </div>
+                <div>
+                  <p className="text-xs uppercase tracking-wider text-gray-600 font-medium">Welcome back</p>
+                  <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mt-0.5">FeedForge Overview</h1>
+                  <p className="text-xs sm:text-sm text-gray-600 mt-0.5">Your imports, exports and channel health at a glance</p>
+                </div>
               </div>
-              <div className="flex items-center gap-3">
-                <select
-                  value={timeRange}
-                  onChange={(e) => setTimeRange(e.target.value as any)}
-                  className="px-3 py-2 border border-gray-300 rounded-lg bg-[#fbf0ea] focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none text-sm"
-                >
-                  <option value="7d">Last 7 days</option>
-                  <option value="30d">Last 30 days</option>
-                  <option value="90d">Last 90 days</option>
-                </select>
-                <button className="px-4 py-2 bg-[#07011c] text-white rounded-lg  transition-all duration-200 text-sm font-medium">
-                  <Calendar className="w-4 h-4 inline mr-2" />
-                  Export Report
-                </button>
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                <div className="relative w-full sm:w-72">
+                  <input
+                    type="text"
+                    placeholder="Search sites, channels, or feeds..."
+                    className="w-full pl-4 pr-10 py-2.5 rounded-xl bg-white border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#07011c]/20 focus:border-[#07011c] text-sm placeholder:text-gray-400 transition-all"
+                  />
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400 font-medium">⌘K</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <select
+                    value={timeRange}
+                    onChange={(e) => setTimeRange(e.target.value as any)}
+                    className="px-4 py-2.5 border border-gray-300 rounded-xl bg-white text-xs sm:text-sm focus:ring-2 focus:ring-[#07011c]/20 focus:border-[#07011c] outline-none shadow-sm transition-all font-medium"
+                  >
+                    <option value="7d">Last 7 days</option>
+                    <option value="30d">Last 30 days</option>
+                    <option value="90d">Last 90 days</option>
+                  </select>
+                  <button className="px-5 py-2.5 rounded-xl bg-[#07011c] text-white text-xs sm:text-sm font-semibold shadow-md hover:shadow-lg hover:bg-[#1a0d3d] transition-all duration-200 flex items-center gap-1.5">
+                    <Calendar className="w-4 h-4" />
+                    Export summary
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </header>
 
         {/* Main Content */}
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
-          {/* Key Metrics Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            {/* Total Sites */}
-            <div className="bg-[#fbf0ea] rounded-lg border border-gray-200 shadow-sm p-6 hover:shadow-md transition-shadow">
-              <div className="flex items-center justify-between mb-4">
-                <div className="p-3 bg-[#1a0d3d] rounded-lg">
-                  <Building2 className="w-6 h-6 text-[#07011c]" />
-                </div>
-                <span className="text-xs font-medium text-green-600 bg-green-100 px-2 py-1 rounded">
-                  <TrendingUp className="w-3 h-3 inline mr-1" />
-                  +12%
-                </span>
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-1">{metrics.totalSites}</h3>
-              <p className="text-sm text-gray-600">Total Sites</p>
-            </div>
-
-            {/* Active Imports */}
-            <div className="bg-[#fbf0ea] rounded-lg border border-gray-200 shadow-sm p-6 hover:shadow-md transition-shadow">
-              <div className="flex items-center justify-between mb-4">
-                <div className="p-3 bg-green-100 rounded-lg">
-                  <Download className="w-6 h-6 text-green-600" />
-                </div>
-                <span className="text-xs font-medium text-green-600 bg-green-100 px-2 py-1 rounded">
-                  <TrendingUp className="w-3 h-3 inline mr-1" />
-                  +8%
-                </span>
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-1">{metrics.activeImports}</h3>
-              <p className="text-sm text-gray-600">Active Imports</p>
-            </div>
-
-            {/* Successful Exports */}
-            <div className="bg-[#fbf0ea] rounded-lg border border-gray-200 shadow-sm p-6 hover:shadow-md transition-shadow">
-              <div className="flex items-center justify-between mb-4">
-                <div className="p-3 bg-purple-100 rounded-lg">
-                  <Upload className="w-6 h-6 text-purple-600" />
-                </div>
-                <span className="text-xs font-medium text-green-600 bg-green-100 px-2 py-1 rounded">
-                  <TrendingUp className="w-3 h-3 inline mr-1" />
-                  +15%
-                </span>
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-1">{metrics.successfulExports}</h3>
-              <p className="text-sm text-gray-600">Successful Exports</p>
-            </div>
-
-            {/* Success Rate */}
-            <div className="bg-[#fbf0ea] rounded-lg border border-gray-200 shadow-sm p-6 hover:shadow-md transition-shadow">
-              <div className="flex items-center justify-between mb-4">
-                <div className="p-3 bg-orange-100 rounded-lg">
-                  <Activity className="w-6 h-6 text-orange-600" />
-                </div>
-                <span className="text-xs font-medium text-green-600 bg-green-100 px-2 py-1 rounded">
-                  <TrendingUp className="w-3 h-3 inline mr-1" />
-                  +2.1%
-                </span>
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-1">{metrics.successRate}%</h3>
-              <p className="text-sm text-gray-600">Success Rate</p>
-            </div>
-          </div>
-
-          {/* Charts Row */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-            {/* Exports & Imports Chart */}
-            <div className="bg-[#fbf0ea] rounded-lg border border-gray-200 shadow-sm p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-lg font-semibold text-gray-900">Exports & Imports Trend</h2>
-                <div className="flex items-center gap-4">
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 bg-[#07011c] rounded-full"></div>
-                    <span className="text-sm text-gray-600">Exports</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                    <span className="text-sm text-gray-600">Imports</span>
-                  </div>
-                </div>
-              </div>
-              <div className="h-64 flex items-end justify-between gap-2">
-                {chartData.labels.map((label, index) => (
-                  <div key={index} className="flex-1 flex flex-col items-center gap-2">
-                    <div className="w-full flex flex-col justify-end gap-1" style={{ height: '200px' }}>
-                      <div
-                        className="w-full bg-[#07011c] rounded-t hover:bg-[#07011c] transition-colors"
-                        style={{ height: `${(chartData.exports[index] / maxValue) * 100}%` }}
-                        title={`Exports: ${chartData.exports[index]}`}
-                      ></div>
-                      <div
-                        className="w-full bg-green-500 rounded-t hover:bg-green-600 transition-colors"
-                        style={{ height: `${(chartData.imports[index] / maxValue) * 100}%` }}
-                        title={`Imports: ${chartData.imports[index]}`}
-                      ></div>
+        <main className="flex-1 overflow-y-auto px-4 sm:px-6 lg:px-10 py-8 bg-gradient-to-b from-[#EDE8D0] to-[#EDE8D0]/50">
+          <div className="grid gap-6 lg:grid-cols-[minmax(0,2.1fr)_minmax(0,1.2fr)]">
+            {/* Left main column */}
+            <div className="space-y-6">
+              {/* Top gradient cards row */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                {/* Profile / environment card */}
+                <div className="bg-white rounded-2xl border border-gray-200 shadow-md hover:shadow-xl transition-all duration-300 px-6 py-5 flex flex-col justify-between group">
+                  <div className="flex items-center gap-3 mb-5">
+                    <div className="relative w-14 h-14 rounded-xl bg-gradient-to-br from-[#07011c] via-[#1a0d3d] to-[#07011c] flex items-center justify-center shadow-lg ring-2 ring-[#07011c]/10 group-hover:scale-105 transition-transform">
+                      <span className="text-white text-base font-bold">FF</span>
                     </div>
-                    <span className="text-xs text-gray-600">{label}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Status Breakdown */}
-            <div className="bg-[#fbf0ea] rounded-lg border border-gray-200 shadow-sm p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-6">Status Breakdown</h2>
-              <div className="space-y-4">
-                {statusData.map((item, index) => (
-                  <div key={index}>
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-medium text-gray-700">{item.label}</span>
-                      <span className="text-sm font-semibold text-gray-900">{item.value} ({item.percentage}%)</span>
-                    </div>
-                    <div className="w-full bg-[#f5dcc4] rounded-full h-2.5">
-                      <div
-                        className={`${item.color} h-2.5 rounded-full transition-all duration-300`}
-                        style={{ width: `${item.percentage}%` }}
-                      ></div>
+                    <div>
+                      <p className="text-xs text-gray-500 font-medium">Environment</p>
+                      <p className="text-sm font-bold text-gray-900 mt-0.5">Production feeds</p>
                     </div>
                   </div>
-                ))}
+                  <div className="flex items-center justify-between">
+                    <div className="flex flex-col">
+                      <span className="text-xs text-gray-500 font-medium mb-1">Sites</span>
+                      <span className="text-xl font-bold text-gray-900">{metrics.totalSites}</span>
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-xs text-gray-500 font-medium mb-1">Active imports</span>
+                      <span className="text-xl font-bold text-gray-900">{metrics.activeImports}</span>
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-xs text-gray-500 font-medium mb-1">Channels</span>
+                      <span className="text-xl font-bold text-gray-900">{metrics.activeChannels}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Prioritized imports */}
+                <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#ffd0b5] via-[#ffe4cc] to-[#ffc2b3] border border-white/80 shadow-lg hover:shadow-2xl transition-all duration-300 px-6 py-5 flex flex-col justify-between group">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>
+                  <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full -ml-12 -mb-12"></div>
+                  <div className="relative flex items-center justify-between mb-6">
+                    <div>
+                      <p className="text-xs font-semibold text-[#7a3a16] uppercase tracking-wider mb-2">Prioritized imports</p>
+                      <p className="text-4xl font-bold text-[#1b0b33] leading-none mb-1">{metrics.activeImports}</p>
+                      <p className="text-xs text-[#7a3a16] font-medium">running on schedule</p>
+                    </div>
+                    <div className="w-14 h-14 rounded-xl bg-white/80 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                      <Download className="w-6 h-6 text-[#1b0b33]" />
+                    </div>
+                  </div>
+                  <div className="relative flex items-center justify-between text-xs">
+                    <span className="flex items-center gap-1.5 text-[#1b0b33] font-semibold">
+                      <TrendingUp className="w-4 h-4" />
+                      +12% vs last month
+                    </span>
+                    <span className="text-[#7a3a16] font-medium">Top 3 feeds optimised</span>
+                  </div>
+                </div>
+
+                {/* Additional checks */}
+                <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#ffe0f0] via-[#ffe9ff] to-[#d3f0ff] border border-white/80 shadow-lg hover:shadow-2xl transition-all duration-300 px-6 py-5 flex flex-col justify-between group">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>
+                  <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full -ml-12 -mb-12"></div>
+                  <div className="relative flex items-center justify-between mb-6">
+                    <div>
+                      <p className="text-xs font-semibold text-[#28304f] uppercase tracking-wider mb-2">Additional checks</p>
+                      <p className="text-4xl font-bold text-[#1b0b33] leading-none mb-1">{metrics.successRate}%</p>
+                      <p className="text-xs text-[#28304f] font-medium">overall success rate</p>
+                    </div>
+                    <div className="w-14 h-14 rounded-xl bg-white/80 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                      <Activity className="w-6 h-6 text-[#1b0b33]" />
+                    </div>
+                  </div>
+                  <div className="relative flex items-center justify-between text-xs">
+                    <span className="flex items-center gap-1.5 text-[#1b0b33] font-semibold">
+                      <CheckCircle2 className="w-4 h-4 text-green-600" />
+                      Feeds healthy
+                    </span>
+                    <span className="text-[#28304f] font-medium">3 exports need review</span>
+                  </div>
+                </div>
               </div>
-              <div className="mt-6 pt-6 border-t border-gray-200">
-                <div className="grid grid-cols-3 gap-4 text-center">
+
+              {/* Focus / trends area */}
+              <div className="bg-white rounded-2xl border border-gray-200 shadow-md hover:shadow-xl transition-all duration-300 p-6">
+                <div className="flex items-center justify-between mb-6">
                   <div>
-                    <div className="text-2xl font-bold text-gray-900">{metrics.totalProcessed.toLocaleString()}</div>
-                    <div className="text-xs text-gray-600 mt-1">Total Processed</div>
+                    <h2 className="text-base font-bold text-gray-900">Feed Throughput</h2>
+                    <p className="text-xs text-gray-600 mt-1">Imports vs exports across the last 12 months</p>
                   </div>
-                  <div>
-                    <div className="text-2xl font-bold text-gray-900">{metrics.avgProcessingTime}</div>
-                    <div className="text-xs text-gray-600 mt-1">Avg Time</div>
-                  </div>
-                  <div>
-                    <div className="text-2xl font-bold text-gray-900">{metrics.activeChannels}</div>
-                    <div className="text-xs text-gray-600 mt-1">Active Channels</div>
-                  </div>
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-[#EDE8D0] px-4 py-1.5 text-xs font-semibold text-[#7a3a16] border border-gray-200">
+                    <ArrowUp className="w-3.5 h-3.5" />
+                    {metrics.totalProcessed.toLocaleString()} items processed
+                  </span>
                 </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Bottom Row */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Recent Activity */}
-            <div className="lg:col-span-2 bg-[#fbf0ea] rounded-lg border border-gray-200 shadow-sm p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-lg font-semibold text-gray-900">Recent Activity</h2>
-                <Link href="/execution-logs" className="text-sm text-[#07011c] hover:text-[#07011c] font-medium">
-                  View All
-                </Link>
-              </div>
-              <div className="space-y-4">
-                {recentActivity.map((activity) => (
-                  <div key={activity.id} className="flex items-center gap-4 p-3 rounded-lg hover:bg-[#f5dcc4] transition-colors">
-                    <div className={`p-2 rounded-lg ${
-                      activity.type === 'export' ? 'bg-purple-100' : 'bg-green-100'
-                    }`}>
-                      {activity.type === 'export' ? (
-                        <Upload className={`w-4 h-4 ${activity.type === 'export' ? 'text-purple-600' : 'text-green-600'}`} />
-                      ) : (
-                        <Download className="w-4 h-4 text-green-600" />
-                      )}
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm font-medium text-gray-900">{activity.site}</span>
-                        <span className="text-xs text-gray-500">•</span>
-                        <span className="text-xs text-gray-500">{activity.channel}</span>
+                <div className="h-64 flex items-end justify-between gap-2.5 mb-4">
+                  {chartData.labels.map((label, index) => (
+                    <div key={label} className="flex-1 flex flex-col items-center gap-2 group">
+                      <div className="w-full flex flex-col justify-end gap-1.5 hover:opacity-80 transition-opacity" style={{ height: '200px' }}>
+                        <div
+                          className="w-full rounded-t-lg bg-gradient-to-t from-[#07011c] via-[#1a0d3d] to-[#2d1a5c] shadow-md hover:shadow-lg transition-all cursor-pointer group-hover:scale-105"
+                          style={{ height: `${(chartData.exports[index] / maxValue) * 100}%` }}
+                          title={`Exports: ${chartData.exports[index]}`}
+                        />
+                        <div
+                          className="w-full rounded-t-lg bg-gradient-to-t from-green-600 via-green-400 to-green-300 shadow-md hover:shadow-lg transition-all cursor-pointer group-hover:scale-105"
+                          style={{ height: `${(chartData.imports[index] / maxValue) * 100}%` }}
+                          title={`Imports: ${chartData.imports[index]}`}
+                        />
                       </div>
-                      <div className="flex items-center gap-2 mt-1">
-                        {activity.status === 'success' ? (
-                          <CheckCircle2 className="w-3 h-3 text-green-600" />
-                        ) : (
-                          <XCircle className="w-3 h-3 text-red-600" />
-                        )}
-                        <span className={`text-xs font-medium ${
-                          activity.status === 'success' ? 'text-green-600' : 'text-red-600'
-                        }`}>
-                          {activity.status === 'success' ? 'Success' : 'Failed'}
-                        </span>
-                        <span className="text-xs text-gray-500">•</span>
-                        <span className="text-xs text-gray-500">{activity.time}</span>
+                      <span className="text-xs text-gray-600 font-medium">{label}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-6 pt-4 border-t border-gray-200 flex items-center justify-between text-xs">
+                  <div className="flex items-center gap-4">
+                    <span className="flex items-center gap-2">
+                      <span className="w-4 h-2 rounded-full bg-gradient-to-r from-[#07011c] to-[#2d1a5c]" />
+                      <span className="text-gray-700 font-semibold">Exports</span>
+                    </span>
+                    <span className="flex items-center gap-2">
+                      <span className="w-4 h-2 rounded-full bg-gradient-to-r from-green-600 to-green-300" />
+                      <span className="text-gray-700 font-semibold">Imports</span>
+                    </span>
+                  </div>
+                  <span className="text-gray-500">Last updated 2 min ago</span>
+                </div>
+              </div>
+
+              {/* Recent activity + status */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                <div className="bg-white rounded-2xl border border-gray-200 shadow-md hover:shadow-xl transition-all duration-300 p-6">
+                  <div className="flex items-center justify-between mb-5">
+                    <h2 className="text-base font-bold text-gray-900">Recent Activity</h2>
+                    <Link href="/execution-logs" className="text-xs font-semibold text-[#07011c] hover:text-[#1a0d3d] hover:underline transition-colors">
+                      View all →
+                    </Link>
+                  </div>
+                  <div className="space-y-3">
+                    {recentActivity.map((activity) => (
+                      <div
+                        key={activity.id}
+                        className="flex items-center gap-3 rounded-xl px-4 py-3 hover:bg-[#EDE8D0]/50 transition-all duration-200 border border-transparent hover:border-gray-200 group"
+                      >
+                        <div
+                          className={`flex h-10 w-10 items-center justify-center rounded-xl shadow-sm group-hover:scale-110 transition-transform ${
+                            activity.type === 'export' ? 'bg-purple-100' : 'bg-green-100'
+                          }`}
+                        >
+                          {activity.type === 'export' ? (
+                            <Upload className="w-5 h-5 text-purple-600" />
+                          ) : (
+                            <Download className="w-5 h-5 text-green-600" />
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between mb-1">
+                            <p className="text-sm font-semibold text-gray-900 truncate">{activity.site}</p>
+                            <span className="text-xs text-gray-500 ml-2 whitespace-nowrap">{activity.time}</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-xs">
+                            {activity.status === 'success' ? (
+                              <CheckCircle2 className="w-3.5 h-3.5 text-green-600" />
+                            ) : (
+                              <XCircle className="w-3.5 h-3.5 text-red-600" />
+                            )}
+                            <span
+                              className={`font-semibold ${
+                                activity.status === 'success' ? 'text-green-600' : 'text-red-600'
+                              }`}
+                            >
+                              {activity.status === 'success' ? 'Success' : 'Failed'}
+                            </span>
+                            <span className="text-gray-400">•</span>
+                            <span className="text-gray-600">{activity.channel}</span>
+                          </div>
+                        </div>
                       </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-2xl border border-gray-200 shadow-md hover:shadow-xl transition-all duration-300 p-6">
+                  <h2 className="text-base font-bold text-gray-900 mb-5">Run Status</h2>
+                  <div className="space-y-4 mb-6">
+                    {statusData.map((item) => (
+                      <div key={item.label}>
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-xs font-semibold text-gray-700 uppercase tracking-wide">{item.label}</span>
+                          <span className="text-sm font-bold text-gray-900">
+                            {item.value} <span className="text-gray-500">({item.percentage}%)</span>
+                          </span>
+                        </div>
+                        <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden shadow-inner">
+                          <div
+                            className={`${item.color} h-full rounded-full transition-all duration-500 shadow-sm`}
+                            style={{ width: `${item.percentage}%` }}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="pt-5 border-t border-gray-200 grid grid-cols-3 gap-4 text-center">
+                    <div>
+                      <p className="text-xl font-bold text-gray-900 mb-1">
+                        {metrics.totalProcessed.toLocaleString()}
+                      </p>
+                      <p className="text-xs text-gray-600 font-medium">Total processed</p>
+                    </div>
+                    <div>
+                      <p className="text-xl font-bold text-gray-900 mb-1">{metrics.avgProcessingTime}</p>
+                      <p className="text-xs text-gray-600 font-medium">Avg time</p>
+                    </div>
+                    <div>
+                      <p className="text-xl font-bold text-gray-900 mb-1">{metrics.activeChannels}</p>
+                      <p className="text-xs text-gray-600 font-medium">Channels</p>
                     </div>
                   </div>
-                ))}
+                </div>
               </div>
             </div>
 
-            {/* Quick Stats */}
-            <div className="bg-[#fbf0ea] rounded-lg border border-gray-200 shadow-sm p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-6">Quick Stats</h2>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between p-3 bg-[#f5dcc4] rounded-lg">
-                  <div className="flex items-center gap-3">
-                    <Server className="w-5 h-5 text-[#07011c]" />
-                    <span className="text-sm font-medium text-gray-700">Active Channels</span>
-                  </div>
-                  <span className="text-lg font-bold text-gray-900">{metrics.activeChannels}</span>
+            {/* Right rail column */}
+            <div className="space-y-5">
+              {/* Today's schedule */}
+              <div className="bg-white rounded-2xl border border-gray-200 shadow-md hover:shadow-xl transition-all duration-300 p-6">
+                <div className="flex items-center justify-between mb-5">
+                  <h2 className="text-base font-bold text-gray-900">Today's Schedule</h2>
+                  <button className="text-xs font-semibold text-gray-500 hover:text-[#07011c] transition-colors">See all →</button>
                 </div>
-                <div className="flex items-center justify-between p-3 bg-[#f5dcc4] rounded-lg">
-                  <div className="flex items-center gap-3">
-                    <FileText className="w-5 h-5 text-green-600" />
-                    <span className="text-sm font-medium text-gray-700">Failed Exports</span>
+                <div className="space-y-4">
+                  <div className="flex items-start gap-4 group">
+                    <div className="w-12 text-right pt-1">
+                      <p className="font-bold text-gray-900 text-sm">08:00</p>
+                      <p className="text-gray-400 text-xs">AM</p>
+                    </div>
+                    <div className="flex-1 rounded-xl bg-[#EDE8D0] border border-gray-200 px-4 py-3 group-hover:shadow-md transition-all">
+                      <p className="font-semibold text-gray-900 text-sm">Daily Google Shopping export</p>
+                      <p className="mt-1 text-gray-600 text-xs">Potpourri & 3 other sites</p>
+                    </div>
                   </div>
-                  <span className="text-lg font-bold text-red-600">{metrics.failedExports}</span>
-                </div>
-                <div className="flex items-center justify-between p-3 bg-[#f5dcc4] rounded-lg">
-                  <div className="flex items-center gap-3">
-                    <Clock className="w-5 h-5 text-orange-600" />
-                    <span className="text-sm font-medium text-gray-700">Pending Tasks</span>
+                  <div className="flex items-start gap-4 group">
+                    <div className="w-12 text-right pt-1">
+                      <p className="font-bold text-gray-900 text-sm">09:30</p>
+                      <p className="text-gray-400 text-xs">AM</p>
+                    </div>
+                    <div className="flex-1 rounded-xl bg-purple-50 border border-purple-200 px-4 py-3 group-hover:shadow-md transition-all">
+                      <p className="font-semibold text-gray-900 text-sm">Inventory import window</p>
+                      <p className="mt-1 text-gray-600 text-xs">Warehouse SFTP profile</p>
+                    </div>
                   </div>
-                  <span className="text-lg font-bold text-gray-900">2</span>
-                </div>
-                <div className="flex items-center justify-between p-3 bg-[#f5dcc4] rounded-lg">
-                  <div className="flex items-center gap-3">
-                    <Users className="w-5 h-5 text-purple-600" />
-                    <span className="text-sm font-medium text-gray-700">Total Sites</span>
+                  <div className="flex items-start gap-4 group">
+                    <div className="w-12 text-right pt-1">
+                      <p className="font-bold text-gray-900 text-sm">02:00</p>
+                      <p className="text-gray-400 text-xs">PM</p>
+                    </div>
+                    <div className="flex-1 rounded-xl bg-blue-50 border border-blue-200 px-4 py-3 group-hover:shadow-md transition-all">
+                      <p className="font-semibold text-gray-900 text-sm">Channel health scan</p>
+                      <p className="mt-1 text-gray-600 text-xs">Feed quality checks across sites</p>
+                    </div>
                   </div>
-                  <span className="text-lg font-bold text-gray-900">{metrics.totalSites}</span>
                 </div>
               </div>
-              <div className="mt-6 pt-6 border-t border-gray-200">
-                <button className="w-full px-4 py-2 bg-[#07011c] text-white rounded-lg  transition-all duration-200 font-medium">
-                  View Detailed Reports
+
+              {/* Developed areas */}
+              <div className="bg-white rounded-2xl border border-gray-200 shadow-md hover:shadow-xl transition-all duration-300 p-6">
+                <h2 className="text-base font-bold text-gray-900 mb-5">Developed Areas</h2>
+                <div className="space-y-4">
+                  {developedAreas.map((area) => (
+                    <div key={area.label} className="flex items-center gap-4">
+                      <div className="w-36 text-xs text-gray-700 font-medium">{area.label}</div>
+                      <div className="flex-1 h-3 rounded-full bg-gray-200 overflow-hidden shadow-inner">
+                        <div
+                          className={`h-full rounded-full ${area.color} shadow-sm transition-all duration-500`}
+                          style={{ width: `${area.value}%` }}
+                        />
+                      </div>
+                      <div className="w-12 text-right text-xs text-gray-900 font-bold">
+                        {area.value}%
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Quick export CTA */}
+              <div className="relative overflow-hidden bg-gradient-to-br from-[#07011c] via-[#1a0d3d] to-[#2d1a5c] rounded-2xl text-white p-6 shadow-2xl hover:shadow-3xl transition-all duration-300 group">
+                <div className="absolute top-0 right-0 w-40 h-40 bg-white/5 rounded-full -mr-20 -mt-20"></div>
+                <div className="absolute bottom-0 left-0 w-32 h-32 bg-white/5 rounded-full -ml-16 -mb-16"></div>
+                <div className="relative flex items-center justify-between mb-4">
+                  <h2 className="text-base font-bold">Need a Quick Export?</h2>
+                  <ArrowUp className="w-5 h-5 rotate-45 text-white/60 group-hover:text-white/80 group-hover:scale-110 transition-all" />
+                </div>
+                <p className="text-xs text-white/90 mb-5 relative leading-relaxed">
+                  Trigger an on-demand export for any site without leaving the dashboard.
+                </p>
+                <button className="w-full rounded-xl bg-white text-[#07011c] text-sm font-bold py-3 shadow-lg hover:bg-[#EDE8D0] hover:shadow-xl transition-all duration-200 group-hover:scale-105">
+                  Open Exports Workspace
                 </button>
               </div>
             </div>
