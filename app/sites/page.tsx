@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { 
-  Search, Filter, Plus, Building2, RotateCcw, XCircle
+  Search, Filter, Plus, Building2, RotateCcw, XCircle,
+  ChevronLeft, ChevronRight, BarChart3, FileText, Download, Upload, Activity
 } from 'lucide-react';
 
 interface Site {
@@ -28,6 +29,7 @@ export default function SitesPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [selectedSite, setSelectedSite] = useState<Site | null>(null);
+  const [isNavSidebarOpen, setIsNavSidebarOpen] = useState(true);
 
   const sites: Site[] = [
     { id: 1, siteName: 'NorthStyle', workingFile: 'NorthStyleWorkingTa...', sourceFileName: 'Northstyle.xml', sftp: 'sftp.blocklogic.tech I...', executeOn: '08:00', modifiedOn: '7/24/2025 1:41 pm', isActive: true },
@@ -76,41 +78,82 @@ export default function SitesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
-      {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-20 shadow-sm">
-        <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
-            <div className="flex items-center gap-6">
-              <div className="flex items-center gap-3">
-                <Link href="/" className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg flex items-center justify-center hover:from-blue-700 hover:to-blue-800 transition-all duration-200 cursor-pointer shadow-md hover:shadow-lg">
-                  <Building2 className="w-6 h-6 text-white" />
-                </Link>
-                <div>
-                  <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Manage Sites</h1>
-                  <p className="text-xs sm:text-sm text-gray-500">Manage site configurations</p>
-                </div>
+    <div className="min-h-screen bg-[#fbf0ea] flex">
+      {/* Left Navigation Sidebar */}
+      <aside className={`${mounted && isNavSidebarOpen ? 'w-64' : mounted ? 'w-20' : 'w-64'} bg-[#fbf0ea] border-r border-gray-200 flex flex-col sticky top-0 h-screen transition-all duration-300 ease-in-out`} suppressHydrationWarning>
+        <div className="p-4 border-b border-gray-200">
+          <div className="flex items-center justify-between mb-6">
+            <Link href="/" className={`flex items-center gap-3 ${!isNavSidebarOpen ? 'justify-center w-full' : ''}`}>
+              <div className="w-10 h-10 bg-gradient-to-br from-[#07011c] to-[#07011c] rounded-lg flex items-center justify-center hover:from-[#07011c] hover:to-[#07011c] transition-all duration-200 cursor-pointer shadow-md hover:shadow-lg flex-shrink-0">
+                <Building2 className="w-6 h-6 text-white" />
               </div>
-              <nav className="hidden md:flex items-center gap-4 ml-4 pl-4 border-l border-gray-200">
-                <Link href="/" className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200">
-                  Onboarding
-                </Link>
-                <Link href="/imports" className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200">
-                  Imports
-                </Link>
-                <Link href="/exports" className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200">
-                  Exports
-                </Link>
-                <Link href="/sites" className="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors duration-200">
-                  Sites
-                </Link>
-              </nav>
-            </div>
+              {isNavSidebarOpen && (
+                <div>
+                  <h1 className="text-lg font-bold text-gray-900">FeedForge</h1>
+                  <p className="text-xs text-gray-500">Data Feeding Portal</p>
+                </div>
+              )}
+            </Link>
+          </div>
+          <button
+            onClick={() => setIsNavSidebarOpen(!isNavSidebarOpen)}
+            className="w-full flex items-center justify-center p-2 hover:bg-[#f5dcc4] rounded-lg transition-colors duration-200"
+            title={isNavSidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
+          >
+            {isNavSidebarOpen ? (
+              <ChevronLeft className="w-5 h-5 text-gray-600" />
+            ) : (
+              <ChevronRight className="w-5 h-5 text-gray-600" />
+            )}
+          </button>
+        </div>
+        <nav className="flex-1 p-4 space-y-1">
+          <Link href="/dashboard" className={`flex items-center ${isNavSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#07011c]  rounded-lg transition-colors duration-200`}>
+            <BarChart3 className="w-5 h-5 flex-shrink-0" />
+            {isNavSidebarOpen && <span>Dashboard</span>}
+          </Link>
+          <Link href="/" className={`flex items-center ${isNavSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#07011c]  rounded-lg transition-colors duration-200`}>
+            <FileText className="w-5 h-5 flex-shrink-0" />
+            {isNavSidebarOpen && <span>Onboarding</span>}
+          </Link>
+          <Link href="/imports" className={`flex items-center ${isNavSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#07011c]  rounded-lg transition-colors duration-200`}>
+            <Download className="w-5 h-5 flex-shrink-0" />
+            {isNavSidebarOpen && <span>Imports</span>}
+          </Link>
+          <Link href="/exports" className={`flex items-center ${isNavSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#07011c]  rounded-lg transition-colors duration-200`}>
+            <Upload className="w-5 h-5 flex-shrink-0" />
+            {isNavSidebarOpen && <span>Exports</span>}
+          </Link>
+          <Link href="/sites" className={`flex items-center ${isNavSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-white bg-[#1a0d3d] rounded-lg transition-colors duration-200`}>
+            <Building2 className="w-5 h-5 flex-shrink-0" />
+            {isNavSidebarOpen && <span>Sites</span>}
+          </Link>
+          <Link href="/reports" className={`flex items-center ${isNavSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#07011c]  rounded-lg transition-colors duration-200`}>
+            <FileText className="w-5 h-5 flex-shrink-0" />
+            {isNavSidebarOpen && <span>Reports</span>}
+          </Link>
+          <Link href="/execution-logs" className={`flex items-center ${isNavSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#07011c]  rounded-lg transition-colors duration-200`}>
+            <Activity className="w-5 h-5 flex-shrink-0" />
+            {isNavSidebarOpen && <span>Execution Logs</span>}
+          </Link>
+        </nav>
+      </aside>
+
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Header */}
+        <header className="bg-[#fbf0ea] border-b border-gray-200 sticky top-0 z-20 shadow-sm">
+          <div className="px-4 sm:px-6 lg:px-8 py-4">
+            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+              <div>
+                <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Manage Sites</h1>
+                <p className="text-xs sm:text-sm text-gray-500">Manage site configurations</p>
+              </div>
             
             {/* Add Site Button */}
             <button
               onClick={() => openModal()}
-              className="flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 active:bg-blue-800 transition-all duration-200 shadow-sm hover:shadow-md font-medium whitespace-nowrap"
+              className="flex items-center justify-center gap-2 px-4 py-2 bg-[#07011c] text-white rounded-lg hover:bg-[#07011c] active:bg-[#07011c] transition-all duration-200 shadow-sm hover:shadow-md font-medium whitespace-nowrap"
             >
               <Plus className="w-4 h-4" />
               <span className="hidden sm:inline">Add Site</span>
@@ -124,7 +167,7 @@ export default function SitesPage() {
       <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
         {/* Search Bar */}
         <div className="flex items-center gap-2 mb-4">
-          <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded transition-all">
+          <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-[#f5dcc4] rounded transition-all">
             <RotateCcw className="w-4 h-4" />
           </button>
           <div className="relative flex-1">
@@ -134,17 +177,17 @@ export default function SitesPage() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search All Fields"
-              className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+              className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
             />
             <Filter className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
           </div>
         </div>
 
         {/* Sites Table */}
-        <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+        <div className="bg-[#fbf0ea] rounded-lg border border-gray-200 shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50 border-b border-gray-200">
+              <thead className="bg-[#f5dcc4] border-b border-gray-200">
                 <tr>
                   <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Ac...</th>
                   <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Id</th>
@@ -156,11 +199,11 @@ export default function SitesPage() {
                   <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">ModifiedOn</th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="bg-[#fbf0ea] divide-y divide-gray-200">
                 {filteredSites.map((site) => (
                   <tr
                     key={site.id}
-                    className="hover:bg-blue-50/50 transition-colors cursor-pointer"
+                    className="/50 transition-colors cursor-pointer"
                     onClick={() => openDrawer(site)}
                   >
                     <td className="px-4 py-3">
@@ -188,12 +231,12 @@ export default function SitesPage() {
             className="absolute inset-0 bg-black bg-opacity-50 transition-opacity duration-300 ease-out"
             onClick={closeModal}
           ></div>
-          <div className="relative w-full max-w-2xl max-h-[90vh] bg-white rounded-lg shadow-2xl flex flex-col animate-scale-in">
+          <div className="relative w-full max-w-2xl max-h-[90vh] bg-[#fbf0ea] rounded-lg shadow-2xl flex flex-col animate-scale-in">
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
               <h2 className="text-xl font-semibold text-gray-900">Add Site</h2>
               <button
                 onClick={closeModal}
-                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded transition-all duration-200"
+                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-[#f5dcc4] rounded transition-all duration-200"
               >
                 <XCircle className="w-5 h-5" />
               </button>
@@ -204,12 +247,12 @@ export default function SitesPage() {
                   <label className="block text-sm font-medium text-gray-700 mb-2">ID</label>
                   <input
                     type="text"
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">CustomerId</label>
-                  <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none cursor-pointer bg-white">
+                  <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none cursor-pointer bg-[#fbf0ea]">
                     <option>Select Customer...</option>
                     <option>Customer 1</option>
                     <option>Customer 2</option>
@@ -219,47 +262,47 @@ export default function SitesPage() {
                   <label className="block text-sm font-medium text-gray-700 mb-2">SiteName <span className="text-red-500">*</span></label>
                   <input
                     type="text"
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">WorkingFileTable <span className="text-red-500">*</span></label>
                   <input
                     type="text"
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">SourceFilePath <span className="text-red-500">*</span></label>
                   <input
                     type="text"
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">ExecuteOn <span className="text-red-500">*</span></label>
                   <input
                     type="time"
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">SourceFileName <span className="text-red-500">*</span></label>
                   <input
                     type="text"
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">XML File Id <span className="text-red-500">*</span></label>
                   <input
                     type="text"
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">ImportProfileId</label>
-                  <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none cursor-pointer bg-white">
+                  <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none cursor-pointer bg-[#fbf0ea]">
                     <option>Select Profile...</option>
                     <option>Profile 1</option>
                     <option>Profile 2</option>
@@ -269,14 +312,14 @@ export default function SitesPage() {
                   <label className="block text-sm font-medium text-gray-700 mb-2">JoinFiles</label>
                   <input
                     type="text"
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
                   />
                 </div>
                 <div>
                   <label className="flex items-center gap-2">
                     <input
                       type="checkbox"
-                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                      className="w-4 h-4 text-[#07011c] border-gray-300 rounded focus:ring-[#07011c]"
                     />
                     <span className="text-sm text-gray-700">isActive</span>
                   </label>
@@ -286,13 +329,13 @@ export default function SitesPage() {
             <div className="border-t border-gray-200 p-6 flex items-center justify-end gap-3">
               <button
                 onClick={closeModal}
-                className="px-6 py-2.5 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-all font-medium"
+                className="px-6 py-2.5 text-gray-700 border border-gray-300 rounded-lg hover:bg-[#f5dcc4] transition-all font-medium"
               >
                 Cancel
               </button>
               <button
                 onClick={closeModal}
-                className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all font-medium"
+                className="px-6 py-2.5 bg-[#07011c] text-white rounded-lg hover:bg-[#07011c] transition-all font-medium"
               >
                 Save
               </button>
@@ -305,12 +348,12 @@ export default function SitesPage() {
       {isDrawerOpen && (
         <div className="fixed inset-0 z-50 overflow-hidden">
           <div className="absolute inset-0 bg-black bg-opacity-50" onClick={closeDrawer}></div>
-          <div className="absolute right-0 top-0 h-full w-full sm:w-[600px] lg:w-[700px] bg-white shadow-2xl flex flex-col">
+          <div className="absolute right-0 top-0 h-full w-full sm:w-[600px] lg:w-[700px] bg-[#fbf0ea] shadow-2xl flex flex-col">
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
               <h2 className="text-xl font-semibold text-gray-900">Edit Record</h2>
               <button
                 onClick={closeDrawer}
-                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded transition-all duration-200"
+                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-[#f5dcc4] rounded transition-all duration-200"
               >
                 <XCircle className="w-5 h-5" />
               </button>
@@ -322,12 +365,12 @@ export default function SitesPage() {
                   <input
                     type="text"
                     defaultValue={selectedSite?.id || ''}
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">CustomerId</label>
-                  <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none cursor-pointer bg-white">
+                  <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none cursor-pointer bg-[#fbf0ea]">
                     <option>Select Customer...</option>
                     <option>Customer 1</option>
                     <option>Customer 2</option>
@@ -338,7 +381,7 @@ export default function SitesPage() {
                   <input
                     type="text"
                     defaultValue={selectedSite?.siteName || ''}
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
                   />
                 </div>
                 <div>
@@ -346,7 +389,7 @@ export default function SitesPage() {
                   <input
                     type="text"
                     defaultValue={selectedSite?.workingFileTable || selectedSite?.workingFile || ''}
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
                   />
                 </div>
                 <div>
@@ -354,7 +397,7 @@ export default function SitesPage() {
                   <input
                     type="text"
                     defaultValue={selectedSite?.sourceFilePath || ''}
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
                   />
                 </div>
                 <div>
@@ -362,7 +405,7 @@ export default function SitesPage() {
                   <input
                     type="time"
                     defaultValue={selectedSite?.executeOn || ''}
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
                   />
                 </div>
                 <div>
@@ -370,7 +413,7 @@ export default function SitesPage() {
                   <input
                     type="text"
                     defaultValue={selectedSite?.sourceFileName || ''}
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
                   />
                 </div>
                 <div>
@@ -378,12 +421,12 @@ export default function SitesPage() {
                   <input
                     type="text"
                     defaultValue={selectedSite?.xmlFileId || ''}
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">ImportProfileId</label>
-                  <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none cursor-pointer bg-white">
+                  <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none cursor-pointer bg-[#fbf0ea]">
                     <option>Select Profile...</option>
                     <option>Profile 1</option>
                     <option>Profile 2</option>
@@ -394,7 +437,7 @@ export default function SitesPage() {
                   <input
                     type="text"
                     defaultValue={selectedSite?.joinFiles || ''}
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
                   />
                 </div>
                 <div>
@@ -402,7 +445,7 @@ export default function SitesPage() {
                     <input
                       type="checkbox"
                       defaultChecked={selectedSite?.isActive || false}
-                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                      className="w-4 h-4 text-[#07011c] border-gray-300 rounded focus:ring-[#07011c]"
                     />
                     <span className="text-sm text-gray-700">isActive</span>
                   </label>
@@ -412,13 +455,13 @@ export default function SitesPage() {
             <div className="border-t border-gray-200 p-6 flex items-center justify-end gap-3">
               <button
                 onClick={closeDrawer}
-                className="px-6 py-2.5 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-all font-medium"
+                className="px-6 py-2.5 text-gray-700 border border-gray-300 rounded-lg hover:bg-[#f5dcc4] transition-all font-medium"
               >
                 Cancel
               </button>
               <button
                 onClick={closeDrawer}
-                className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all font-medium"
+                className="px-6 py-2.5 bg-[#07011c] text-white rounded-lg hover:bg-[#07011c] transition-all font-medium"
               >
                 Save
               </button>
@@ -426,6 +469,7 @@ export default function SitesPage() {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 }

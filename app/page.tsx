@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Building2, Plus, X, CheckCircle2, Circle, FileText, Server, Download, FileCode } from 'lucide-react';
+import { Building2, Plus, X, CheckCircle2, Circle, FileText, Server, Download, FileCode, ChevronLeft, ChevronRight, BarChart3, Upload, Activity } from 'lucide-react';
 
 interface Site {
   id: string;
@@ -13,6 +13,12 @@ interface Site {
 
 export default function OnboardingPage() {
   const [currentStep, setCurrentStep] = useState(1);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   const [companyName, setCompanyName] = useState('');
   const [contactName, setContactName] = useState('');
   const [contactEmail, setContactEmail] = useState('');
@@ -52,56 +58,93 @@ export default function OnboardingPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
-      {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-10 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <Link href="/" className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg flex items-center justify-center hover:from-blue-700 hover:to-blue-800 transition-all duration-200 cursor-pointer shadow-md hover:shadow-lg">
+    <div className="min-h-screen bg-[#fbf0ea] flex">
+      {/* Left Navigation Sidebar */}
+      <aside className={`${mounted && isSidebarOpen ? 'w-64' : mounted ? 'w-20' : 'w-64'} bg-[#fbf0ea] border-r border-gray-200 flex flex-col sticky top-0 h-screen transition-all duration-300 ease-in-out`} suppressHydrationWarning>
+        <div className="p-4 border-b border-gray-200">
+          <div className="flex items-center justify-between mb-6">
+            <Link href="/" className={`flex items-center gap-3 ${mounted && !isSidebarOpen ? 'justify-center w-full' : ''}`}>
+              <div className="w-10 h-10 bg-gradient-to-br from-[#07011c] to-[#07011c] rounded-lg flex items-center justify-center hover:from-[#07011c] hover:to-[#07011c] transition-all duration-200 cursor-pointer shadow-md hover:shadow-lg flex-shrink-0">
                 <Building2 className="w-6 h-6 text-white" />
-              </Link>
-              <div>
-                <h1 className="text-xl font-bold text-gray-900">FeedForge</h1>
-                <p className="text-xs text-gray-500">Data Feeding Portal</p>
               </div>
-            </div>
-            <div className="flex items-center gap-6">
-              <nav className="hidden md:flex items-center gap-4">
-                <Link href="/" className="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors duration-200">
-                  Onboarding
-                </Link>
-                <Link href="/imports" className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200">
-                  Imports
-                </Link>
-                <Link href="/exports" className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200">
-                  Exports
-                </Link>
-                <Link href="/sites" className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200">
-                  Sites
-                </Link>
-                <Link href="/reports" className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200">
-                  Reports
-                </Link>
-              </nav>
+              {(!mounted || isSidebarOpen) && (
+                <div>
+                  <h1 className="text-lg font-bold text-gray-900">FeedForge</h1>
+                  <p className="text-xs text-gray-500">Data Feeding Portal</p>
+                </div>
+              )}
+            </Link>
+          </div>
+          <button
+            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            className="w-full flex items-center justify-center p-2 hover:bg-[#f5dcc4] rounded-lg transition-colors duration-200"
+            title={isSidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
+          >
+            {(!mounted || isSidebarOpen) ? (
+              <ChevronLeft className="w-5 h-5 text-gray-600" />
+            ) : (
+              <ChevronRight className="w-5 h-5 text-gray-600" />
+            )}
+          </button>
+        </div>
+        <nav className="flex-1 p-4 space-y-1">
+          <Link href="/dashboard" className={`flex items-center ${mounted && isSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#07011c]  rounded-lg transition-colors duration-200`}>
+            <BarChart3 className="w-5 h-5 flex-shrink-0" />
+            {(!mounted || isSidebarOpen) && <span>Dashboard</span>}
+          </Link>
+          <Link href="/" className={`flex items-center ${mounted && isSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-white bg-[#1a0d3d] rounded-lg transition-colors duration-200`}>
+            <FileText className="w-5 h-5 flex-shrink-0" />
+            {(!mounted || isSidebarOpen) && <span>Onboarding</span>}
+          </Link>
+          <Link href="/imports" className={`flex items-center ${mounted && isSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#07011c]  rounded-lg transition-colors duration-200`}>
+            <Download className="w-5 h-5 flex-shrink-0" />
+            {(!mounted || isSidebarOpen) && <span>Imports</span>}
+          </Link>
+          <Link href="/exports" className={`flex items-center ${mounted && isSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#07011c]  rounded-lg transition-colors duration-200`}>
+            <Upload className="w-5 h-5 flex-shrink-0" />
+            {(!mounted || isSidebarOpen) && <span>Exports</span>}
+          </Link>
+          <Link href="/sites" className={`flex items-center ${mounted && isSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#07011c]  rounded-lg transition-colors duration-200`}>
+            <Building2 className="w-5 h-5 flex-shrink-0" />
+            {(!mounted || isSidebarOpen) && <span>Sites</span>}
+          </Link>
+          <Link href="/reports" className={`flex items-center ${mounted && isSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#07011c]  rounded-lg transition-colors duration-200`}>
+            <FileText className="w-5 h-5 flex-shrink-0" />
+            {(!mounted || isSidebarOpen) && <span>Reports</span>}
+          </Link>
+          <Link href="/execution-logs" className={`flex items-center ${mounted && isSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#07011c]  rounded-lg transition-colors duration-200`}>
+            <Activity className="w-5 h-5 flex-shrink-0" />
+            {(!mounted || isSidebarOpen) && <span>Execution Logs</span>}
+          </Link>
+        </nav>
+      </aside>
+
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Header */}
+        <header className="bg-[#fbf0ea] border-b border-gray-200 sticky top-0 z-10 shadow-sm">
+          <div className="px-4 sm:px-6 lg:px-8 py-4">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <h1 className="text-xl font-bold text-gray-900">Onboarding</h1>
+                <p className="text-xs text-gray-500">Step {currentStep} of 3</p>
+              </div>
               <div className="flex items-center gap-3">
-                <span className="text-sm font-medium text-gray-700 whitespace-nowrap">Step {currentStep} of 3</span>
-                <div className="w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
+                <div className="w-32 h-2 bg-[#f0d4b8] rounded-full overflow-hidden">
                   <div 
-                    className="h-full bg-blue-600 rounded-full transition-all duration-300"
+                    className="h-full bg-[#07011c] rounded-full transition-all duration-300"
                     style={{ width: `${(currentStep / 3) * 100}%` }}
                   ></div>
                 </div>
+                <a href="#" className="text-sm text-[#07011c] hover:text-[#07011c] font-medium transition-colors duration-200 hover:underline whitespace-nowrap">
+                  Help / Documentation
+                </a>
               </div>
-              <a href="#" className="text-sm text-blue-600 hover:text-blue-700 font-medium transition-colors duration-200 hover:underline whitespace-nowrap">
-                Help / Documentation
-              </a>
             </div>
           </div>
-        </div>
-      </header>
+        </header>
 
-      {/* Main Body */}
+        {/* Main Body */}
       <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column - Setup Form */}
@@ -110,7 +153,7 @@ export default function OnboardingPage() {
             {currentStep === 1 && (
               <>
             {/* Company Profile */}
-            <section className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200">
+            <section className="bg-[#fbf0ea] rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200">
               <h2 className="text-lg font-semibold text-gray-900 mb-6">Company Profile</h2>
               <div className="space-y-4">
                 <div>
@@ -121,7 +164,7 @@ export default function OnboardingPage() {
                     type="text"
                     value={companyName}
                     onChange={(e) => setCompanyName(e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400"
                     placeholder="Enter company name"
                   />
                 </div>
@@ -134,7 +177,7 @@ export default function OnboardingPage() {
                       type="text"
                       value={contactName}
                       onChange={(e) => setContactName(e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400"
                       placeholder="John Doe"
                     />
                   </div>
@@ -146,7 +189,7 @@ export default function OnboardingPage() {
                       type="email"
                       value={contactEmail}
                       onChange={(e) => setContactEmail(e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400"
                       placeholder="john@example.com"
                     />
                   </div>
@@ -158,7 +201,7 @@ export default function OnboardingPage() {
                       type="tel"
                       value={contactPhone}
                       onChange={(e) => setContactPhone(e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400"
                       placeholder="+1 (555) 123-4567"
                     />
                   </div>
@@ -170,7 +213,7 @@ export default function OnboardingPage() {
                   <select
                     value={timezone}
                     onChange={(e) => setTimezone(e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-white"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-[#fbf0ea]"
                   >
                     <option value="UTC">UTC</option>
                     <option value="America/New_York">America/New_York (EST)</option>
@@ -186,7 +229,7 @@ export default function OnboardingPage() {
             </section>
 
             {/* Sites Setup */}
-            <section className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200">
+            <section className="bg-[#fbf0ea] rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200">
               <h2 className="text-lg font-semibold text-gray-900 mb-6">Sites Setup</h2>
               <div className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -198,7 +241,7 @@ export default function OnboardingPage() {
                       type="text"
                       value={newSiteName}
                       onChange={(e) => setNewSiteName(e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400"
                       placeholder="Main Office"
                     />
                   </div>
@@ -210,7 +253,7 @@ export default function OnboardingPage() {
                       type="text"
                       value={newSiteCode}
                       onChange={(e) => setNewSiteCode(e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400"
                       placeholder="SITE001"
                     />
                   </div>
@@ -222,14 +265,14 @@ export default function OnboardingPage() {
                       type="text"
                       value={newSiteLocation}
                       onChange={(e) => setNewSiteLocation(e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400"
                       placeholder="New York, NY"
                     />
                   </div>
                 </div>
                 <button
                   onClick={addSite}
-                  className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 active:bg-blue-800 transition-all duration-200 font-medium"
+                  className="flex items-center gap-2 px-4 py-2 bg-[#07011c] text-white rounded-lg hover:bg-[#07011c] active:bg-[#07011c] transition-all duration-200 font-medium"
                 >
                   <Plus className="w-4 h-4" />
                   Save & Add Another
@@ -241,7 +284,7 @@ export default function OnboardingPage() {
                 <div className="mt-6 space-y-2">
                   <h3 className="text-sm font-medium text-gray-700 mb-3">Added Sites</h3>
                   {sites.map((site) => (
-                    <div key={site.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200 hover:bg-blue-50 hover:border-blue-200 transition-all duration-200 group">
+                    <div key={site.id} className="flex items-center justify-between p-3 bg-[#f5dcc4] rounded-lg border border-gray-200  hover:border-[#2d1a5c] transition-all duration-200 group">
                       <div className="flex-1 min-w-0">
                         <p className="font-medium text-gray-900 truncate">{site.name}</p>
                         <p className="text-sm text-gray-500 truncate">Code: {site.code} {site.location && `• ${site.location}`}</p>
@@ -260,7 +303,7 @@ export default function OnboardingPage() {
             </section>
 
             {/* Default Standards */}
-            <section className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200">
+            <section className="bg-[#fbf0ea] rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200">
               <h2 className="text-lg font-semibold text-gray-900 mb-6">Default Standards</h2>
               <div className="space-y-4">
                 <div>
@@ -270,7 +313,7 @@ export default function OnboardingPage() {
                   <select
                     value={defaultFormat}
                     onChange={(e) => setDefaultFormat(e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-white"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-[#fbf0ea]"
                   >
                     <option value="CSV">CSV</option>
                     <option value="JSON">JSON</option>
@@ -286,7 +329,7 @@ export default function OnboardingPage() {
                     type="text"
                     value={fileNaming}
                     onChange={(e) => setFileNaming(e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400"
                     placeholder="e.g., {site_code}_{date}_{type}.csv"
                   />
                 </div>
@@ -298,7 +341,7 @@ export default function OnboardingPage() {
                     type="text"
                     value={dataRetention}
                     onChange={(e) => setDataRetention(e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400"
                     placeholder="e.g., 90 days, 1 year"
                   />
                 </div>
@@ -309,14 +352,14 @@ export default function OnboardingPage() {
 
             {/* Step 2: Import Configuration */}
             {currentStep === 2 && (
-              <section className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200">
+              <section className="bg-[#fbf0ea] rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200">
                 <h2 className="text-lg font-semibold text-gray-900 mb-6">Configure First Import</h2>
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Import Source Type <span className="text-red-500">*</span>
                     </label>
-                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-white">
+                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-[#fbf0ea]">
                       <option>SFTP</option>
                       <option>FTP</option>
                       <option>API</option>
@@ -330,7 +373,7 @@ export default function OnboardingPage() {
                       </label>
                       <input
                         type="text"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400"
                         placeholder="sftp.example.com"
                       />
                     </div>
@@ -340,7 +383,7 @@ export default function OnboardingPage() {
                       </label>
                       <input
                         type="number"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400"
                         placeholder="22"
                       />
                     </div>
@@ -352,7 +395,7 @@ export default function OnboardingPage() {
                       </label>
                       <input
                         type="text"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400"
                         placeholder="username"
                       />
                     </div>
@@ -362,7 +405,7 @@ export default function OnboardingPage() {
                       </label>
                       <input
                         type="password"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400"
                         placeholder="••••••••"
                       />
                     </div>
@@ -373,7 +416,7 @@ export default function OnboardingPage() {
                     </label>
                     <input
                       type="text"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400"
                       placeholder="/data/imports"
                     />
                   </div>
@@ -381,7 +424,7 @@ export default function OnboardingPage() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       File Format <span className="text-red-500">*</span>
                     </label>
-                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-white">
+                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-[#fbf0ea]">
                       <option>CSV</option>
                       <option>JSON</option>
                       <option>XML</option>
@@ -392,7 +435,7 @@ export default function OnboardingPage() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Schedule
                     </label>
-                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-white">
+                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-[#fbf0ea]">
                       <option>Daily</option>
                       <option>Hourly</option>
                       <option>Weekly</option>
@@ -405,14 +448,14 @@ export default function OnboardingPage() {
 
             {/* Step 3: Export Configuration */}
             {currentStep === 3 && (
-              <section className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200">
+              <section className="bg-[#fbf0ea] rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200">
                 <h2 className="text-lg font-semibold text-gray-900 mb-6">Configure First Export</h2>
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Export Destination Type <span className="text-red-500">*</span>
                     </label>
-                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-white">
+                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-[#fbf0ea]">
                       <option>SFTP</option>
                       <option>FTP</option>
                       <option>Email</option>
@@ -427,7 +470,7 @@ export default function OnboardingPage() {
                       </label>
                       <input
                         type="text"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400"
                         placeholder="sftp.example.com"
                       />
                     </div>
@@ -437,7 +480,7 @@ export default function OnboardingPage() {
                       </label>
                       <input
                         type="number"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400"
                         placeholder="22"
                       />
                     </div>
@@ -449,7 +492,7 @@ export default function OnboardingPage() {
                       </label>
                       <input
                         type="text"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400"
                         placeholder="username"
                       />
                     </div>
@@ -459,7 +502,7 @@ export default function OnboardingPage() {
                       </label>
                       <input
                         type="password"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400"
                         placeholder="••••••••"
                       />
                     </div>
@@ -470,7 +513,7 @@ export default function OnboardingPage() {
                     </label>
                     <input
                       type="text"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400"
                       placeholder="/data/exports"
                     />
                   </div>
@@ -478,7 +521,7 @@ export default function OnboardingPage() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Export Format <span className="text-red-500">*</span>
                     </label>
-                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-white">
+                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-[#fbf0ea]">
                       <option>CSV</option>
                       <option>JSON</option>
                       <option>XML</option>
@@ -489,7 +532,7 @@ export default function OnboardingPage() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Schedule
                     </label>
-                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-white">
+                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-[#fbf0ea]">
                       <option>Daily</option>
                       <option>Hourly</option>
                       <option>Weekly</option>
@@ -504,15 +547,15 @@ export default function OnboardingPage() {
           {/* Right Column - Checklist / Summary */}
           <div className="lg:col-span-1 space-y-6">
             {/* Onboarding Checklist */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200">
+            <div className="bg-[#fbf0ea] rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200">
               <h2 className="text-lg font-semibold text-gray-900 mb-4">Onboarding Checklist</h2>
               <div className="space-y-3">
                 {checklistItems.map((item) => (
-                  <div key={item.id} className="flex items-center gap-3 p-2 rounded-lg hover:bg-blue-50 transition-colors duration-200 cursor-default group">
+                  <div key={item.id} className="flex items-center gap-3 p-2 rounded-lg  transition-colors duration-200 cursor-default group">
                     {item.completed ? (
-                      <CheckCircle2 className="w-5 h-5 text-blue-600 flex-shrink-0 group-hover:scale-110 transition-transform duration-200" />
+                      <CheckCircle2 className="w-5 h-5 text-[#07011c] flex-shrink-0 group-hover:scale-110 transition-transform duration-200" />
                     ) : (
-                      <Circle className="w-5 h-5 text-gray-300 flex-shrink-0 group-hover:text-blue-300 transition-colors duration-200" />
+                      <Circle className="w-5 h-5 text-gray-300 flex-shrink-0 group-hover:text-[#3d2470] transition-colors duration-200" />
                     )}
                     <span className={`text-sm flex-1 ${item.completed ? 'text-gray-900 line-through' : 'text-gray-700'}`}>
                       {item.label}
@@ -523,35 +566,35 @@ export default function OnboardingPage() {
             </div>
 
             {/* What You&apos;ll Need Panel */}
-            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg border border-blue-200 p-6 hover:from-blue-100 hover:to-blue-200 hover:shadow-md transition-all duration-200">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">What You&apos;ll Need</h2>
+            <div className="bg-gradient-to-br from-[#1a0d3d] to-[#1a0d3d] rounded-lg border border-[#2d1a5c] p-6 hover:from-[#1a0d3d] hover:to-[#07011c]-200 hover:shadow-md transition-all duration-200 text-white">
+              <h2 className="text-lg font-semibold text-white mb-4">What You&apos;ll Need</h2>
               <div className="space-y-4">
-                <div className="flex items-start gap-3 p-2 rounded-lg hover:bg-white/50 transition-colors duration-200 group">
-                  <Server className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0 group-hover:scale-110 transition-transform duration-200" />
+                <div className="flex items-start gap-3 p-2 rounded-lg hover:bg-[#fbf0ea]/50 transition-colors duration-200 group">
+                  <Server className="w-5 h-5 text-white mt-0.5 flex-shrink-0 group-hover:scale-110 transition-transform duration-200" />
                   <div>
-                    <p className="text-sm font-medium text-gray-900">SFTP Details</p>
-                    <p className="text-xs text-gray-600">Host, username, password, and port information</p>
+                    <p className="text-sm font-medium text-white">SFTP Details</p>
+                    <p className="text-xs text-gray-100">Host, username, password, and port information</p>
                   </div>
                 </div>
-                <div className="flex items-start gap-3 p-2 rounded-lg hover:bg-white/50 transition-colors duration-200 group">
-                  <FileText className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0 group-hover:scale-110 transition-transform duration-200" />
+                <div className="flex items-start gap-3 p-2 rounded-lg hover:bg-[#fbf0ea]/50 transition-colors duration-200 group">
+                  <FileText className="w-5 h-5 text-white mt-0.5 flex-shrink-0 group-hover:scale-110 transition-transform duration-200" />
                   <div>
-                    <p className="text-sm font-medium text-gray-900">Sample Import File</p>
-                    <p className="text-xs text-gray-600">Example file showing expected format and structure</p>
+                    <p className="text-sm font-medium text-white">Sample Import File</p>
+                    <p className="text-xs text-gray-100">Example file showing expected format and structure</p>
                   </div>
                 </div>
-                <div className="flex items-start gap-3 p-2 rounded-lg hover:bg-white/50 transition-colors duration-200 group">
-                  <Download className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0 group-hover:scale-110 transition-transform duration-200" />
+                <div className="flex items-start gap-3 p-2 rounded-lg hover:bg-[#fbf0ea]/50 transition-colors duration-200 group">
+                  <Download className="w-5 h-5 text-white mt-0.5 flex-shrink-0 group-hover:scale-110 transition-transform duration-200" />
                   <div>
-                    <p className="text-sm font-medium text-gray-900">Export Destination Credentials</p>
-                    <p className="text-xs text-gray-600">Access details for where exports will be delivered</p>
+                    <p className="text-sm font-medium text-white">Export Destination Credentials</p>
+                    <p className="text-xs text-gray-100">Access details for where exports will be delivered</p>
                   </div>
                 </div>
-                <div className="flex items-start gap-3 p-2 rounded-lg hover:bg-white/50 transition-colors duration-200 group">
-                  <FileCode className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0 group-hover:scale-110 transition-transform duration-200" />
+                <div className="flex items-start gap-3 p-2 rounded-lg hover:bg-[#fbf0ea]/50 transition-colors duration-200 group">
+                  <FileCode className="w-5 h-5 text-white mt-0.5 flex-shrink-0 group-hover:scale-110 transition-transform duration-200" />
                   <div>
-                    <p className="text-sm font-medium text-gray-900">Format Specs</p>
-                    <p className="text-xs text-gray-600">CSV/JSON/XML schema and field definitions</p>
+                    <p className="text-sm font-medium text-white">Format Specs</p>
+                    <p className="text-xs text-gray-100">CSV/JSON/XML schema and field definitions</p>
                   </div>
                 </div>
               </div>
@@ -561,29 +604,29 @@ export default function OnboardingPage() {
       </main>
 
       {/* Footer Actions - Sticky */}
-      <footer className="bg-white border-t border-gray-200 sticky bottom-0 z-10 mt-auto shadow-lg">
+      <footer className="bg-[#fbf0ea] border-t border-gray-200 sticky bottom-0 z-10 mt-auto shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between gap-4">
             <button 
               onClick={() => setCurrentStep(Math.max(1, currentStep - 1))}
               disabled={currentStep === 1}
-              className="px-6 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 hover:border-gray-400 active:bg-gray-100 transition-all duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-6 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-[#f5dcc4] hover:border-gray-400 active:bg-[#f5dcc4] transition-all duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Back
             </button>
             <div className="flex items-center gap-4">
-              <button className="px-6 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 hover:border-gray-400 active:bg-gray-100 transition-all duration-200 font-medium">
+              <button className="px-6 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-[#f5dcc4] hover:border-gray-400 active:bg-[#f5dcc4] transition-all duration-200 font-medium">
                 Save Draft
               </button>
               {currentStep < 3 ? (
                 <button 
                   onClick={() => setCurrentStep(currentStep + 1)}
-                  className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 active:bg-blue-800 transition-all duration-200 font-medium"
+                  className="px-6 py-2 bg-[#07011c] text-white rounded-lg hover:bg-[#07011c] active:bg-[#07011c] transition-all duration-200 font-medium"
                 >
                   Next{currentStep === 1 ? ': Configure Imports' : currentStep === 2 ? ': Configure Exports' : ''}
                 </button>
               ) : (
-                <Link href="/imports" className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 active:bg-blue-800 transition-all duration-200 font-medium">
+                <Link href="/imports" className="px-6 py-2 bg-[#07011c] text-white rounded-lg hover:bg-[#07011c] active:bg-[#07011c] transition-all duration-200 font-medium">
                   Complete Setup
                 </Link>
               )}
@@ -591,6 +634,7 @@ export default function OnboardingPage() {
           </div>
         </div>
       </footer>
+      </div>
     </div>
   );
 }

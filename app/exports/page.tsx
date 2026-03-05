@@ -1,13 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { 
   Search, Filter, Plus, Building2, CheckCircle2, XCircle, Clock, 
   Play, Settings, Copy, Eye, Download, AlertCircle, Server, 
   FileText, Calendar, Mail, Key, Folder, FileCode, MapPin,
   Globe, Send, Webhook, Database, Zap, RotateCcw, Save, Circle, Minus,
-  ChevronLeft, ChevronRight
+  ChevronLeft, ChevronRight, BarChart3, Upload, Activity
 } from 'lucide-react';
 
 interface Site {
@@ -79,6 +79,7 @@ export default function ExportsPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'paused'>('all');
   const [channelTypeFilter, setChannelTypeFilter] = useState<'all' | 'SFTP' | 'HTML Drop' | 'Email' | 'Webhook/API'>('all');
+  const [isNavSidebarOpen, setIsNavSidebarOpen] = useState(true);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [selectedChannel, setSelectedChannel] = useState<ExportChannel | null>(null);
   const [activeTab, setActiveTab] = useState<'destination' | 'exportContent' | 'format' | 'schedule' | 'notifications'>('destination');
@@ -278,39 +279,77 @@ export default function ExportsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
-      {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-20 shadow-sm">
-        <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
-            <div className="flex items-center gap-6">
-              <div className="flex items-center gap-3">
-                <Link href="/" className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg flex items-center justify-center hover:from-blue-700 hover:to-blue-800 transition-all duration-200 cursor-pointer shadow-md hover:shadow-lg">
-                  <Building2 className="w-6 h-6 text-white" />
-                </Link>
-                <div>
-                  <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Exports</h1>
-                  <p className="text-xs sm:text-sm text-gray-500">Manage export channels</p>
-                </div>
+    <div className="min-h-screen bg-[#fbf0ea] flex">
+      {/* Left Navigation Sidebar */}
+      <aside className={`${mounted && isNavSidebarOpen ? 'w-64' : mounted ? 'w-20' : 'w-64'} bg-[#fbf0ea] border-r border-gray-200 flex flex-col sticky top-0 h-screen transition-all duration-300 ease-in-out`} suppressHydrationWarning>
+        <div className="p-4 border-b border-gray-200">
+          <div className="flex items-center justify-between mb-6">
+            <Link href="/" className={`flex items-center gap-3 ${!isNavSidebarOpen ? 'justify-center w-full' : ''}`}>
+              <div className="w-10 h-10 bg-gradient-to-br from-[#07011c] to-[#07011c] rounded-lg flex items-center justify-center hover:from-[#07011c] hover:to-[#07011c] transition-all duration-200 cursor-pointer shadow-md hover:shadow-lg flex-shrink-0">
+                <Building2 className="w-6 h-6 text-white" />
               </div>
-              <nav className="hidden md:flex items-center gap-4 ml-4 pl-4 border-l border-gray-200">
-                <Link href="/" className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200">
-                  Onboarding
-                </Link>
-                <Link href="/imports" className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200">
-                  Imports
-                </Link>
-                <Link href="/exports" className="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors duration-200">
-                  Exports
-                </Link>
-                <Link href="/sites" className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200">
-                  Sites
-                </Link>
-                <Link href="/reports" className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200">
-                  Reports
-                </Link>
-              </nav>
-            </div>
+              {isNavSidebarOpen && (
+                <div>
+                  <h1 className="text-lg font-bold text-gray-900">FeedForge</h1>
+                  <p className="text-xs text-gray-500">Data Feeding Portal</p>
+                </div>
+              )}
+            </Link>
+          </div>
+          <button
+            onClick={() => setIsNavSidebarOpen(!isNavSidebarOpen)}
+            className="w-full flex items-center justify-center p-2 hover:bg-[#f5dcc4] rounded-lg transition-colors duration-200"
+            title={isNavSidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
+          >
+            {isNavSidebarOpen ? (
+              <ChevronLeft className="w-5 h-5 text-gray-600" />
+            ) : (
+              <ChevronRight className="w-5 h-5 text-gray-600" />
+            )}
+          </button>
+        </div>
+        <nav className="flex-1 p-4 space-y-1">
+          <Link href="/dashboard" className={`flex items-center ${isNavSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#07011c]  rounded-lg transition-colors duration-200`}>
+            <BarChart3 className="w-5 h-5 flex-shrink-0" />
+            {isNavSidebarOpen && <span>Dashboard</span>}
+          </Link>
+          <Link href="/" className={`flex items-center ${isNavSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#07011c]  rounded-lg transition-colors duration-200`}>
+            <FileText className="w-5 h-5 flex-shrink-0" />
+            {isNavSidebarOpen && <span>Onboarding</span>}
+          </Link>
+          <Link href="/imports" className={`flex items-center ${isNavSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#07011c]  rounded-lg transition-colors duration-200`}>
+            <Download className="w-5 h-5 flex-shrink-0" />
+            {isNavSidebarOpen && <span>Imports</span>}
+          </Link>
+          <Link href="/exports" className={`flex items-center ${isNavSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-white bg-[#1a0d3d] rounded-lg transition-colors duration-200`}>
+            <Upload className="w-5 h-5 flex-shrink-0" />
+            {isNavSidebarOpen && <span>Exports</span>}
+          </Link>
+          <Link href="/sites" className={`flex items-center ${isNavSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#07011c]  rounded-lg transition-colors duration-200`}>
+            <Building2 className="w-5 h-5 flex-shrink-0" />
+            {isNavSidebarOpen && <span>Sites</span>}
+          </Link>
+          <Link href="/reports" className={`flex items-center ${isNavSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#07011c]  rounded-lg transition-colors duration-200`}>
+            <FileText className="w-5 h-5 flex-shrink-0" />
+            {isNavSidebarOpen && <span>Reports</span>}
+          </Link>
+          <Link href="/execution-logs" className={`flex items-center ${isNavSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#07011c]  rounded-lg transition-colors duration-200`}>
+            <Activity className="w-5 h-5 flex-shrink-0" />
+            {isNavSidebarOpen && <span>Execution Logs</span>}
+          </Link>
+        </nav>
+      </aside>
+
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Header */}
+        <header className="bg-[#fbf0ea] border-b border-gray-200 sticky top-0 z-20 shadow-sm">
+          <div className="px-4 sm:px-6 lg:px-8 py-4">
+            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+              <div>
+                <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Exports</h1>
+                <p className="text-xs sm:text-sm text-gray-500">Manage export channels</p>
+              </div>
             
             {/* Global Controls */}
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full lg:w-auto">
@@ -322,7 +361,7 @@ export default function ExportsPage() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search sites..."
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400"
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400"
                 />
               </div>
               
@@ -332,7 +371,7 @@ export default function ExportsPage() {
                   <select
                     value={statusFilter}
                     onChange={(e) => setStatusFilter(e.target.value as any)}
-                    className="pl-10 pr-8 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-white text-sm"
+                    className="pl-10 pr-8 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-[#fbf0ea] text-sm"
                   >
                     <option value="all">All Status</option>
                     <option value="active">Active</option>
@@ -345,7 +384,7 @@ export default function ExportsPage() {
                   <select
                     value={channelTypeFilter}
                     onChange={(e) => setChannelTypeFilter(e.target.value as any)}
-                    className="pl-10 pr-8 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-white text-sm"
+                    className="pl-10 pr-8 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-[#fbf0ea] text-sm"
                   >
                     <option value="all">All Channels</option>
                     <option value="SFTP">SFTP</option>
@@ -360,7 +399,7 @@ export default function ExportsPage() {
               {/* Add Export Channel Button */}
               <button
                 onClick={() => openDrawer()}
-                className="flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 active:bg-blue-800 transition-all duration-200 shadow-sm hover:shadow-md font-medium whitespace-nowrap"
+                className="flex items-center justify-center gap-2 px-4 py-2 bg-[#07011c] text-white rounded-lg hover:bg-[#07011c] active:bg-[#07011c] transition-all duration-200 shadow-sm hover:shadow-md font-medium whitespace-nowrap"
               >
                 <Plus className="w-4 h-4" />
                 <span className="hidden sm:inline">Add Export Channel</span>
@@ -376,7 +415,7 @@ export default function ExportsPage() {
         {/* Slider Toggle Button - Always visible, positioned outside sidebar */}
         <button
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-          className={`absolute ${isSidebarOpen ? 'left-full sm:left-80 lg:left-96 -ml-8' : 'left-0'} top-1/2 -translate-y-1/2 z-30 bg-white border border-gray-300 ${isSidebarOpen ? 'rounded-l-lg' : 'rounded-r-lg'} p-2 shadow-md hover:bg-gray-50 transition-all duration-300 ease-in-out hover:shadow-lg`}
+          className={`absolute ${isSidebarOpen ? 'left-full sm:left-80 lg:left-96 -ml-8' : 'left-0'} top-1/2 -translate-y-1/2 z-30 bg-[#fbf0ea] border border-gray-300 ${isSidebarOpen ? 'rounded-l-lg' : 'rounded-r-lg'} p-2 shadow-md hover:bg-[#f5dcc4] transition-all duration-300 ease-in-out hover:shadow-lg`}
           title={isSidebarOpen ? 'Hide Sidebar' : 'Show Sidebar'}
         >
           {isSidebarOpen ? (
@@ -387,29 +426,31 @@ export default function ExportsPage() {
         </button>
 
         {/* Left Sidebar - Sites List */}
-        <aside className={`${isSidebarOpen ? 'w-full sm:w-80 lg:w-96' : 'w-0'} border-r border-gray-200 bg-gray-50 overflow-y-auto transition-all duration-300 ease-in-out relative`}>
+        <aside className={`${isSidebarOpen ? 'w-full sm:w-80 lg:w-96' : 'w-0'} border-r border-gray-200 bg-[#f5dcc4] overflow-y-auto transition-all duration-300 ease-in-out relative`}>
           <div className={`p-3 space-y-1.5 ${isSidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
             <h2 className="text-sm font-semibold text-gray-700 mb-2 px-2">Sites</h2>
-            {filteredSites.map((site) => (
+            {filteredSites.map((site) => {
+              const isSelected = selectedSite === site.id;
+              return (
               <div
                 key={site.id}
                 onClick={() => setSelectedSite(site.id)}
                 className={`p-2.5 rounded-lg border cursor-pointer transition-all duration-200 ${
-                  selectedSite === site.id
-                    ? 'bg-blue-50 border-blue-300 shadow-md'
-                    : 'bg-white border-gray-200 hover:border-blue-200 hover:bg-blue-50/50 hover:shadow-sm'
+                  isSelected
+                    ? 'bg-[#1a0d3d] border-[#2d1a5c] shadow-md text-white'
+                    : 'bg-[#fbf0ea] border-gray-200 hover:border-[#2d1a5c] /50 hover:shadow-sm'
                 }`}
               >
                 <div className="flex items-start justify-between mb-1">
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-sm text-gray-900 truncate">{site.name}</h3>
-                    <p className="text-xs text-gray-500 mt-0.5">{site.code}</p>
+                    <h3 className={`font-semibold text-sm truncate ${isSelected ? 'text-white' : 'text-gray-900'}`}>{site.name}</h3>
+                    <p className={`text-xs mt-0.5 ${isSelected ? 'text-indigo-100' : 'text-gray-500'}`}>{site.code}</p>
                   </div>
                   <div className="flex items-center gap-1.5 ml-2">
                     <span className={`px-1.5 py-0.5 rounded text-xs font-medium ${
                       site.status === 'active' 
                         ? 'bg-green-100 text-green-700' 
-                        : 'bg-gray-100 text-gray-700'
+                        : 'bg-[#f5dcc4] text-gray-700'
                     }`}>
                       {site.status === 'active' ? 'Active' : 'Paused'}
                     </span>
@@ -424,10 +465,10 @@ export default function ExportsPage() {
                   ) : (
                     <Clock className="w-3.5 h-3.5 text-yellow-600" />
                   )}
-                  <span className="text-xs text-gray-600">Last export: {site.lastExportTime}</span>
+                  <span className={`text-xs ${isSelected ? 'text-indigo-100' : 'text-gray-600'}`}>Last export: {site.lastExportTime}</span>
                 </div>
               </div>
-            ))}
+            )})}
           </div>
         </aside>
 
@@ -436,7 +477,7 @@ export default function ExportsPage() {
           {currentSite && (
             <>
               {/* Site Header Strip */}
-              <div className="bg-white border-b border-gray-200 px-4 sm:px-6 lg:px-8 py-4">
+              <div className="bg-[#fbf0ea] border-b border-gray-200 px-4 sm:px-6 lg:px-8 py-4">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                   <div className="flex items-center gap-3">
                     <div>
@@ -454,16 +495,16 @@ export default function ExportsPage() {
                         onClick={(e) => e.stopPropagation()}
                         className="sr-only peer"
                       />
-                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                      <div className="w-11 h-6 bg-[#f0d4b8] peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#2d1a5c] rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-[#fbf0ea] after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#07011c]"></div>
                     </label>
                   </div>
                   
                   <div className="flex items-center gap-3">
-                    <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 hover:border-gray-400 active:bg-gray-100 transition-all duration-200 font-medium text-sm">
+                    <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-[#f5dcc4] hover:border-gray-400 active:bg-[#f5dcc4] transition-all duration-200 font-medium text-sm">
                       <Server className="w-4 h-4" />
                       Test Destination
                     </button>
-                    <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 active:bg-blue-800 transition-all duration-200 shadow-sm hover:shadow-md font-medium text-sm">
+                    <button className="flex items-center gap-2 px-4 py-2 bg-[#07011c] text-white rounded-lg hover:bg-[#07011c] active:bg-[#07011c] transition-all duration-200 shadow-sm hover:shadow-md font-medium text-sm">
                       <Play className="w-4 h-4" />
                       Run Export Now
                     </button>
@@ -472,7 +513,7 @@ export default function ExportsPage() {
               </div>
 
               {/* Section Tabs */}
-              <div className="border-b border-gray-200 bg-white">
+              <div className="border-b border-gray-200 bg-[#fbf0ea]">
                 <div className="flex space-x-1 px-4 sm:px-6 lg:px-8">
                   {[
                     { id: 'exportFiles', label: 'Manage Export Files', icon: FileText },
@@ -486,7 +527,7 @@ export default function ExportsPage() {
                         onClick={() => setActiveSection(section.id as any)}
                         className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-all duration-200 whitespace-nowrap ${
                           activeSection === section.id
-                            ? 'border-blue-600 text-blue-600'
+                            ? 'border-[#07011c] text-[#07011c]'
                             : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                         }`}
                       >
@@ -510,7 +551,7 @@ export default function ExportsPage() {
                           setSelectedExportFile(null);
                           setIsExportFileModalOpen(true);
                         }}
-                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-200"
+                        className="flex items-center gap-2 px-4 py-2 bg-[#07011c] text-white rounded-lg hover:bg-[#07011c] transition-all duration-200"
                       >
                         <Plus className="w-4 h-4" />
                         Add Export File
@@ -519,7 +560,7 @@ export default function ExportsPage() {
 
                     {/* Search Bar */}
                     <div className="flex items-center gap-2">
-                      <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded transition-all">
+                      <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-[#f5dcc4] rounded transition-all">
                         <RotateCcw className="w-4 h-4" />
                       </button>
                       <div className="relative flex-1">
@@ -529,17 +570,17 @@ export default function ExportsPage() {
                           value={exportFileSearchQuery}
                           onChange={(e) => setExportFileSearchQuery(e.target.value)}
                           placeholder="Search All Fields"
-                          className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                          className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
                         />
                         <Filter className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                       </div>
                     </div>
 
                     {/* Export Files Table */}
-                <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                <div className="bg-[#fbf0ea] rounded-lg border border-gray-200 shadow-sm overflow-hidden">
                   <div className="overflow-x-auto">
                     <table className="w-full">
-                      <thead className="bg-gray-50 border-b border-gray-200">
+                      <thead className="bg-[#f5dcc4] border-b border-gray-200">
                         <tr>
                               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">A</th>
                               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Al En...</th>
@@ -553,7 +594,7 @@ export default function ExportsPage() {
                               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">SortB</th>
                         </tr>
                       </thead>
-                      <tbody className="bg-white divide-y divide-gray-200">
+                      <tbody className="bg-[#fbf0ea] divide-y divide-gray-200">
                             {exportFiles
                               .filter(file => 
                                 Object.values(file).some(val => 
@@ -563,7 +604,7 @@ export default function ExportsPage() {
                               .map((file) => (
                                 <tr
                                   key={file.id}
-                                  className="hover:bg-blue-50/50 transition-colors cursor-pointer"
+                                  className="/50 transition-colors cursor-pointer"
                                   onClick={() => {
                                     setSelectedExportFile(file);
                                     setIsExportFileModalOpen(true);
@@ -621,7 +662,7 @@ export default function ExportsPage() {
                           setSelectedExportProfile(null);
                           setIsExportProfileModalOpen(true);
                         }}
-                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-200"
+                        className="flex items-center gap-2 px-4 py-2 bg-[#07011c] text-white rounded-lg hover:bg-[#07011c] transition-all duration-200"
                       >
                         <Plus className="w-4 h-4" />
                         Add Profile
@@ -630,7 +671,7 @@ export default function ExportsPage() {
 
                     {/* Search Bar */}
                     <div className="flex items-center gap-2">
-                      <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded transition-all">
+                      <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-[#f5dcc4] rounded transition-all">
                         <RotateCcw className="w-4 h-4" />
                                   </button>
                       <div className="relative flex-1">
@@ -640,17 +681,17 @@ export default function ExportsPage() {
                           value={exportProfileSearchQuery}
                           onChange={(e) => setExportProfileSearchQuery(e.target.value)}
                           placeholder="Search All Fields"
-                          className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                          className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
                         />
                         <Filter className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                       </div>
                     </div>
 
                     {/* Export Profiles Table */}
-                    <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                    <div className="bg-[#fbf0ea] rounded-lg border border-gray-200 shadow-sm overflow-hidden">
                       <div className="overflow-x-auto">
                         <table className="w-full">
-                          <thead className="bg-gray-50 border-b border-gray-200">
+                          <thead className="bg-[#f5dcc4] border-b border-gray-200">
                             <tr>
                               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Active</th>
                               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">ID</th>
@@ -661,7 +702,7 @@ export default function ExportsPage() {
                               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">ModifiedOn</th>
                             </tr>
                           </thead>
-                          <tbody className="bg-white divide-y divide-gray-200">
+                          <tbody className="bg-[#fbf0ea] divide-y divide-gray-200">
                             {exportProfiles
                               .filter(profile => 
                                 Object.values(profile).some(val => 
@@ -671,7 +712,7 @@ export default function ExportsPage() {
                               .map((profile) => (
                                 <tr
                                   key={profile.id}
-                                  className="hover:bg-blue-50/50 transition-colors cursor-pointer"
+                                  className="/50 transition-colors cursor-pointer"
                                   onClick={() => {
                                     setSelectedExportProfile(profile);
                                     setIsExportProfileModalOpen(true);
@@ -712,7 +753,7 @@ export default function ExportsPage() {
                           <select
                             value={selectedCustomer}
                             onChange={(e) => setSelectedCustomer(e.target.value)}
-                            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-white text-sm"
+                            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none bg-[#fbf0ea] text-sm"
                           >
                             <option>Potpourri</option>
                             <option>Customer 2</option>
@@ -724,7 +765,7 @@ export default function ExportsPage() {
                           <select
                             value={selectedSiteForMapping}
                             onChange={(e) => setSelectedSiteForMapping(e.target.value)}
-                            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-white text-sm"
+                            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none bg-[#fbf0ea] text-sm"
                           >
                             <option>Back In The Saddle</option>
                             <option>Site 2</option>
@@ -736,7 +777,7 @@ export default function ExportsPage() {
                           <select
                             value={selectedExportForMapping}
                             onChange={(e) => setSelectedExportForMapping(e.target.value)}
-                            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-white text-sm"
+                            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none bg-[#fbf0ea] text-sm"
                           >
                             <option>Bing Export</option>
                             <option>CJ Export</option>
@@ -751,11 +792,11 @@ export default function ExportsPage() {
                     <div className="flex items-center justify-between">
                       <h2 className="text-xl font-bold text-gray-900">Export File Field Mapping</h2>
                       <div className="flex items-center gap-2">
-                        <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-all duration-200">
+                        <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-[#f5dcc4] transition-all duration-200">
                           <Plus className="w-4 h-4" />
                           Add New
                         </button>
-                        <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-200">
+                        <button className="flex items-center gap-2 px-4 py-2 bg-[#07011c] text-white rounded-lg hover:bg-[#07011c] transition-all duration-200">
                           <Save className="w-4 h-4" />
                           Save
                         </button>
@@ -764,7 +805,7 @@ export default function ExportsPage() {
 
                     {/* Search Bar */}
                     <div className="flex items-center gap-2">
-                      <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded transition-all">
+                      <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-[#f5dcc4] rounded transition-all">
                         <RotateCcw className="w-4 h-4" />
                       </button>
                       <div className="relative flex-1">
@@ -774,17 +815,17 @@ export default function ExportsPage() {
                           value={fieldMappingSearchQuery}
                           onChange={(e) => setFieldMappingSearchQuery(e.target.value)}
                           placeholder="Search All Fields"
-                          className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                          className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
                         />
                         <Filter className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                       </div>
                     </div>
 
                     {/* Field Mapping Table */}
-                  <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                  <div className="bg-[#fbf0ea] rounded-lg border border-gray-200 shadow-sm overflow-hidden">
                     <div className="overflow-x-auto">
                       <table className="w-full">
-                        <thead className="bg-gray-50 border-b border-gray-200">
+                        <thead className="bg-[#f5dcc4] border-b border-gray-200">
                           <tr>
                               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">ID</th>
                               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Mapped?</th>
@@ -793,7 +834,7 @@ export default function ExportsPage() {
                               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Sort Order</th>
                           </tr>
                         </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
+                        <tbody className="bg-[#fbf0ea] divide-y divide-gray-200">
                             {exportFieldMappings
                               .filter(mapping => 
                                 Object.values(mapping).some(val => 
@@ -801,11 +842,11 @@ export default function ExportsPage() {
                                 )
                               )
                               .map((mapping) => (
-                                <tr key={mapping.id} className="hover:bg-blue-50/50 transition-colors">
+                                <tr key={mapping.id} className="/50 transition-colors">
                                   <td className="px-4 py-3 text-sm text-gray-900">{mapping.id}</td>
                                   <td className="px-4 py-3">
                                     {mapping.isMapped ? (
-                                      <CheckCircle2 className="w-5 h-5 text-blue-600" />
+                                      <CheckCircle2 className="w-5 h-5 text-[#07011c]" />
                                     ) : (
                                       <Circle className="w-5 h-5 text-gray-300" />
                                     )}
@@ -831,12 +872,12 @@ export default function ExportsPage() {
       {isExportFileModalOpen && (
         <div className="fixed inset-0 z-50 overflow-hidden">
           <div className="absolute inset-0 bg-black bg-opacity-50" onClick={() => setIsExportFileModalOpen(false)}></div>
-          <div className="absolute right-0 top-0 h-full w-full sm:w-[600px] bg-white shadow-2xl flex flex-col">
+          <div className="absolute right-0 top-0 h-full w-full sm:w-[600px] bg-[#fbf0ea] shadow-2xl flex flex-col">
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
               <h2 className="text-xl font-semibold text-gray-900">Edit Record</h2>
               <button
                 onClick={() => setIsExportFileModalOpen(false)}
-                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded transition-all"
+                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-[#f5dcc4] rounded transition-all"
               >
                 <XCircle className="w-5 h-5" />
               </button>
@@ -848,12 +889,12 @@ export default function ExportsPage() {
                   <input
                     type="text"
                     defaultValue={selectedExportFile?.id || ''}
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Site</label>
-                  <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none cursor-pointer bg-white">
+                  <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none cursor-pointer bg-[#fbf0ea]">
                     <option>Select Site...</option>
                     <option>Signals</option>
                     <option>Basbleu</option>
@@ -865,7 +906,7 @@ export default function ExportsPage() {
                   <input
                     type="text"
                     defaultValue={selectedExportFile?.exportName || ''}
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
                   />
                 </div>
                 <div>
@@ -873,7 +914,7 @@ export default function ExportsPage() {
                   <input
                     type="text"
                     defaultValue={selectedExportFile?.path || ''}
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
                   />
                 </div>
                 <div>
@@ -881,12 +922,12 @@ export default function ExportsPage() {
                   <input
                     type="text"
                     defaultValue={selectedExportFile?.fileName || ''}
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">ExportProfileId</label>
-                  <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none cursor-pointer bg-white">
+                  <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none cursor-pointer bg-[#fbf0ea]">
                     <option>Select Profile...</option>
                     <option>FTP for Signals</option>
                     <option>FTP for Basbleu</option>
@@ -894,7 +935,7 @@ export default function ExportsPage() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Delimiter <span className="text-red-500">*</span></label>
-                  <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none cursor-pointer bg-white">
+                  <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none cursor-pointer bg-[#fbf0ea]">
                     <option>TAB</option>
                     <option>,</option>
                     <option>PIPE</option>
@@ -906,19 +947,19 @@ export default function ExportsPage() {
                   <input
                     type="text"
                     defaultValue={selectedExportFile?.sortBy || 'id'}
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Sort Direction <span className="text-red-500">*</span></label>
-                  <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none cursor-pointer bg-white">
+                  <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none cursor-pointer bg-[#fbf0ea]">
                     <option>Ascending</option>
                     <option>Descending</option>
                   </select>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Export Method <span className="text-red-500">*</span></label>
-                  <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none cursor-pointer bg-white">
+                  <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none cursor-pointer bg-[#fbf0ea]">
                     <option>SFTP</option>
                     <option>FTP</option>
                     <option>Local</option>
@@ -928,14 +969,14 @@ export default function ExportsPage() {
                   <label className="block text-sm font-medium text-gray-700 mb-2">Export SQL</label>
                   <textarea
                     rows={4}
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none resize-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none resize-none"
                   />
                 </div>
                 <div className="space-y-2">
                   <label className="flex items-center gap-2">
                     <input
                       type="checkbox"
-                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                      className="w-4 h-4 text-[#07011c] border-gray-300 rounded focus:ring-[#07011c]"
                     />
                     <span className="text-sm text-gray-700">Use AI</span>
                   </label>
@@ -943,7 +984,7 @@ export default function ExportsPage() {
                     <input
                       type="checkbox"
                       defaultChecked={selectedExportFile?.isActive || false}
-                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                      className="w-4 h-4 text-[#07011c] border-gray-300 rounded focus:ring-[#07011c]"
                     />
                     <span className="text-sm text-gray-700">isActive</span>
                   </label>
@@ -953,13 +994,13 @@ export default function ExportsPage() {
             <div className="border-t border-gray-200 p-6 flex items-center justify-end gap-3">
               <button
                 onClick={() => setIsExportFileModalOpen(false)}
-                className="px-6 py-2.5 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-all font-medium"
+                className="px-6 py-2.5 text-gray-700 border border-gray-300 rounded-lg hover:bg-[#f5dcc4] transition-all font-medium"
               >
                 Cancel
               </button>
               <button
                 onClick={() => setIsExportFileModalOpen(false)}
-                className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all font-medium"
+                className="px-6 py-2.5 bg-[#07011c] text-white rounded-lg hover:bg-[#07011c] transition-all font-medium"
               >
                 Save
               </button>
@@ -972,12 +1013,12 @@ export default function ExportsPage() {
       {isExportProfileModalOpen && (
         <div className="fixed inset-0 z-50 overflow-hidden">
           <div className="absolute inset-0 bg-black bg-opacity-50" onClick={() => setIsExportProfileModalOpen(false)}></div>
-          <div className="absolute right-0 top-0 h-full w-full sm:w-[600px] bg-white shadow-2xl flex flex-col">
+          <div className="absolute right-0 top-0 h-full w-full sm:w-[600px] bg-[#fbf0ea] shadow-2xl flex flex-col">
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
               <h2 className="text-xl font-semibold text-gray-900">Edit Record</h2>
               <button
                 onClick={() => setIsExportProfileModalOpen(false)}
-                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded transition-all"
+                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-[#f5dcc4] rounded transition-all"
               >
                 <XCircle className="w-5 h-5" />
               </button>
@@ -989,7 +1030,7 @@ export default function ExportsPage() {
                   <input
                     type="text"
                     defaultValue={selectedExportProfile?.id || ''}
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
                   />
                 </div>
                 <div>
@@ -997,12 +1038,12 @@ export default function ExportsPage() {
                   <input
                     type="text"
                     defaultValue={selectedExportProfile?.displayName || ''}
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Protocol <span className="text-red-500">*</span></label>
-                  <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none cursor-pointer bg-white">
+                  <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none cursor-pointer bg-[#fbf0ea]">
                     <option>FTP</option>
                     <option>SFTP</option>
                   </select>
@@ -1012,7 +1053,7 @@ export default function ExportsPage() {
                   <input
                     type="text"
                     defaultValue={selectedExportProfile?.serverName || ''}
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
                   />
                 </div>
                 <div>
@@ -1020,42 +1061,42 @@ export default function ExportsPage() {
                   <input
                     type="text"
                     defaultValue={selectedExportProfile?.userName || ''}
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Pwd <span className="text-red-500">*</span></label>
                   <input
                     type="password"
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">hostkey <span className="text-red-500">*</span></label>
                   <input
                     type="text"
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Operation <span className="text-red-500">*</span></label>
                   <input
                     type="text"
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">DestinationPath <span className="text-red-500">*</span></label>
                   <input
                     type="text"
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Schedule <span className="text-red-500">*</span></label>
                   <input
                     type="text"
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
                   />
                 </div>
                 <div>
@@ -1063,7 +1104,7 @@ export default function ExportsPage() {
                     <input
                       type="checkbox"
                       defaultChecked={selectedExportProfile?.isActive || false}
-                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                      className="w-4 h-4 text-[#07011c] border-gray-300 rounded focus:ring-[#07011c]"
                     />
                     <span className="text-sm text-gray-700">isActive</span>
                   </label>
@@ -1073,13 +1114,13 @@ export default function ExportsPage() {
             <div className="border-t border-gray-200 p-6 flex items-center justify-end gap-3">
               <button
                 onClick={() => setIsExportProfileModalOpen(false)}
-                className="px-6 py-2.5 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-all font-medium"
+                className="px-6 py-2.5 text-gray-700 border border-gray-300 rounded-lg hover:bg-[#f5dcc4] transition-all font-medium"
               >
                 Cancel
               </button>
               <button
                 onClick={() => setIsExportProfileModalOpen(false)}
-                className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all font-medium"
+                className="px-6 py-2.5 bg-[#07011c] text-white rounded-lg hover:bg-[#07011c] transition-all font-medium"
               >
                 Save
               </button>
@@ -1095,14 +1136,14 @@ export default function ExportsPage() {
             className="absolute inset-0 bg-black bg-opacity-50 transition-opacity duration-300 ease-out"
             onClick={closeDrawer}
           ></div>
-          <div className="relative w-full max-w-3xl max-h-[90vh] bg-white rounded-lg shadow-2xl flex flex-col animate-scale-in">
+          <div className="relative w-full max-w-3xl max-h-[90vh] bg-[#fbf0ea] rounded-lg shadow-2xl flex flex-col animate-scale-in">
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
               <h2 className="text-xl font-semibold text-gray-900">
                 {selectedChannel ? 'Edit Export Channel' : 'Add Export Channel'}
               </h2>
               <button
                 onClick={closeDrawer}
-                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded transition-all duration-200"
+                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-[#f5dcc4] rounded transition-all duration-200"
               >
                 <XCircle className="w-5 h-5" />
               </button>
@@ -1125,7 +1166,7 @@ export default function ExportsPage() {
                       onClick={() => setActiveTab(tab.id as any)}
                       className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-all duration-200 whitespace-nowrap ${
                         activeTab === tab.id
-                          ? 'border-blue-600 text-blue-600'
+                          ? 'border-[#07011c] text-[#07011c]'
                           : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                       }`}
                     >
@@ -1143,7 +1184,7 @@ export default function ExportsPage() {
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Channel Type</label>
-                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-white">
+                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-[#fbf0ea]">
                       <option>SFTP</option>
                       <option>HTML Drop</option>
                       <option>Email</option>
@@ -1154,7 +1195,7 @@ export default function ExportsPage() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">Host / Endpoint</label>
                     <input
                       type="text"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400"
                       placeholder="sftp.example.com or https://api.example.com"
                     />
                   </div>
@@ -1163,13 +1204,13 @@ export default function ExportsPage() {
                       <label className="block text-sm font-medium text-gray-700 mb-2">Port</label>
                       <input
                         type="number"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400"
                         placeholder="22"
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">Auth Type</label>
-                      <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-white">
+                      <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-[#fbf0ea]">
                         <option>Password</option>
                         <option>SSH Key</option>
                         <option>API Key</option>
@@ -1180,7 +1221,7 @@ export default function ExportsPage() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">Username / API Key</label>
                     <input
                       type="text"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400"
                       placeholder="username or API key"
                     />
                   </div>
@@ -1188,7 +1229,7 @@ export default function ExportsPage() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">Password / Secret</label>
                     <input
                       type="password"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400"
                       placeholder="••••••••"
                     />
                   </div>
@@ -1198,7 +1239,7 @@ export default function ExportsPage() {
                       <Folder className="w-5 h-5 text-gray-400" />
                       <input
                         type="text"
-                        className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400"
+                        className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400"
                         placeholder="/exports/{site_code}_{date}.csv"
                       />
                     </div>
@@ -1211,7 +1252,7 @@ export default function ExportsPage() {
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Dataset Selection</label>
-                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-white">
+                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-[#fbf0ea]">
                       <option>Sales Data</option>
                       <option>Inventory Data</option>
                       <option>Customer Data</option>
@@ -1220,7 +1261,7 @@ export default function ExportsPage() {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Site Filter</label>
-                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-white">
+                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-[#fbf0ea]">
                       <option>All Sites</option>
                       <option>Current Site Only</option>
                       <option>Selected Sites</option>
@@ -1231,20 +1272,20 @@ export default function ExportsPage() {
                       <label className="block text-sm font-medium text-gray-700 mb-2">Date Range From</label>
                       <input
                         type="date"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400"
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">Date Range To</label>
                       <input
                         type="date"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400"
                       />
                     </div>
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Status Filter</label>
-                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-white">
+                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-[#fbf0ea]">
                       <option>All Statuses</option>
                       <option>Active Only</option>
                       <option>Inactive Only</option>
@@ -1254,7 +1295,7 @@ export default function ExportsPage() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">Field Selection</label>
                     <textarea
                       rows={4}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400"
                       placeholder="Include: field1, field2, field3&#10;Exclude: field4, field5"
                     />
                     <p className="text-xs text-gray-500 mt-1">List fields to include or exclude, one per line</p>
@@ -1266,7 +1307,7 @@ export default function ExportsPage() {
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Format</label>
-                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-white">
+                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-[#fbf0ea]">
                       <option>CSV</option>
                       <option>Excel</option>
                       <option>JSON</option>
@@ -1279,13 +1320,13 @@ export default function ExportsPage() {
                       <label className="block text-sm font-medium text-gray-700 mb-2">Delimiter</label>
                       <input
                         type="text"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400"
                         placeholder=","
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">Encoding</label>
-                      <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-white">
+                      <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-[#fbf0ea]">
                         <option>UTF-8</option>
                         <option>ASCII</option>
                         <option>ISO-8859-1</option>
@@ -1294,13 +1335,13 @@ export default function ExportsPage() {
                   </div>
                   <div>
                     <label className="flex items-center gap-2">
-                      <input type="checkbox" className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
+                      <input type="checkbox" className="w-4 h-4 text-[#07011c] border-gray-300 rounded focus:ring-[#07011c]" />
                       <span className="text-sm text-gray-700">Include header row</span>
                     </label>
                   </div>
                   <div>
                     <label className="flex items-center gap-2">
-                      <input type="checkbox" className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
+                      <input type="checkbox" className="w-4 h-4 text-[#07011c] border-gray-300 rounded focus:ring-[#07011c]" />
                       <span className="text-sm text-gray-700">Compress as ZIP</span>
                     </label>
                   </div>
@@ -1311,7 +1352,7 @@ export default function ExportsPage() {
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Frequency</label>
-                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-white">
+                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-[#fbf0ea]">
                       <option>Daily</option>
                       <option>Hourly</option>
                       <option>Weekly</option>
@@ -1323,12 +1364,12 @@ export default function ExportsPage() {
                       <label className="block text-sm font-medium text-gray-700 mb-2">Time</label>
                       <input
                         type="time"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400"
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">Timezone</label>
-                      <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-white">
+                      <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-[#fbf0ea]">
                         <option>UTC</option>
                         <option>America/New_York</option>
                         <option>America/Chicago</option>
@@ -1343,23 +1384,23 @@ export default function ExportsPage() {
                 <div className="space-y-4">
                   <div>
                     <label className="flex items-center gap-2 mb-4">
-                      <input type="checkbox" className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
+                      <input type="checkbox" className="w-4 h-4 text-[#07011c] border-gray-300 rounded focus:ring-[#07011c]" />
                       <span className="text-sm font-medium text-gray-700">Email on Success</span>
                     </label>
                     <input
                       type="email"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400"
                       placeholder="email@example.com"
                     />
                   </div>
                   <div>
                     <label className="flex items-center gap-2 mb-4">
-                      <input type="checkbox" defaultChecked className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
+                      <input type="checkbox" defaultChecked className="w-4 h-4 text-[#07011c] border-gray-300 rounded focus:ring-[#07011c]" />
                       <span className="text-sm font-medium text-gray-700">Email on Failure</span>
                     </label>
                     <input
                       type="email"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-400"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400"
                       placeholder="email@example.com"
                     />
                   </div>
@@ -1371,13 +1412,13 @@ export default function ExportsPage() {
             <div className="border-t border-gray-200 p-6 flex items-center justify-end gap-3">
               <button
                 onClick={closeDrawer}
-                className="px-6 py-2.5 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 hover:border-gray-400 active:bg-gray-100 transition-all duration-200 font-medium"
+                className="px-6 py-2.5 text-gray-700 border border-gray-300 rounded-lg hover:bg-[#f5dcc4] hover:border-gray-400 active:bg-[#f5dcc4] transition-all duration-200 font-medium"
               >
                 Cancel
               </button>
               <button
                 onClick={closeDrawer}
-                className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 active:bg-blue-800 transition-all duration-200 shadow-sm hover:shadow-md font-medium"
+                className="px-6 py-2.5 bg-[#07011c] text-white rounded-lg hover:bg-[#07011c] active:bg-[#07011c] transition-all duration-200 shadow-sm hover:shadow-md font-medium"
               >
                 Save Channel
               </button>
@@ -1385,6 +1426,7 @@ export default function ExportsPage() {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 }
