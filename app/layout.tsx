@@ -1,14 +1,8 @@
 'use client';
 
-import type { Metadata } from "next";
 import "./globals.css";
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-
-export const metadata: Metadata = {
-  title: "FeedForge - Data Feeding Portal",
-  description: "Data feeding and management portal",
-};
 
 export default function RootLayout({
   children,
@@ -20,6 +14,9 @@ export default function RootLayout({
   const [checked, setChecked] = useState(false);
 
   useEffect(() => {
+    // Set document title
+    document.title = "FeedForge - Data Feeding Portal";
+    
     const completed =
       typeof window !== "undefined" &&
       window.localStorage.getItem("onboardingCompleted") === "true";
