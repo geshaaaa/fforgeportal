@@ -80,6 +80,7 @@ export default function ExportsPage() {
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'paused'>('all');
   const [channelTypeFilter, setChannelTypeFilter] = useState<'all' | 'SFTP' | 'HTML Drop' | 'Email' | 'Webhook/API'>('all');
   const [isNavSidebarOpen, setIsNavSidebarOpen] = useState(true);
+  const [mounted, setMounted] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [selectedChannel, setSelectedChannel] = useState<ExportChannel | null>(null);
   const [activeTab, setActiveTab] = useState<'destination' | 'exportContent' | 'format' | 'schedule' | 'notifications'>('destination');
@@ -97,6 +98,10 @@ export default function ExportsPage() {
   const [selectedSiteForMapping, setSelectedSiteForMapping] = useState('Back In The Saddle');
   const [selectedExportForMapping, setSelectedExportForMapping] = useState('Bing Export');
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const [sites, setSites] = useState<Site[]>([
     { id: '1', name: 'Main Office', code: 'SITE001', status: 'active', lastExportStatus: 'success', lastExportTime: '1 hour ago' },

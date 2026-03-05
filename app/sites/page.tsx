@@ -30,6 +30,11 @@ export default function SitesPage() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [selectedSite, setSelectedSite] = useState<Site | null>(null);
   const [isNavSidebarOpen, setIsNavSidebarOpen] = useState(true);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const sites: Site[] = [
     { id: 1, siteName: 'NorthStyle', workingFile: 'NorthStyleWorkingTa...', sourceFileName: 'Northstyle.xml', sftp: 'sftp.blocklogic.tech I...', executeOn: '08:00', modifiedOn: '7/24/2025 1:41 pm', isActive: true },

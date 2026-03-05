@@ -12,6 +12,11 @@ export default function ReportsPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedPlatform, setSelectedPlatform] = useState('Google');
   const [isNavSidebarOpen, setIsNavSidebarOpen] = useState(true);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const platforms = [
     'Google',
