@@ -397,7 +397,7 @@ export default function DashboardPage() {
               {/* Today's schedule */}
               <div className="bg-white rounded-2xl border border-gray-200 shadow-md hover:shadow-xl transition-all duration-300 p-6">
                 <div className="flex items-center justify-between mb-5">
-                  <h2 className="text-base font-bold text-gray-900">Today's Schedule</h2>
+                  <h2 className="text-base font-bold text-gray-900">Today&apos;s Schedule</h2>
                   <button className="text-xs font-semibold text-gray-500 hover:text-[#07011c] transition-colors">See all →</button>
                 </div>
                 <div className="space-y-4">
