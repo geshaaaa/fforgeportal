@@ -57,10 +57,6 @@ export default function ReportsPage() {
             <BarChart3 className="w-5 h-5 flex-shrink-0" />
             {isNavSidebarOpen && <span>Dashboard</span>}
           </Link>
-          <Link href="/" className={`flex items-center ${isNavSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#07011c]  rounded-lg transition-colors duration-200`}>
-            <FileText className="w-5 h-5 flex-shrink-0" />
-            {isNavSidebarOpen && <span>Onboarding</span>}
-          </Link>
           <Link href="/imports" className={`flex items-center ${isNavSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#07011c]  rounded-lg transition-colors duration-200`}>
             <Download className="w-5 h-5 flex-shrink-0" />
             {isNavSidebarOpen && <span>Imports</span>}
@@ -103,9 +99,15 @@ export default function ReportsPage() {
         {/* Header */}
         <header className="bg-[#fbf0ea] border-b border-gray-200 sticky top-0 z-20 shadow-sm">
           <div className="px-4 sm:px-6 lg:px-8 py-4">
-            <div>
-              <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Reports</h1>
-              <p className="text-xs sm:text-sm text-gray-500">View and manage reports</p>
+            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+              <div>
+                <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Reports</h1>
+                <p className="text-xs sm:text-sm text-gray-500">View and manage reports</p>
+              </div>
+              <Link href="/" className="px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-700 text-sm font-medium hover:bg-gray-50 transition-all duration-200 flex items-center gap-1.5 shadow-sm">
+                <FileText className="w-4 h-4" />
+                Onboarding
+              </Link>
             </div>
           </div>
         </header>

@@ -307,10 +307,6 @@ export default function ExportsPage() {
             <BarChart3 className="w-5 h-5 flex-shrink-0" />
             {isNavSidebarOpen && <span>Dashboard</span>}
           </Link>
-          <Link href="/" className={`flex items-center ${isNavSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#07011c]  rounded-lg transition-colors duration-200`}>
-            <FileText className="w-5 h-5 flex-shrink-0" />
-            {isNavSidebarOpen && <span>Onboarding</span>}
-          </Link>
           <Link href="/imports" className={`flex items-center ${isNavSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#07011c]  rounded-lg transition-colors duration-200`}>
             <Download className="w-5 h-5 flex-shrink-0" />
             {isNavSidebarOpen && <span>Imports</span>}
@@ -402,6 +398,11 @@ export default function ExportsPage() {
                   </select>
                   <FileCode className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
                 </div>
+                
+                <Link href="/" className="px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-700 text-sm font-medium hover:bg-gray-50 transition-all duration-200 flex items-center gap-1.5 shadow-sm">
+                  <FileText className="w-4 h-4" />
+                  Onboarding
+                </Link>
               </div>
               
               {/* Add Export Channel Button */}
