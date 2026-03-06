@@ -261,9 +261,9 @@ export default function ExecutionLogsPage() {
   const failedCount = executionLogs.filter(log => log.status === 'failed').length;
 
   return (
-    <div className="min-h-screen bg-[#fbf0ea] flex relative">
+    <div className="min-h-screen bg-[#FBF3EA] flex relative">
       {/* Left Navigation Sidebar */}
-      <aside className={`${mounted && isSidebarOpen ? 'w-64' : mounted ? 'w-20' : 'w-64'} bg-[#fbf0ea] border-r border-gray-200 flex flex-col sticky top-0 h-screen transition-all duration-300 ease-in-out`} suppressHydrationWarning>
+      <aside className={`${mounted && isSidebarOpen ? 'w-64' : mounted ? 'w-20' : 'w-64'} bg-[#FBF3EA] border-r border-gray-200 flex flex-col sticky top-0 h-screen transition-all duration-300 ease-in-out`} suppressHydrationWarning>
         <div className="p-4 border-b border-gray-200">
           <div className="flex items-center justify-between mb-6">
             <Link href="/" className={`flex items-center gap-3 ${!isSidebarOpen ? 'justify-center w-full' : ''}`}>
@@ -310,7 +310,7 @@ export default function ExecutionLogsPage() {
       {/* Sidebar Toggle Button - Attached to sidebar edge */}
       <button
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-        className={`absolute ${mounted && isSidebarOpen ? 'left-64' : mounted ? 'left-20' : 'left-64'} top-1/2 -translate-y-1/2 z-30 bg-[#fbf0ea] border border-gray-300 ${mounted && isSidebarOpen ? 'rounded-r-lg rounded-l-none' : 'rounded-l-lg rounded-r-none'} p-2 shadow-md hover:bg-[#f5dcc4] transition-all duration-300 ease-in-out hover:shadow-lg`}
+        className={`absolute ${mounted && isSidebarOpen ? 'left-64' : mounted ? 'left-20' : 'left-64'} top-1/2 -translate-y-1/2 z-30 bg-[#FBF3EA] border border-gray-300 ${mounted && isSidebarOpen ? 'rounded-r-lg rounded-l-none' : 'rounded-l-lg rounded-r-none'} p-2 shadow-md hover:bg-[#FBF3EA] transition-all duration-300 ease-in-out hover:shadow-lg`}
         title={isSidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
         suppressHydrationWarning
       >
@@ -324,14 +324,22 @@ export default function ExecutionLogsPage() {
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
-        <header className="bg-[#fbf0ea] border-b border-gray-200 sticky top-0 z-20 shadow-sm">
+        <header className="bg-[#FBF3EA] border-b border-gray-200 sticky top-0 z-20 shadow-sm">
           <div className="px-4 sm:px-6 lg:px-8 py-4">
             <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
               <div>
                 <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Execution Logs</h1>
                 <p className="text-xs sm:text-sm text-gray-500">View batch execution history and logs</p>
               </div>
-              <Link href="/" className="px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-700 text-sm font-medium hover:bg-gray-50 transition-all duration-200 flex items-center gap-1.5 shadow-sm">
+              <Link 
+                href="/" 
+                onClick={() => {
+                  if (typeof window !== 'undefined') {
+                    sessionStorage.setItem('navigateToOnboarding', 'true');
+                  }
+                }}
+                className="px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-700 text-sm font-medium hover:bg-gray-50 transition-all duration-200 flex items-center gap-1.5 shadow-sm"
+              >
                 <FileText className="w-4 h-4" />
                 Onboarding
               </Link>
@@ -342,12 +350,12 @@ export default function ExecutionLogsPage() {
         {/* Main Content - Two Panel Layout */}
         <main className="flex-1 flex overflow-hidden">
         {/* Left Panel - Batches */}
-        <div className="w-80 border-r border-gray-200 bg-[#fbf0ea] flex flex-col">
-          <div className="p-4 border-b border-gray-200 bg-[#fbf0ea]">
+        <div className="w-80 border-r border-gray-200 bg-[#FBF3EA] flex flex-col">
+          <div className="p-4 border-b border-gray-200 bg-[#FBF3EA]">
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-lg font-semibold text-gray-900">Batches</h2>
               <div className="flex items-center gap-2">
-                <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-[#f5dcc4] rounded transition-all">
+                <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-[#FBF3EA] rounded transition-all">
                   <RotateCcw className="w-4 h-4" />
                 </button>
                 <button className="flex items-center gap-1.5 px-3 py-1.5 bg-[#07011c] text-white rounded-lg hover:bg-[#07011c] transition-all duration-200 text-sm font-medium">
@@ -360,14 +368,14 @@ export default function ExecutionLogsPage() {
 
           <div className="flex-1 overflow-y-auto">
             <table className="w-full">
-              <thead className="bg-[#f5dcc4] border-b border-gray-200 sticky top-0">
+              <thead className="bg-[#FBF3EA] border-b border-gray-200 sticky top-0">
                 <tr>
                   <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">#</th>
                   <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Created On</th>
                   <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Status</th>
                 </tr>
               </thead>
-              <tbody className="bg-[#fbf0ea] divide-y divide-gray-200">
+              <tbody className="bg-[#FBF3EA] divide-y divide-gray-200">
                 {batches.map((batch, index) => {
                   const isSelected = selectedBatch === batch.id;
                   return (
@@ -377,7 +385,7 @@ export default function ExecutionLogsPage() {
                     className={`cursor-pointer transition-colors ${
                       isSelected
                         ? 'bg-[#1a0d3d] text-white'
-                        : 'hover:bg-[#f5dcc4]'
+                        : 'hover:bg-[#FBF3EA]'
                     }`}
                   >
                     <td className={`px-4 py-3 text-sm ${isSelected ? 'text-white' : 'text-gray-900'}`}>{batch.id}</td>
@@ -397,13 +405,13 @@ export default function ExecutionLogsPage() {
         </div>
 
         {/* Right Panel - Execution Summary */}
-        <div className="flex-1 flex flex-col overflow-hidden bg-[#fbf0ea]">
+        <div className="flex-1 flex flex-col overflow-hidden bg-[#FBF3EA]">
           <div className="p-4 border-b border-gray-200">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-semibold text-gray-900">
                 Execution Summary Batch #{selectedBatch}
               </h2>
-              <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-[#f5dcc4] rounded transition-all">
+              <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-[#FBF3EA] rounded transition-all">
                 <RotateCcw className="w-4 h-4" />
               </button>
             </div>
@@ -443,7 +451,7 @@ export default function ExecutionLogsPage() {
                 <span className="text-sm text-gray-700">Troubleshoot</span>
               </label>
 
-              <button className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-700 hover:bg-[#f5dcc4] rounded transition-all">
+              <button className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-700 hover:bg-[#FBF3EA] rounded transition-all">
                 <X className="w-4 h-4" />
                 Delete Instruction
               </button>
@@ -458,12 +466,12 @@ export default function ExecutionLogsPage() {
                 <span className="text-sm text-gray-700">Failed ({failedCount})</span>
               </label>
 
-              <button className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-700 hover:bg-[#f5dcc4] rounded transition-all">
+              <button className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-700 hover:bg-[#FBF3EA] rounded transition-all">
                 <RefreshCw className="w-4 h-4" />
                 Re-Run
               </button>
 
-              <button className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-700 hover:bg-[#f5dcc4] rounded transition-all">
+              <button className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-700 hover:bg-[#FBF3EA] rounded transition-all">
                 <Info className="w-4 h-4" />
                 Instruction Logs
               </button>
@@ -476,7 +484,7 @@ export default function ExecutionLogsPage() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search..."
-                  className="pl-8 pr-3 py-1.5 border border-gray-300 rounded-lg bg-[#fbf0ea] focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none text-sm w-48"
+                  className="pl-8 pr-3 py-1.5 border border-gray-300 rounded-lg bg-[#FBF3EA] focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none text-sm w-48"
                 />
               </div>
             </div>
@@ -485,7 +493,7 @@ export default function ExecutionLogsPage() {
           {/* Execution Logs Table */}
           <div className="flex-1 overflow-y-auto">
             <table className="w-full">
-              <thead className="bg-[#f5dcc4] border-b border-gray-200 sticky top-0">
+              <thead className="bg-[#FBF3EA] border-b border-gray-200 sticky top-0">
                 <tr>
                   <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">#</th>
                   <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">ID</th>
@@ -496,7 +504,7 @@ export default function ExecutionLogsPage() {
                   <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Execution</th>
                 </tr>
               </thead>
-              <tbody className="bg-[#fbf0ea] divide-y divide-gray-200">
+              <tbody className="bg-[#FBF3EA] divide-y divide-gray-200">
                 {filteredLogs.map((log, index) => (
                   <tr key={log.id} className="/50 transition-colors">
                     <td className="px-4 py-3 text-sm text-gray-900">{log.id}</td>

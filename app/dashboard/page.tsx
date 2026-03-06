@@ -64,9 +64,9 @@ export default function DashboardPage() {
   const maxValue = Math.max(...chartData.exports, ...chartData.imports);
 
   return (
-    <div className="min-h-screen bg-[#EDE8D0] flex relative">
+    <div className="min-h-screen bg-[#FBF3EA] flex relative">
       {/* Left Navigation Sidebar */}
-      <aside className={`${isSidebarOpen ? 'w-64' : 'w-20'} bg-[#EDE8D0] border-r border-gray-200 flex flex-col sticky top-0 h-screen transition-all duration-300 ease-in-out`}>
+      <aside className={`${isSidebarOpen ? 'w-64' : 'w-20'} bg-[#FBF3EA] border-r border-gray-200 flex flex-col sticky top-0 h-screen transition-all duration-300 ease-in-out`}>
         <div className="p-4 border-b border-gray-200">
           <div className="flex items-center justify-between mb-6">
             <Link href="/" className={`flex items-center gap-3 ${mounted && !isSidebarOpen ? 'justify-center w-full' : ''}`}>
@@ -113,7 +113,7 @@ export default function DashboardPage() {
       {/* Sidebar Toggle Button - Attached to sidebar edge */}
       <button
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-        className={`absolute ${isSidebarOpen ? 'left-64' : 'left-20'} top-1/2 -translate-y-1/2 z-30 bg-white border border-gray-300 ${isSidebarOpen ? 'rounded-r-lg rounded-l-none' : 'rounded-l-lg rounded-r-none'} p-2 shadow-lg hover:bg-[#EDE8D0] transition-all duration-300 ease-in-out hover:shadow-xl`}
+        className={`absolute ${isSidebarOpen ? 'left-64' : 'left-20'} top-1/2 -translate-y-1/2 z-30 bg-white border border-gray-300 ${isSidebarOpen ? 'rounded-r-lg rounded-l-none' : 'rounded-l-lg rounded-r-none'} p-2 shadow-lg hover:bg-[#FBF3EA] transition-all duration-300 ease-in-out hover:shadow-xl`}
         title={isSidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
       >
         {isSidebarOpen ? (
@@ -126,7 +126,7 @@ export default function DashboardPage() {
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
-        <header className="bg-[#EDE8D0] border-b border-gray-300 sticky top-0 z-20 shadow-sm">
+        <header className="bg-[#FBF3EA] border-b border-gray-300 sticky top-0 z-20 shadow-sm">
           <div className="px-4 sm:px-6 lg:px-10 py-5">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex items-center gap-4">
@@ -149,7 +149,15 @@ export default function DashboardPage() {
                   <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400 font-medium">⌘K</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Link href="/" className="px-4 py-2.5 rounded-xl bg-white border border-gray-300 text-gray-700 text-xs sm:text-sm font-semibold shadow-sm hover:shadow-md hover:bg-gray-50 transition-all duration-200 flex items-center gap-1.5">
+                  <Link 
+                    href="/" 
+                    onClick={() => {
+                      if (typeof window !== 'undefined') {
+                        sessionStorage.setItem('navigateToOnboarding', 'true');
+                      }
+                    }}
+                    className="px-4 py-2.5 rounded-xl bg-white border border-gray-300 text-gray-700 text-xs sm:text-sm font-semibold shadow-sm hover:shadow-md hover:bg-gray-50 transition-all duration-200 flex items-center gap-1.5"
+                  >
                     <FileText className="w-4 h-4" />
                     Onboarding
                   </Link>
@@ -173,7 +181,7 @@ export default function DashboardPage() {
         </header>
 
         {/* Main Content */}
-        <main className="flex-1 overflow-y-auto px-4 sm:px-6 lg:px-10 py-8 bg-gradient-to-b from-[#EDE8D0] to-[#EDE8D0]/50">
+        <main className="flex-1 overflow-y-auto px-4 sm:px-6 lg:px-10 py-8 bg-gradient-to-b from-[#FBF3EA] to-[#FBF3EA]/50">
           <div className="grid gap-6 lg:grid-cols-[minmax(0,2.1fr)_minmax(0,1.2fr)]">
             {/* Left main column */}
             <div className="space-y-6">
@@ -207,7 +215,7 @@ export default function DashboardPage() {
                 </div>
 
                 {/* Prioritized imports */}
-                <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#ffd0b5] via-[#ffe4cc] to-[#ffc2b3] border border-white/80 shadow-lg hover:shadow-2xl transition-all duration-300 px-6 py-5 flex flex-col justify-between group">
+                <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#FBF3EA] via-[#FBF3EA] to-[#FBF3EA] border border-white/80 shadow-lg hover:shadow-2xl transition-all duration-300 px-6 py-5 flex flex-col justify-between group">
                   <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>
                   <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full -ml-12 -mb-12"></div>
                   <div className="relative flex items-center justify-between mb-6">
@@ -260,7 +268,7 @@ export default function DashboardPage() {
                     <h2 className="text-base font-bold text-gray-900">Feed Throughput</h2>
                     <p className="text-xs text-gray-600 mt-1">Imports vs exports across the last 12 months</p>
                   </div>
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-[#EDE8D0] px-4 py-1.5 text-xs font-semibold text-[#7a3a16] border border-gray-200">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-[#FBF3EA] px-4 py-1.5 text-xs font-semibold text-[#7a3a16] border border-gray-200">
                     <ArrowUp className="w-3.5 h-3.5" />
                     {metrics.totalProcessed.toLocaleString()} items processed
                   </span>
@@ -312,7 +320,7 @@ export default function DashboardPage() {
                     {recentActivity.map((activity) => (
                       <div
                         key={activity.id}
-                        className="flex items-center gap-3 rounded-xl px-4 py-3 hover:bg-[#EDE8D0]/50 transition-all duration-200 border border-transparent hover:border-gray-200 group"
+                        className="flex items-center gap-3 rounded-xl px-4 py-3 hover:bg-[#FBF3EA]/50 transition-all duration-200 border border-transparent hover:border-gray-200 group"
                       >
                         <div
                           className={`flex h-10 w-10 items-center justify-center rounded-xl shadow-sm group-hover:scale-110 transition-transform ${
@@ -406,7 +414,7 @@ export default function DashboardPage() {
                       <p className="font-bold text-gray-900 text-sm">08:00</p>
                       <p className="text-gray-400 text-xs">AM</p>
                     </div>
-                    <div className="flex-1 rounded-xl bg-[#EDE8D0] border border-gray-200 px-4 py-3 group-hover:shadow-md transition-all">
+                    <div className="flex-1 rounded-xl bg-[#FBF3EA] border border-gray-200 px-4 py-3 group-hover:shadow-md transition-all">
                       <p className="font-semibold text-gray-900 text-sm">Daily Google Shopping export</p>
                       <p className="mt-1 text-gray-600 text-xs">Potpourri & 3 other sites</p>
                     </div>
@@ -466,7 +474,7 @@ export default function DashboardPage() {
                 <p className="text-xs text-white/90 mb-5 relative leading-relaxed">
                   Trigger an on-demand export for any site without leaving the dashboard.
                 </p>
-                <button className="w-full rounded-xl bg-white text-[#07011c] text-sm font-bold py-3 shadow-lg hover:bg-[#EDE8D0] hover:shadow-xl transition-all duration-200 group-hover:scale-105">
+                <button className="w-full rounded-xl bg-white text-[#07011c] text-sm font-bold py-3 shadow-lg hover:bg-[#FBF3EA] hover:shadow-xl transition-all duration-200 group-hover:scale-105">
                   Open Exports Workspace
                 </button>
               </div>

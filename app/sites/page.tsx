@@ -83,9 +83,9 @@ export default function SitesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#fbf0ea] flex relative">
+    <div className="min-h-screen bg-[#FBF3EA] flex relative">
       {/* Left Navigation Sidebar */}
-      <aside className={`${mounted && isNavSidebarOpen ? 'w-64' : mounted ? 'w-20' : 'w-64'} bg-[#fbf0ea] border-r border-gray-200 flex flex-col sticky top-0 h-screen transition-all duration-300 ease-in-out`} suppressHydrationWarning>
+      <aside className={`${mounted && isNavSidebarOpen ? 'w-64' : mounted ? 'w-20' : 'w-64'} bg-[#FBF3EA] border-r border-gray-200 flex flex-col sticky top-0 h-screen transition-all duration-300 ease-in-out`} suppressHydrationWarning>
         <div className="p-4 border-b border-gray-200">
           <div className="flex items-center justify-between mb-6">
             <Link href="/" className={`flex items-center gap-3 ${!isNavSidebarOpen ? 'justify-center w-full' : ''}`}>
@@ -132,7 +132,7 @@ export default function SitesPage() {
       {/* Sidebar Toggle Button - Attached to sidebar edge */}
       <button
         onClick={() => setIsNavSidebarOpen(!isNavSidebarOpen)}
-        className={`absolute ${mounted && isNavSidebarOpen ? 'left-64' : mounted ? 'left-20' : 'left-64'} top-1/2 -translate-y-1/2 z-30 bg-[#fbf0ea] border border-gray-300 ${mounted && isNavSidebarOpen ? 'rounded-r-lg rounded-l-none' : 'rounded-l-lg rounded-r-none'} p-2 shadow-md hover:bg-[#f5dcc4] transition-all duration-300 ease-in-out hover:shadow-lg`}
+        className={`absolute ${mounted && isNavSidebarOpen ? 'left-64' : mounted ? 'left-20' : 'left-64'} top-1/2 -translate-y-1/2 z-30 bg-[#FBF3EA] border border-gray-300 ${mounted && isNavSidebarOpen ? 'rounded-r-lg rounded-l-none' : 'rounded-l-lg rounded-r-none'} p-2 shadow-md hover:bg-[#FBF3EA] transition-all duration-300 ease-in-out hover:shadow-lg`}
         title={isNavSidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
         suppressHydrationWarning
       >
@@ -146,7 +146,7 @@ export default function SitesPage() {
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
-        <header className="bg-[#fbf0ea] border-b border-gray-200 sticky top-0 z-20 shadow-sm">
+        <header className="bg-[#FBF3EA] border-b border-gray-200 sticky top-0 z-20 shadow-sm">
           <div className="px-4 sm:px-6 lg:px-8 py-4">
             <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
               <div>
@@ -155,7 +155,15 @@ export default function SitesPage() {
               </div>
             
             <div className="flex items-center gap-2">
-              <Link href="/" className="px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-700 text-sm font-medium hover:bg-gray-50 transition-all duration-200 flex items-center gap-1.5 shadow-sm">
+              <Link 
+                href="/" 
+                onClick={() => {
+                  if (typeof window !== 'undefined') {
+                    sessionStorage.setItem('navigateToOnboarding', 'true');
+                  }
+                }}
+                className="px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-700 text-sm font-medium hover:bg-gray-50 transition-all duration-200 flex items-center gap-1.5 shadow-sm"
+              >
                 <FileText className="w-4 h-4" />
                 Onboarding
               </Link>
@@ -177,7 +185,7 @@ export default function SitesPage() {
       <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
         {/* Search Bar */}
         <div className="flex items-center gap-2 mb-4">
-          <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-[#f5dcc4] rounded transition-all">
+          <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-[#FBF3EA] rounded transition-all">
             <RotateCcw className="w-4 h-4" />
           </button>
           <div className="relative flex-1">
@@ -194,10 +202,10 @@ export default function SitesPage() {
         </div>
 
         {/* Sites Table */}
-        <div className="bg-[#fbf0ea] rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+        <div className="bg-[#FBF3EA] rounded-lg border border-gray-200 shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-[#f5dcc4] border-b border-gray-200">
+              <thead className="bg-[#FBF3EA] border-b border-gray-200">
                 <tr>
                   <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Ac...</th>
                   <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Id</th>
@@ -209,7 +217,7 @@ export default function SitesPage() {
                   <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">ModifiedOn</th>
                 </tr>
               </thead>
-              <tbody className="bg-[#fbf0ea] divide-y divide-gray-200">
+              <tbody className="bg-[#FBF3EA] divide-y divide-gray-200">
                 {filteredSites.map((site) => (
                   <tr
                     key={site.id}
@@ -241,12 +249,12 @@ export default function SitesPage() {
             className="absolute inset-0 bg-black bg-opacity-50 transition-opacity duration-300 ease-out"
             onClick={closeModal}
           ></div>
-          <div className="relative w-full max-w-2xl max-h-[90vh] bg-[#fbf0ea] rounded-lg shadow-2xl flex flex-col animate-scale-in">
+          <div className="relative w-full max-w-2xl max-h-[90vh] bg-[#FBF3EA] rounded-lg shadow-2xl flex flex-col animate-scale-in">
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
               <h2 className="text-xl font-semibold text-gray-900">Add Site</h2>
               <button
                 onClick={closeModal}
-                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-[#f5dcc4] rounded transition-all duration-200"
+                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-[#FBF3EA] rounded transition-all duration-200"
               >
                 <XCircle className="w-5 h-5" />
               </button>
@@ -262,7 +270,7 @@ export default function SitesPage() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">CustomerId</label>
-                  <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none cursor-pointer bg-[#fbf0ea]">
+                  <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none cursor-pointer bg-[#FBF3EA]">
                     <option>Select Customer...</option>
                     <option>Customer 1</option>
                     <option>Customer 2</option>
@@ -312,7 +320,7 @@ export default function SitesPage() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">ImportProfileId</label>
-                  <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none cursor-pointer bg-[#fbf0ea]">
+                  <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none cursor-pointer bg-[#FBF3EA]">
                     <option>Select Profile...</option>
                     <option>Profile 1</option>
                     <option>Profile 2</option>
@@ -339,7 +347,7 @@ export default function SitesPage() {
             <div className="border-t border-gray-200 p-6 flex items-center justify-end gap-3">
               <button
                 onClick={closeModal}
-                className="px-6 py-2.5 text-gray-700 border border-gray-300 rounded-lg hover:bg-[#f5dcc4] transition-all font-medium"
+                className="px-6 py-2.5 text-gray-700 border border-gray-300 rounded-lg hover:bg-[#FBF3EA] transition-all font-medium"
               >
                 Cancel
               </button>
@@ -358,12 +366,12 @@ export default function SitesPage() {
       {isDrawerOpen && (
         <div className="fixed inset-0 z-50 overflow-hidden">
           <div className="absolute inset-0 bg-black bg-opacity-50" onClick={closeDrawer}></div>
-          <div className="absolute right-0 top-0 h-full w-full sm:w-[600px] lg:w-[700px] bg-[#fbf0ea] shadow-2xl flex flex-col">
+          <div className="absolute right-0 top-0 h-full w-full sm:w-[600px] lg:w-[700px] bg-[#FBF3EA] shadow-2xl flex flex-col">
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
               <h2 className="text-xl font-semibold text-gray-900">Edit Record</h2>
               <button
                 onClick={closeDrawer}
-                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-[#f5dcc4] rounded transition-all duration-200"
+                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-[#FBF3EA] rounded transition-all duration-200"
               >
                 <XCircle className="w-5 h-5" />
               </button>
@@ -380,7 +388,7 @@ export default function SitesPage() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">CustomerId</label>
-                  <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none cursor-pointer bg-[#fbf0ea]">
+                  <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none cursor-pointer bg-[#FBF3EA]">
                     <option>Select Customer...</option>
                     <option>Customer 1</option>
                     <option>Customer 2</option>
@@ -436,7 +444,7 @@ export default function SitesPage() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">ImportProfileId</label>
-                  <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none cursor-pointer bg-[#fbf0ea]">
+                  <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none cursor-pointer bg-[#FBF3EA]">
                     <option>Select Profile...</option>
                     <option>Profile 1</option>
                     <option>Profile 2</option>
@@ -465,7 +473,7 @@ export default function SitesPage() {
             <div className="border-t border-gray-200 p-6 flex items-center justify-end gap-3">
               <button
                 onClick={closeDrawer}
-                className="px-6 py-2.5 text-gray-700 border border-gray-300 rounded-lg hover:bg-[#f5dcc4] transition-all font-medium"
+                className="px-6 py-2.5 text-gray-700 border border-gray-300 rounded-lg hover:bg-[#FBF3EA] transition-all font-medium"
               >
                 Cancel
               </button>

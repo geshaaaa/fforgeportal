@@ -34,9 +34,9 @@ export default function ReportsPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#fbf0ea] flex relative">
+    <div className="min-h-screen bg-[#FBF3EA] flex relative">
       {/* Left Navigation Sidebar */}
-      <aside className={`${mounted && isNavSidebarOpen ? 'w-64' : mounted ? 'w-20' : 'w-64'} bg-[#fbf0ea] border-r border-gray-200 flex flex-col sticky top-0 h-screen transition-all duration-300 ease-in-out`} suppressHydrationWarning>
+      <aside className={`${mounted && isNavSidebarOpen ? 'w-64' : mounted ? 'w-20' : 'w-64'} bg-[#FBF3EA] border-r border-gray-200 flex flex-col sticky top-0 h-screen transition-all duration-300 ease-in-out`} suppressHydrationWarning>
         <div className="p-4 border-b border-gray-200">
           <div className="flex items-center justify-between mb-6">
             <Link href="/" className={`flex items-center gap-3 ${!isNavSidebarOpen ? 'justify-center w-full' : ''}`}>
@@ -83,7 +83,7 @@ export default function ReportsPage() {
       {/* Sidebar Toggle Button - Attached to sidebar edge */}
       <button
         onClick={() => setIsNavSidebarOpen(!isNavSidebarOpen)}
-        className={`absolute ${mounted && isNavSidebarOpen ? 'left-64' : mounted ? 'left-20' : 'left-64'} top-1/2 -translate-y-1/2 z-30 bg-[#fbf0ea] border border-gray-300 ${mounted && isNavSidebarOpen ? 'rounded-r-lg rounded-l-none' : 'rounded-l-lg rounded-r-none'} p-2 shadow-md hover:bg-[#f5dcc4] transition-all duration-300 ease-in-out hover:shadow-lg`}
+        className={`absolute ${mounted && isNavSidebarOpen ? 'left-64' : mounted ? 'left-20' : 'left-64'} top-1/2 -translate-y-1/2 z-30 bg-[#FBF3EA] border border-gray-300 ${mounted && isNavSidebarOpen ? 'rounded-r-lg rounded-l-none' : 'rounded-l-lg rounded-r-none'} p-2 shadow-md hover:bg-[#FBF3EA] transition-all duration-300 ease-in-out hover:shadow-lg`}
         title={isNavSidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
         suppressHydrationWarning
       >
@@ -97,14 +97,22 @@ export default function ReportsPage() {
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
-        <header className="bg-[#fbf0ea] border-b border-gray-200 sticky top-0 z-20 shadow-sm">
+        <header className="bg-[#FBF3EA] border-b border-gray-200 sticky top-0 z-20 shadow-sm">
           <div className="px-4 sm:px-6 lg:px-8 py-4">
             <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
               <div>
                 <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Reports</h1>
                 <p className="text-xs sm:text-sm text-gray-500">View and manage reports</p>
               </div>
-              <Link href="/" className="px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-700 text-sm font-medium hover:bg-gray-50 transition-all duration-200 flex items-center gap-1.5 shadow-sm">
+              <Link 
+                href="/" 
+                onClick={() => {
+                  if (typeof window !== 'undefined') {
+                    sessionStorage.setItem('navigateToOnboarding', 'true');
+                  }
+                }}
+                className="px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-700 text-sm font-medium hover:bg-gray-50 transition-all duration-200 flex items-center gap-1.5 shadow-sm"
+              >
                 <FileText className="w-4 h-4" />
                 Onboarding
               </Link>
@@ -115,15 +123,15 @@ export default function ReportsPage() {
       {/* Main Content */}
       <main className="flex-1 overflow-y-auto">
         {/* Tabs */}
-        <div className="bg-[#e8c5a8] border-b border-[#d4b08f]">
+        <div className="bg-[#FBF3EA] border-b border-gray-300">
           <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center gap-1">
               <button
                 onClick={() => setActiveTab('authorization')}
                 className={`flex items-center gap-2 px-6 py-4 text-sm font-medium border-b-2 transition-all duration-200 ${
                   activeTab === 'authorization'
-                    ? 'border-[#07011c] text-white bg-[#e8c5a8]'
-                    : 'border-transparent text-gray-600 hover:text-gray-800 hover:border-[#d4b08f]'
+                    ? 'border-[#07011c] text-white bg-[#FBF3EA]'
+                    : 'border-transparent text-gray-600 hover:text-gray-800 hover:border-gray-300'
                 }`}
               >
                 <BarChart3 className="w-4 h-4" />
@@ -133,8 +141,8 @@ export default function ReportsPage() {
                 onClick={() => setActiveTab('sku')}
                 className={`flex items-center gap-2 px-6 py-4 text-sm font-medium border-b-2 transition-all duration-200 ${
                   activeTab === 'sku'
-                    ? 'border-[#07011c] text-white bg-[#e8c5a8]'
-                    : 'border-transparent text-gray-600 hover:text-gray-800 hover:border-[#d4b08f]'
+                    ? 'border-[#07011c] text-white bg-[#FBF3EA]'
+                    : 'border-transparent text-gray-600 hover:text-gray-800 hover:border-gray-300'
                 }`}
               >
                 <FileText className="w-4 h-4" />
@@ -144,8 +152,8 @@ export default function ReportsPage() {
                 onClick={() => setActiveTab('feedqa')}
                 className={`flex items-center gap-2 px-6 py-4 text-sm font-medium border-b-2 transition-all duration-200 ${
                   activeTab === 'feedqa'
-                    ? 'border-[#07011c] text-white bg-[#e8c5a8]'
-                    : 'border-transparent text-gray-600 hover:text-gray-800 hover:border-[#d4b08f]'
+                    ? 'border-[#07011c] text-white bg-[#FBF3EA]'
+                    : 'border-transparent text-gray-600 hover:text-gray-800 hover:border-gray-300'
                 }`}
               >
                 <FileText className="w-4 h-4" />
@@ -159,7 +167,7 @@ export default function ReportsPage() {
         <div className="p-4 sm:p-6 lg:p-8">
           {/* Search Bar */}
           <div className="flex items-center gap-2 mb-6">
-            <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-[#f5dcc4] rounded transition-all">
+            <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-[#FBF3EA] rounded transition-all">
               <RotateCcw className="w-4 h-4" />
             </button>
             <div className="relative flex-1">
@@ -181,7 +189,7 @@ export default function ReportsPage() {
 
           {/* Authorization Tab */}
           {activeTab === 'authorization' && (
-            <div className="bg-[#fbf0ea] rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+            <div className="bg-[#FBF3EA] rounded-lg border border-gray-200 shadow-sm overflow-hidden">
               <div className="p-6">
                 <h2 className="text-2xl font-bold text-gray-900 mb-6">Authorization</h2>
                 
@@ -207,7 +215,7 @@ export default function ReportsPage() {
                   <h3 className="text-lg font-semibold text-gray-900 mb-4">
                     {selectedPlatform} Authorization
                   </h3>
-                  <div className="bg-[#f5dcc4] rounded-lg p-6">
+                  <div className="bg-[#FBF3EA] rounded-lg p-6">
                     <p className="text-sm text-gray-600">
                       Authorization details for {selectedPlatform} will be displayed here.
                     </p>
@@ -219,13 +227,13 @@ export default function ReportsPage() {
 
           {/* SKU Report Tab */}
           {activeTab === 'sku' && (
-            <div className="bg-[#fbf0ea] rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+            <div className="bg-[#FBF3EA] rounded-lg border border-gray-200 shadow-sm overflow-hidden">
               <div className="p-6">
                 <h2 className="text-lg font-semibold text-gray-900 mb-4">SKU Report</h2>
                 <p className="text-sm text-gray-600 mb-6">View SKU inventory, pricing, and availability reports.</p>
                 
                 {/* Placeholder content */}
-                <div className="bg-[#f5dcc4] rounded-lg p-8 text-center">
+                <div className="bg-[#FBF3EA] rounded-lg p-8 text-center">
                   <FileText className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                   <p className="text-gray-500">SKU report data will be displayed here</p>
                 </div>
@@ -235,13 +243,13 @@ export default function ReportsPage() {
 
           {/* FeedQA Tab */}
           {activeTab === 'feedqa' && (
-            <div className="bg-[#fbf0ea] rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+            <div className="bg-[#FBF3EA] rounded-lg border border-gray-200 shadow-sm overflow-hidden">
               <div className="p-6">
                 <h2 className="text-lg font-semibold text-gray-900 mb-4">FeedQA Report</h2>
                 <p className="text-sm text-gray-600 mb-6">View feed quality assurance reports and validation results.</p>
                 
                 {/* Placeholder content */}
-                <div className="bg-[#f5dcc4] rounded-lg p-8 text-center">
+                <div className="bg-[#FBF3EA] rounded-lg p-8 text-center">
                   <FileText className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                   <p className="text-gray-500">FeedQA report data will be displayed here</p>
                 </div>

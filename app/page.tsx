@@ -67,11 +67,11 @@ export default function OnboardingPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#EDE8D0] flex">
+    <div className="min-h-screen bg-[#FBF3EA] flex">
       {/* Main Content Area (no sidebar while onboarding) */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
-        <header className="bg-[#fbf0ea] border-b border-gray-300 sticky top-0 z-10 shadow-sm">
+        <header className="bg-[#FBF3EA] border-b border-gray-300 sticky top-0 z-10 shadow-sm">
           <div className="px-4 sm:px-6 lg:px-8 py-4">
             <div className="flex items-center justify-between gap-4">
               <div>
@@ -79,7 +79,7 @@ export default function OnboardingPage() {
                 <p className="text-xs text-gray-500">Step {currentStep} of 3</p>
               </div>
               <div className="flex items-center gap-3">
-                <div className="w-32 h-2 bg-[#f0d4b8] rounded-full overflow-hidden">
+                <div className="w-32 h-2 bg-[#FBF3EA] rounded-full overflow-hidden">
                   <div 
                     className="h-full bg-[#07011c] rounded-full transition-all duration-300"
                     style={{ width: `${(currentStep / 3) * 100}%` }}
@@ -102,7 +102,7 @@ export default function OnboardingPage() {
             {currentStep === 1 && (
               <>
             {/* Company Profile */}
-            <section className="bg-[#fbf0ea] rounded-lg shadow-sm border border-gray-300 p-6 hover:shadow-md transition-shadow duration-200">
+            <section className="bg-[#FBF3EA] rounded-lg shadow-sm border border-gray-300 p-6 hover:shadow-md transition-shadow duration-200">
               <h2 className="text-lg font-semibold text-gray-900 mb-6">Company Profile</h2>
               <div className="space-y-4">
                 <div>
@@ -162,7 +162,7 @@ export default function OnboardingPage() {
                   <select
                     value={timezone}
                     onChange={(e) => setTimezone(e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-[#fbf0ea]"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-[#FBF3EA]"
                   >
                     <option value="UTC">UTC</option>
                     <option value="America/New_York">America/New_York (EST)</option>
@@ -178,7 +178,7 @@ export default function OnboardingPage() {
             </section>
 
             {/* Sites Setup */}
-            <section className="bg-[#fbf0ea] rounded-lg shadow-sm border border-gray-300 p-6 hover:shadow-md transition-shadow duration-200">
+            <section className="bg-[#FBF3EA] rounded-lg shadow-sm border border-gray-300 p-6 hover:shadow-md transition-shadow duration-200">
               <h2 className="text-lg font-semibold text-gray-900 mb-6">Sites Setup</h2>
               <div className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -233,7 +233,7 @@ export default function OnboardingPage() {
                 <div className="mt-6 space-y-2">
                   <h3 className="text-sm font-medium text-gray-700 mb-3">Added Sites</h3>
                     {sites.map((site) => (
-                    <div key={site.id} className="flex items-center justify-between p-3 bg-[#f5dcc4] rounded-lg border border-gray-300  hover:border-[#2d1a5c] transition-all duration-200 group">
+                    <div key={site.id} className="flex items-center justify-between p-3 bg-[#FBF3EA] rounded-lg border border-gray-300  hover:border-[#2d1a5c] transition-all duration-200 group">
                       <div className="flex-1 min-w-0">
                         <p className="font-medium text-gray-900 truncate">{site.name}</p>
                         <p className="text-sm text-gray-500 truncate">Code: {site.code} {site.location && `• ${site.location}`}</p>
@@ -252,7 +252,7 @@ export default function OnboardingPage() {
             </section>
 
             {/* Default Standards */}
-            <section className="bg-[#fbf0ea] rounded-lg shadow-sm border border-gray-300 p-6 hover:shadow-md transition-shadow duration-200">
+            <section className="bg-[#FBF3EA] rounded-lg shadow-sm border border-gray-300 p-6 hover:shadow-md transition-shadow duration-200">
               <h2 className="text-lg font-semibold text-gray-900 mb-6">Default Standards</h2>
               <div className="space-y-4">
                 <div>
@@ -262,7 +262,7 @@ export default function OnboardingPage() {
                   <select
                     value={defaultFormat}
                     onChange={(e) => setDefaultFormat(e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-[#fbf0ea]"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-[#FBF3EA]"
                   >
                     <option value="CSV">CSV</option>
                     <option value="JSON">JSON</option>
@@ -301,14 +301,14 @@ export default function OnboardingPage() {
 
             {/* Step 2: Import Configuration */}
             {currentStep === 2 && (
-            <section className="bg-[#fbf0ea] rounded-lg shadow-sm border border-gray-300 p-6 hover:shadow-md transition-shadow duration-200">
+            <section className="bg-[#FBF3EA] rounded-lg shadow-sm border border-gray-300 p-6 hover:shadow-md transition-shadow duration-200">
                 <h2 className="text-lg font-semibold text-gray-900 mb-6">Configure First Import</h2>
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Import Source Type <span className="text-red-500">*</span>
                     </label>
-                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-[#fbf0ea]">
+                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-[#FBF3EA]">
                       <option>SFTP</option>
                       <option>FTP</option>
                       <option>API</option>
@@ -373,7 +373,7 @@ export default function OnboardingPage() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       File Format <span className="text-red-500">*</span>
                     </label>
-                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-[#fbf0ea]">
+                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-[#FBF3EA]">
                       <option>CSV</option>
                       <option>JSON</option>
                       <option>XML</option>
@@ -384,7 +384,7 @@ export default function OnboardingPage() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Schedule
                     </label>
-                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-[#fbf0ea]">
+                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-[#FBF3EA]">
                       <option>Daily</option>
                       <option>Hourly</option>
                       <option>Weekly</option>
@@ -397,14 +397,14 @@ export default function OnboardingPage() {
 
             {/* Step 3: Export Configuration */}
             {currentStep === 3 && (
-            <section className="bg-[#fbf0ea] rounded-lg shadow-sm border border-gray-300 p-6 hover:shadow-md transition-shadow duration-200">
+            <section className="bg-[#FBF3EA] rounded-lg shadow-sm border border-gray-300 p-6 hover:shadow-md transition-shadow duration-200">
                 <h2 className="text-lg font-semibold text-gray-900 mb-6">Configure First Export</h2>
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Export Destination Type <span className="text-red-500">*</span>
                     </label>
-                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-[#fbf0ea]">
+                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-[#FBF3EA]">
                       <option>SFTP</option>
                       <option>FTP</option>
                       <option>Email</option>
@@ -470,7 +470,7 @@ export default function OnboardingPage() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Export Format <span className="text-red-500">*</span>
                     </label>
-                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-[#fbf0ea]">
+                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-[#FBF3EA]">
                       <option>CSV</option>
                       <option>JSON</option>
                       <option>XML</option>
@@ -481,7 +481,7 @@ export default function OnboardingPage() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Schedule
                     </label>
-                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-[#fbf0ea]">
+                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-[#FBF3EA]">
                       <option>Daily</option>
                       <option>Hourly</option>
                       <option>Weekly</option>
@@ -496,7 +496,7 @@ export default function OnboardingPage() {
           {/* Right Column - Checklist / Summary */}
           <div className="lg:col-span-1 space-y-6">
             {/* Onboarding Checklist */}
-            <div className="bg-[#fbf0ea] rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200">
+            <div className="bg-[#FBF3EA] rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200">
               <h2 className="text-lg font-semibold text-gray-900 mb-4">Onboarding Checklist</h2>
               <div className="space-y-3">
                 {checklistItems.map((item) => (
@@ -518,28 +518,28 @@ export default function OnboardingPage() {
             <div className="bg-gradient-to-br from-[#1a0d3d] to-[#1a0d3d] rounded-lg border border-[#2d1a5c] p-6 hover:from-[#1a0d3d] hover:to-[#07011c]-200 hover:shadow-md transition-all duration-200 text-white">
               <h2 className="text-lg font-semibold text-white mb-4">What You&apos;ll Need</h2>
               <div className="space-y-4">
-                <div className="flex items-start gap-3 p-2 rounded-lg hover:bg-[#fbf0ea]/50 transition-colors duration-200 group">
+                <div className="flex items-start gap-3 p-2 rounded-lg hover:bg-[#FBF3EA]/50 transition-colors duration-200 group">
                   <Server className="w-5 h-5 text-white mt-0.5 flex-shrink-0 group-hover:scale-110 transition-transform duration-200" />
                   <div>
                     <p className="text-sm font-medium text-white">SFTP Details</p>
                     <p className="text-xs text-gray-100">Host, username, password, and port information</p>
                   </div>
                 </div>
-                <div className="flex items-start gap-3 p-2 rounded-lg hover:bg-[#fbf0ea]/50 transition-colors duration-200 group">
+                <div className="flex items-start gap-3 p-2 rounded-lg hover:bg-[#FBF3EA]/50 transition-colors duration-200 group">
                   <FileText className="w-5 h-5 text-white mt-0.5 flex-shrink-0 group-hover:scale-110 transition-transform duration-200" />
                   <div>
                     <p className="text-sm font-medium text-white">Sample Import File</p>
                     <p className="text-xs text-gray-100">Example file showing expected format and structure</p>
                   </div>
                 </div>
-                <div className="flex items-start gap-3 p-2 rounded-lg hover:bg-[#fbf0ea]/50 transition-colors duration-200 group">
+                <div className="flex items-start gap-3 p-2 rounded-lg hover:bg-[#FBF3EA]/50 transition-colors duration-200 group">
                   <Download className="w-5 h-5 text-white mt-0.5 flex-shrink-0 group-hover:scale-110 transition-transform duration-200" />
                   <div>
                     <p className="text-sm font-medium text-white">Export Destination Credentials</p>
                     <p className="text-xs text-gray-100">Access details for where exports will be delivered</p>
                   </div>
                 </div>
-                <div className="flex items-start gap-3 p-2 rounded-lg hover:bg-[#fbf0ea]/50 transition-colors duration-200 group">
+                <div className="flex items-start gap-3 p-2 rounded-lg hover:bg-[#FBF3EA]/50 transition-colors duration-200 group">
                   <FileCode className="w-5 h-5 text-white mt-0.5 flex-shrink-0 group-hover:scale-110 transition-transform duration-200" />
                   <div>
                     <p className="text-sm font-medium text-white">Format Specs</p>
@@ -553,18 +553,18 @@ export default function OnboardingPage() {
       </main>
 
       {/* Footer Actions - Sticky */}
-      <footer className="bg-[#fbf0ea] border-t border-gray-200 sticky bottom-0 z-10 mt-auto shadow-lg">
+      <footer className="bg-[#FBF3EA] border-t border-gray-200 sticky bottom-0 z-10 mt-auto shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between gap-4">
             <button 
               onClick={() => setCurrentStep(Math.max(1, currentStep - 1))}
               disabled={currentStep === 1}
-              className="px-6 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-[#f5dcc4] hover:border-gray-400 active:bg-[#f5dcc4] transition-all duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-6 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-[#FBF3EA] hover:border-gray-400 active:bg-[#FBF3EA] transition-all duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Back
             </button>
             <div className="flex items-center gap-4">
-              <button className="px-6 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-[#f5dcc4] hover:border-gray-400 active:bg-[#f5dcc4] transition-all duration-200 font-medium">
+              <button className="px-6 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-[#FBF3EA] hover:border-gray-400 active:bg-[#FBF3EA] transition-all duration-200 font-medium">
                 Save Draft
               </button>
               {currentStep < 3 ? (
