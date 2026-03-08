@@ -92,10 +92,30 @@ export default function ImportsPage() {
   }, []);
   const [fieldMappingSearchQuery, setFieldMappingSearchQuery] = useState('');
   const [isSftpModalOpen, setIsSftpModalOpen] = useState(false);
+  const [isSftpModalClosing, setIsSftpModalClosing] = useState(false);
   const [isJoinFileModalOpen, setIsJoinFileModalOpen] = useState(false);
+  const [isJoinFileModalClosing, setIsJoinFileModalClosing] = useState(false);
   const [selectedSftpProfile, setSelectedSftpProfile] = useState<SftpProfile | null>(null);
   const [selectedJoinFile, setSelectedJoinFile] = useState<JoinFile | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+  const closeSftpModal = () => {
+    setIsSftpModalClosing(true);
+    setTimeout(() => {
+      setIsSftpModalOpen(false);
+      setIsSftpModalClosing(false);
+      setSelectedSftpProfile(null);
+    }, 300); // Match animation duration
+  };
+
+  const closeJoinFileModal = () => {
+    setIsJoinFileModalClosing(true);
+    setTimeout(() => {
+      setIsJoinFileModalOpen(false);
+      setIsJoinFileModalClosing(false);
+      setSelectedJoinFile(null);
+    }, 300); // Match animation duration
+  };
 
   const [sites, setSites] = useState<Site[]>([
     { id: '1', name: 'Main Office', code: 'SITE001', status: 'active', lastImportStatus: 'success', lastImportTime: '2 hours ago' },
@@ -526,6 +546,7 @@ export default function ImportsPage() {
                       <button
                         onClick={() => {
                           setSelectedSftpProfile(null);
+                          setIsSftpModalClosing(false);
                           setIsSftpModalOpen(true);
                         }}
                         className="flex items-center gap-2 px-4 py-2 bg-[#000000] text-white rounded-lg hover:bg-[#000000] transition-all duration-200"
@@ -582,6 +603,7 @@ export default function ImportsPage() {
                                   className="/50 transition-colors cursor-pointer"
                                   onClick={() => {
                                     setSelectedSftpProfile(profile);
+                                    setIsSftpModalClosing(false);
                                     setIsSftpModalOpen(true);
                                   }}
                                 >
@@ -612,6 +634,7 @@ export default function ImportsPage() {
                                 <button
                         onClick={() => {
                           setSelectedJoinFile(null);
+                          setIsJoinFileModalClosing(false);
                           setIsJoinFileModalOpen(true);
                         }}
                         className="flex items-center gap-2 px-4 py-2 bg-[#000000] text-white rounded-lg hover:bg-[#000000] transition-all duration-200"
@@ -667,6 +690,7 @@ export default function ImportsPage() {
                                   className="/50 transition-colors cursor-pointer"
                                   onClick={() => {
                                     setSelectedJoinFile(file);
+                                    setIsJoinFileModalClosing(false);
                                     setIsJoinFileModalOpen(true);
                                   }}
                                 >
@@ -767,12 +791,15 @@ export default function ImportsPage() {
       {/* SFTP Profile Modal */}
       {isSftpModalOpen && (
         <div className="fixed inset-0 z-50 overflow-hidden">
-          <div className="absolute inset-0 bg-black bg-opacity-50" onClick={() => setIsSftpModalOpen(false)}></div>
-          <div className="absolute right-0 top-0 h-full w-full sm:w-[600px] bg-[#FBF9F7] shadow-2xl flex flex-col">
+          <div 
+            className={`absolute inset-0 bg-black bg-opacity-50 ${isSftpModalClosing ? 'animate-backdrop-fade-out' : 'animate-backdrop-fade'}`} 
+            onClick={closeSftpModal}
+          ></div>
+          <div className={`absolute right-0 top-0 h-full w-full sm:w-[600px] bg-[#FBF9F7] shadow-2xl flex flex-col ${isSftpModalClosing ? 'animate-slide-out-right' : 'animate-slide-in-right'}`}>
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
               <h2 className="text-xl font-semibold text-gray-900">Edit Record</h2>
               <button
-                onClick={() => setIsSftpModalOpen(false)}
+                onClick={closeSftpModal}
                 className="p-2 text-gray-400 hover:text-gray-600 hover:bg-[#FBF9F7] rounded transition-all"
               >
                 <XCircle className="w-5 h-5" />
@@ -877,13 +904,13 @@ export default function ImportsPage() {
             </div>
             <div className="border-t border-gray-200 p-6 flex items-center justify-end gap-3">
               <button
-                onClick={() => setIsSftpModalOpen(false)}
+                onClick={closeSftpModal}
                 className="px-6 py-2.5 text-gray-700 border border-gray-300 rounded-lg hover:bg-[#FBF9F7] transition-all font-medium"
               >
                 Cancel
               </button>
               <button
-                onClick={() => setIsSftpModalOpen(false)}
+                onClick={closeSftpModal}
                 className="px-6 py-2.5 bg-[#000000] text-white rounded-lg hover:bg-[#000000] transition-all font-medium"
               >
                 Save
@@ -896,12 +923,15 @@ export default function ImportsPage() {
       {/* Join File Modal */}
       {isJoinFileModalOpen && (
         <div className="fixed inset-0 z-50 overflow-hidden">
-          <div className="absolute inset-0 bg-black bg-opacity-50" onClick={() => setIsJoinFileModalOpen(false)}></div>
-          <div className="absolute right-0 top-0 h-full w-full sm:w-[600px] bg-[#FBF9F7] shadow-2xl flex flex-col">
+          <div 
+            className={`absolute inset-0 bg-black bg-opacity-50 ${isJoinFileModalClosing ? 'animate-backdrop-fade-out' : 'animate-backdrop-fade'}`} 
+            onClick={closeJoinFileModal}
+          ></div>
+          <div className={`absolute right-0 top-0 h-full w-full sm:w-[600px] bg-[#FBF9F7] shadow-2xl flex flex-col ${isJoinFileModalClosing ? 'animate-slide-out-right' : 'animate-slide-in-right'}`}>
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
               <h2 className="text-xl font-semibold text-gray-900">Edit Record</h2>
               <button
-                onClick={() => setIsJoinFileModalOpen(false)}
+                onClick={closeJoinFileModal}
                 className="p-2 text-gray-400 hover:text-gray-600 hover:bg-[#FBF9F7] rounded transition-all"
               >
                 <XCircle className="w-5 h-5" />
@@ -1011,13 +1041,13 @@ export default function ImportsPage() {
             </div>
             <div className="border-t border-gray-200 p-6 flex items-center justify-end gap-3">
               <button
-                onClick={() => setIsJoinFileModalOpen(false)}
+                onClick={closeJoinFileModal}
                 className="px-6 py-2.5 text-gray-700 border border-gray-300 rounded-lg hover:bg-[#FBF9F7] transition-all font-medium"
               >
                 Cancel
               </button>
               <button
-                onClick={() => setIsJoinFileModalOpen(false)}
+                onClick={closeJoinFileModal}
                 className="px-6 py-2.5 bg-[#000000] text-white rounded-lg hover:bg-[#000000] transition-all font-medium"
               >
                 Save

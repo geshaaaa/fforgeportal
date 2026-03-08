@@ -20,6 +20,12 @@ export default function DashboardPage() {
     setMounted(true);
   }, []);
 
+  // Helper function to format numbers consistently (prevents hydration errors)
+  // Uses regex-based formatting that works the same on server and client
+  const formatNumber = (num: number): string => {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  };
+
   // Mock data for metrics
   const metrics = {
     totalSites: 12,
@@ -265,38 +271,112 @@ export default function DashboardPage() {
                     <h2 className="text-base font-bold text-gray-900">Feed Throughput</h2>
                     <p className="text-xs text-gray-600 mt-1">Imports vs exports across the last 12 months</p>
                   </div>
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-[#FBF9F7] px-4 py-1.5 text-xs font-semibold text-[#7a3a16] border border-gray-200">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-[#FBF9F7] px-4 py-1.5 text-xs font-semibold text-black border border-gray-200">
                     <ArrowUp className="w-3.5 h-3.5" />
-                    {metrics.totalProcessed.toLocaleString()} items processed
+                    {formatNumber(metrics.totalProcessed)} items processed
                   </span>
                 </div>
-                <div className="h-64 flex items-end justify-between gap-2.5 mb-4">
-                  {chartData.labels.map((label, index) => (
-                    <div key={label} className="flex-1 flex flex-col items-center gap-2 group">
-                      <div className="w-full flex flex-col justify-end gap-1.5 hover:opacity-80 transition-opacity" style={{ height: '200px' }}>
-                        <div
-                          className="w-full rounded-t-lg bg-gradient-to-t from-[#000000] via-[#000000] to-[#000000] shadow-md hover:shadow-lg transition-all cursor-pointer group-hover:scale-105"
-                          style={{ height: `${(chartData.exports[index] / maxValue) * 100}%` }}
-                          title={`Exports: ${chartData.exports[index]}`}
-                        />
-                        <div
-                          className="w-full rounded-t-lg bg-gradient-to-t from-green-600 via-green-400 to-green-300 shadow-md hover:shadow-lg transition-all cursor-pointer group-hover:scale-105"
-                          style={{ height: `${(chartData.imports[index] / maxValue) * 100}%` }}
-                          title={`Imports: ${chartData.imports[index]}`}
-                        />
-                      </div>
-                      <span className="text-xs text-gray-600 font-medium">{label}</span>
-                    </div>
-                  ))}
+                <div className="h-64 relative mb-4">
+                  {/* SVG for line graph */}
+                  <svg className="w-full h-full" viewBox="0 0 1000 200" preserveAspectRatio="none">
+                    {/* Grid lines */}
+                    {[0, 25, 50, 75, 100].map((y) => (
+                      <line
+                        key={y}
+                        x1="0"
+                        y1={y * 2}
+                        x2="1000"
+                        y2={y * 2}
+                        stroke="#f3f4f6"
+                        strokeWidth="1"
+                        vectorEffect="non-scaling-stroke"
+                      />
+                    ))}
+                    
+                    {/* Exports line */}
+                    <polyline
+                      points={chartData.exports.map((value, index) => {
+                        const x = (index / (chartData.exports.length - 1)) * 1000;
+                        const y = 200 - ((value / maxValue) * 200);
+                        return `${x},${y}`;
+                      }).join(' ')}
+                      fill="none"
+                      stroke="#000000"
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="hover:stroke-[4] transition-all"
+                    />
+                    
+                    {/* Imports line */}
+                    <polyline
+                      points={chartData.imports.map((value, index) => {
+                        const x = (index / (chartData.imports.length - 1)) * 1000;
+                        const y = 200 - ((value / maxValue) * 200);
+                        return `${x},${y}`;
+                      }).join(' ')}
+                      fill="none"
+                      stroke="#10b981"
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="hover:stroke-[4] transition-all"
+                    />
+                    
+                    {/* Exports data points */}
+                    {chartData.exports.map((value, index) => {
+                      const x = (index / (chartData.exports.length - 1)) * 1000;
+                      const y = 200 - ((value / maxValue) * 200);
+                      return (
+                        <g key={`export-${index}`} className="hover:scale-150 transition-transform cursor-pointer" style={{ transformOrigin: `${x}px ${y}px` }}>
+                          <title>Exports: {value}</title>
+                          <circle
+                            cx={x}
+                            cy={y}
+                            r="4"
+                            fill="#000000"
+                            className="transition-all"
+                          />
+                        </g>
+                      );
+                    })}
+                    
+                    {/* Imports data points */}
+                    {chartData.imports.map((value, index) => {
+                      const x = (index / (chartData.imports.length - 1)) * 1000;
+                      const y = 200 - ((value / maxValue) * 200);
+                      return (
+                        <g key={`import-${index}`} className="hover:scale-150 transition-transform cursor-pointer" style={{ transformOrigin: `${x}px ${y}px` }}>
+                          <title>Imports: {value}</title>
+                          <circle
+                            cx={x}
+                            cy={y}
+                            r="4"
+                            fill="#10b981"
+                            className="transition-all"
+                          />
+                        </g>
+                      );
+                    })}
+                  </svg>
+                  
+                  {/* Month labels */}
+                  <div className="absolute bottom-0 left-0 right-0 flex justify-between px-2">
+                    {chartData.labels.map((label) => (
+                      <span key={label} className="text-xs text-gray-600 font-medium">
+                        {label}
+                      </span>
+                    ))}
+                  </div>
                 </div>
                 <div className="mt-6 pt-4 border-t border-gray-200 flex items-center justify-between text-xs">
                   <div className="flex items-center gap-4">
                     <span className="flex items-center gap-2">
-                      <span className="w-4 h-2 rounded-full bg-gradient-to-r from-[#000000] to-[#000000]" />
+                      <span className="w-4 h-2 rounded-full bg-black" />
                       <span className="text-gray-700 font-semibold">Exports</span>
                     </span>
                     <span className="flex items-center gap-2">
-                      <span className="w-4 h-2 rounded-full bg-gradient-to-r from-green-600 to-green-300" />
+                      <span className="w-4 h-2 rounded-full bg-green-500" />
                       <span className="text-gray-700 font-semibold">Imports</span>
                     </span>
                   </div>
@@ -380,7 +460,7 @@ export default function DashboardPage() {
                   <div className="pt-5 border-t border-gray-200 grid grid-cols-3 gap-4 text-center">
                     <div>
                       <p className="text-xl font-bold text-gray-900 mb-1">
-                        {metrics.totalProcessed.toLocaleString()}
+                        {formatNumber(metrics.totalProcessed)}
                       </p>
                       <p className="text-xs text-gray-600 font-medium">Total processed</p>
                     </div>
@@ -399,41 +479,56 @@ export default function DashboardPage() {
 
             {/* Right rail column */}
             <div className="space-y-5">
-              {/* Today's schedule */}
-              <div className="bg-white rounded-2xl border border-gray-200 shadow-md hover:shadow-xl transition-all duration-300 p-6">
-                <div className="flex items-center justify-between mb-5">
-                  <h2 className="text-base font-bold text-gray-900">Today&apos;s Schedule</h2>
-                  <button className="text-xs font-semibold text-gray-500 hover:text-[#000000] transition-colors">See all →</button>
+              {/* Performance Metrics */}
+              <div className="bg-gradient-to-br from-white to-[#FBF9F7] rounded-2xl border-2 border-gray-200 shadow-lg hover:shadow-2xl transition-all duration-300 p-6">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-lg font-bold text-black">Performance Metrics</h2>
+                  <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center">
+                    <Activity className="w-5 h-5 text-white" />
+                  </div>
                 </div>
-                <div className="space-y-4">
-                  <div className="flex items-start gap-4 group">
-                    <div className="w-12 text-right pt-1">
-                      <p className="font-bold text-gray-900 text-sm">08:00</p>
-                      <p className="text-gray-400 text-xs">AM</p>
+                <div className="space-y-5">
+                  <div className="p-4 bg-white rounded-xl border border-gray-200 hover:border-black transition-all duration-200 group">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs font-semibold text-gray-600 uppercase tracking-wide">Success Rate</span>
+                      <span className="text-lg font-bold text-black">{metrics.successRate}%</span>
                     </div>
-                    <div className="flex-1 rounded-xl bg-[#FBF9F7] border border-gray-200 px-4 py-3 group-hover:shadow-md transition-all">
-                      <p className="font-semibold text-gray-900 text-sm">Daily Google Shopping export</p>
-                      <p className="mt-1 text-gray-600 text-xs">Potpourri & 3 other sites</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-4 group">
-                    <div className="w-12 text-right pt-1">
-                      <p className="font-bold text-gray-900 text-sm">09:30</p>
-                      <p className="text-gray-400 text-xs">AM</p>
-                    </div>
-                    <div className="flex-1 rounded-xl bg-[#FBF9F7] border border-gray-300 px-4 py-3 group-hover:shadow-md transition-all">
-                      <p className="font-semibold text-gray-900 text-sm">Inventory import window</p>
-                      <p className="mt-1 text-gray-600 text-xs">Warehouse SFTP profile</p>
+                    <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                      <div
+                        className="bg-black h-full rounded-full transition-all duration-500"
+                        style={{ width: `${metrics.successRate}%` }}
+                      />
                     </div>
                   </div>
-                  <div className="flex items-start gap-4 group">
-                    <div className="w-12 text-right pt-1">
-                      <p className="font-bold text-gray-900 text-sm">02:00</p>
-                      <p className="text-gray-400 text-xs">PM</p>
+                  
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="p-4 bg-white rounded-xl border border-gray-200 hover:border-black transition-all duration-200 group">
+                      <div className="flex items-center gap-2 mb-2">
+                        <TrendingUp className="w-4 h-4 text-black" />
+                        <span className="text-xs font-semibold text-gray-600">Avg Time</span>
+                      </div>
+                      <p className="text-xl font-bold text-black">{metrics.avgProcessingTime}</p>
                     </div>
-                    <div className="flex-1 rounded-xl bg-[#FBF9F7] border border-gray-300 px-4 py-3 group-hover:shadow-md transition-all">
-                      <p className="font-semibold text-gray-900 text-sm">Channel health scan</p>
-                      <p className="mt-1 text-gray-600 text-xs">Feed quality checks across sites</p>
+                    <div className="p-4 bg-white rounded-xl border border-gray-200 hover:border-black transition-all duration-200 group">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Server className="w-4 h-4 text-black" />
+                        <span className="text-xs font-semibold text-gray-600">Channels</span>
+                      </div>
+                      <p className="text-xl font-bold text-black">{metrics.activeChannels}</p>
+                    </div>
+                  </div>
+                  
+                  <div className="p-4 bg-black rounded-xl text-white">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-xs font-semibold text-gray-300 mb-1">Total Processed</p>
+                        <p className="text-2xl font-bold">
+                          {formatNumber(metrics.totalProcessed)}
+                        </p>
+                      </div>
+                      <div className="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center">
+                        <CheckCircle2 className="w-6 h-6 text-white" />
+                      </div>
                     </div>
                   </div>
                 </div>
