@@ -13,6 +13,8 @@ export default function DashboardPage() {
   const [timeRange, setTimeRange] = useState<'7d' | '30d' | '90d'>('30d');
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [mounted, setMounted] = useState(false);
+  const [showImportConfig, setShowImportConfig] = useState(false);
+  const [showExportConfig, setShowExportConfig] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -461,6 +463,219 @@ export default function DashboardPage() {
                     </div>
                   ))}
                 </div>
+              </div>
+
+              {/* Import Configuration */}
+              <div className="bg-white rounded-2xl border border-gray-200 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden">
+                <button
+                  onClick={() => setShowImportConfig(!showImportConfig)}
+                  className="w-full flex items-center justify-between p-6 hover:bg-[#FBF3EA]/50 transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    <Download className="w-5 h-5 text-[#07011c]" />
+                    <h2 className="text-base font-bold text-gray-900">Configure Import</h2>
+                  </div>
+                  <ChevronRight className={`w-5 h-5 text-gray-400 transition-transform ${showImportConfig ? 'rotate-90' : ''}`} />
+                </button>
+                {showImportConfig && (
+                  <div className="px-6 pb-6 space-y-4 border-t border-gray-200 pt-4">
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-2">
+                        Import Source Type <span className="text-red-500">*</span>
+                      </label>
+                      <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none text-sm bg-white">
+                        <option>SFTP</option>
+                        <option>FTP</option>
+                        <option>API</option>
+                        <option>File Upload</option>
+                      </select>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs font-medium text-gray-700 mb-2">
+                          Server/Host <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none text-sm"
+                          placeholder="sftp.example.com"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium text-gray-700 mb-2">Port</label>
+                        <input
+                          type="number"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none text-sm"
+                          placeholder="22"
+                        />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs font-medium text-gray-700 mb-2">
+                          Username <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none text-sm"
+                          placeholder="username"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium text-gray-700 mb-2">
+                          Password <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="password"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none text-sm"
+                          placeholder="••••••••"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-2">
+                        Source Path <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none text-sm"
+                        placeholder="/data/imports"
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs font-medium text-gray-700 mb-2">
+                          File Format <span className="text-red-500">*</span>
+                        </label>
+                        <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none text-sm bg-white">
+                          <option>CSV</option>
+                          <option>JSON</option>
+                          <option>XML</option>
+                          <option>Excel</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium text-gray-700 mb-2">Schedule</label>
+                        <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none text-sm bg-white">
+                          <option>Daily</option>
+                          <option>Hourly</option>
+                          <option>Weekly</option>
+                          <option>Manual</option>
+                        </select>
+                      </div>
+                    </div>
+                    <button className="w-full px-4 py-2 bg-[#07011c] text-white rounded-lg hover:bg-[#1a0d3d] transition-all text-sm font-medium">
+                      Save Import Configuration
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Export Configuration */}
+              <div className="bg-white rounded-2xl border border-gray-200 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden">
+                <button
+                  onClick={() => setShowExportConfig(!showExportConfig)}
+                  className="w-full flex items-center justify-between p-6 hover:bg-[#FBF3EA]/50 transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    <Upload className="w-5 h-5 text-[#07011c]" />
+                    <h2 className="text-base font-bold text-gray-900">Configure Export</h2>
+                  </div>
+                  <ChevronRight className={`w-5 h-5 text-gray-400 transition-transform ${showExportConfig ? 'rotate-90' : ''}`} />
+                </button>
+                {showExportConfig && (
+                  <div className="px-6 pb-6 space-y-4 border-t border-gray-200 pt-4">
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-2">
+                        Export Destination Type <span className="text-red-500">*</span>
+                      </label>
+                      <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none text-sm bg-white">
+                        <option>SFTP</option>
+                        <option>FTP</option>
+                        <option>Email</option>
+                        <option>API/Webhook</option>
+                        <option>Local Storage</option>
+                      </select>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs font-medium text-gray-700 mb-2">
+                          Server/Host <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none text-sm"
+                          placeholder="sftp.example.com"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium text-gray-700 mb-2">Port</label>
+                        <input
+                          type="number"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none text-sm"
+                          placeholder="22"
+                        />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs font-medium text-gray-700 mb-2">
+                          Username <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none text-sm"
+                          placeholder="username"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium text-gray-700 mb-2">
+                          Password <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="password"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none text-sm"
+                          placeholder="••••••••"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-2">
+                        Destination Path <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none text-sm"
+                        placeholder="/data/exports"
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs font-medium text-gray-700 mb-2">
+                          Export Format <span className="text-red-500">*</span>
+                        </label>
+                        <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none text-sm bg-white">
+                          <option>CSV</option>
+                          <option>JSON</option>
+                          <option>XML</option>
+                          <option>Excel</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium text-gray-700 mb-2">Schedule</label>
+                        <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none text-sm bg-white">
+                          <option>Daily</option>
+                          <option>Hourly</option>
+                          <option>Weekly</option>
+                          <option>Manual</option>
+                        </select>
+                      </div>
+                    </div>
+                    <button className="w-full px-4 py-2 bg-[#07011c] text-white rounded-lg hover:bg-[#1a0d3d] transition-all text-sm font-medium">
+                      Save Export Configuration
+                    </button>
+                  </div>
+                )}
               </div>
 
               {/* Quick export CTA */}
