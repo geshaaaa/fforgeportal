@@ -261,13 +261,13 @@ export default function ExecutionLogsPage() {
   const failedCount = executionLogs.filter(log => log.status === 'failed').length;
 
   return (
-    <div className="min-h-screen bg-[#FBF3EA] flex relative">
+    <div className="min-h-screen bg-[#FBF9F7] flex relative">
       {/* Left Navigation Sidebar */}
-      <aside className={`${mounted && isSidebarOpen ? 'w-64' : mounted ? 'w-20' : 'w-64'} bg-[#FBF3EA] border-r border-gray-200 flex flex-col sticky top-0 h-screen transition-all duration-300 ease-in-out`} suppressHydrationWarning>
+      <aside className={`${mounted && isSidebarOpen ? 'w-64' : mounted ? 'w-20' : 'w-64'} bg-[#FBF9F7] border-r border-gray-200 flex flex-col sticky top-0 h-screen transition-all duration-300 ease-in-out`} suppressHydrationWarning>
         <div className="p-4 border-b border-gray-200">
           <div className="flex items-center justify-between mb-6">
-            <Link href="/" className={`flex items-center gap-3 ${!isSidebarOpen ? 'justify-center w-full' : ''}`}>
-              <div className="w-10 h-10 bg-gradient-to-br from-[#07011c] to-[#07011c] rounded-lg flex items-center justify-center hover:from-[#07011c] hover:to-[#07011c] transition-all duration-200 cursor-pointer shadow-md hover:shadow-lg flex-shrink-0">
+            <Link href="/dashboard" className={`flex items-center gap-3 ${!isSidebarOpen ? 'justify-center w-full' : ''}`}>
+              <div className="w-10 h-10 bg-gradient-to-br from-[#000000] to-[#000000] rounded-lg flex items-center justify-center hover:from-[#000000] hover:to-[#000000] transition-all duration-200 cursor-pointer shadow-md hover:shadow-lg flex-shrink-0">
                 <Building2 className="w-6 h-6 text-white" />
               </div>
               {isSidebarOpen && (
@@ -280,27 +280,27 @@ export default function ExecutionLogsPage() {
           </div>
         </div>
         <nav className="flex-1 p-4 space-y-1">
-          <Link href="/dashboard" className={`flex items-center ${isSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#07011c]  rounded-lg transition-colors duration-200`}>
+          <Link href="/dashboard" className={`flex items-center ${isSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#000000]  rounded-lg transition-colors duration-200`}>
             <BarChart3 className="w-5 h-5 flex-shrink-0" />
             {isSidebarOpen && <span>Dashboard</span>}
           </Link>
-          <Link href="/imports" className={`flex items-center ${isSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#07011c]  rounded-lg transition-colors duration-200`}>
+          <Link href="/imports" className={`flex items-center ${isSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#000000]  rounded-lg transition-colors duration-200`}>
             <Download className="w-5 h-5 flex-shrink-0" />
             {isSidebarOpen && <span>Imports</span>}
           </Link>
-          <Link href="/exports" className={`flex items-center ${isSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#07011c]  rounded-lg transition-colors duration-200`}>
+          <Link href="/exports" className={`flex items-center ${isSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#000000]  rounded-lg transition-colors duration-200`}>
             <Upload className="w-5 h-5 flex-shrink-0" />
             {isSidebarOpen && <span>Exports</span>}
           </Link>
-          <Link href="/sites" className={`flex items-center ${isSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#07011c]  rounded-lg transition-colors duration-200`}>
+          <Link href="/sites" className={`flex items-center ${isSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#000000]  rounded-lg transition-colors duration-200`}>
             <Building2 className="w-5 h-5 flex-shrink-0" />
             {isSidebarOpen && <span>Sites</span>}
           </Link>
-          <Link href="/reports" className={`flex items-center ${isSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#07011c]  rounded-lg transition-colors duration-200`}>
+          <Link href="/reports" className={`flex items-center ${isSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#000000]  rounded-lg transition-colors duration-200`}>
             <FileText className="w-5 h-5 flex-shrink-0" />
             {isSidebarOpen && <span>Reports</span>}
           </Link>
-          <Link href="/execution-logs" className={`flex items-center ${isSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-white bg-[#1a0d3d] rounded-lg transition-colors duration-200`}>
+          <Link href="/execution-logs" className={`flex items-center ${isSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-white bg-[#000000] rounded-lg transition-colors duration-200`}>
             <Activity className="w-5 h-5 flex-shrink-0" />
             {isSidebarOpen && <span>Execution Logs</span>}
           </Link>
@@ -310,7 +310,7 @@ export default function ExecutionLogsPage() {
       {/* Sidebar Toggle Button - Attached to sidebar edge */}
       <button
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-        className={`absolute ${mounted && isSidebarOpen ? 'left-64' : mounted ? 'left-20' : 'left-64'} top-1/2 -translate-y-1/2 z-30 bg-[#FBF3EA] border border-gray-300 ${mounted && isSidebarOpen ? 'rounded-r-lg rounded-l-none' : 'rounded-l-lg rounded-r-none'} p-2 shadow-md hover:bg-[#FBF3EA] transition-all duration-300 ease-in-out hover:shadow-lg`}
+        className={`absolute ${mounted && isSidebarOpen ? 'left-64' : mounted ? 'left-20' : 'left-64'} top-1/2 -translate-y-1/2 z-30 bg-[#FBF9F7] border border-gray-300 ${mounted && isSidebarOpen ? 'rounded-r-lg rounded-l-none' : 'rounded-l-lg rounded-r-none'} p-2 shadow-md hover:bg-[#FBF9F7] transition-all duration-300 ease-in-out hover:shadow-lg`}
         title={isSidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
         suppressHydrationWarning
       >
@@ -324,7 +324,7 @@ export default function ExecutionLogsPage() {
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
-        <header className="bg-[#FBF3EA] border-b border-gray-200 sticky top-0 z-20 shadow-sm">
+        <header className="bg-[#FBF9F7] border-b border-gray-200 sticky top-0 z-20 shadow-sm">
           <div className="px-4 sm:px-6 lg:px-8 py-4">
             <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
               <div>
@@ -332,10 +332,10 @@ export default function ExecutionLogsPage() {
                 <p className="text-xs sm:text-sm text-gray-500">View batch execution history and logs</p>
               </div>
               <Link 
-                href="/" 
+                href="/dashboard" 
                 onClick={() => {
                   if (typeof window !== 'undefined') {
-                    sessionStorage.setItem('navigateToOnboarding', 'true');
+                    
                   }
                 }}
                 className="px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-700 text-sm font-medium hover:bg-gray-50 transition-all duration-200 flex items-center gap-1.5 shadow-sm"
@@ -350,15 +350,15 @@ export default function ExecutionLogsPage() {
         {/* Main Content - Two Panel Layout */}
         <main className="flex-1 flex overflow-hidden">
         {/* Left Panel - Batches */}
-        <div className="w-80 border-r border-gray-200 bg-[#FBF3EA] flex flex-col">
-          <div className="p-4 border-b border-gray-200 bg-[#FBF3EA]">
+        <div className="w-80 border-r border-gray-200 bg-[#FBF9F7] flex flex-col">
+          <div className="p-4 border-b border-gray-200 bg-[#FBF9F7]">
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-lg font-semibold text-gray-900">Batches</h2>
               <div className="flex items-center gap-2">
-                <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-[#FBF3EA] rounded transition-all">
+                <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-[#FBF9F7] rounded transition-all">
                   <RotateCcw className="w-4 h-4" />
                 </button>
-                <button className="flex items-center gap-1.5 px-3 py-1.5 bg-[#07011c] text-white rounded-lg hover:bg-[#07011c] transition-all duration-200 text-sm font-medium">
+                <button className="flex items-center gap-1.5 px-3 py-1.5 bg-[#000000] text-white rounded-lg hover:bg-[#000000] transition-all duration-200 text-sm font-medium">
                   <Plus className="w-4 h-4" />
                   Add Batch
                 </button>
@@ -368,14 +368,14 @@ export default function ExecutionLogsPage() {
 
           <div className="flex-1 overflow-y-auto">
             <table className="w-full">
-              <thead className="bg-[#FBF3EA] border-b border-gray-200 sticky top-0">
+              <thead className="bg-[#FBF9F7] border-b border-gray-200 sticky top-0">
                 <tr>
                   <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">#</th>
                   <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Created On</th>
                   <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Status</th>
                 </tr>
               </thead>
-              <tbody className="bg-[#FBF3EA] divide-y divide-gray-200">
+              <tbody className="bg-[#FBF9F7] divide-y divide-gray-200">
                 {batches.map((batch, index) => {
                   const isSelected = selectedBatch === batch.id;
                   return (
@@ -384,15 +384,15 @@ export default function ExecutionLogsPage() {
                     onClick={() => setSelectedBatch(batch.id)}
                     className={`cursor-pointer transition-colors ${
                       isSelected
-                        ? 'bg-[#1a0d3d] text-white'
-                        : 'hover:bg-[#FBF3EA]'
+                        ? 'bg-[#000000] text-white'
+                        : 'hover:bg-[#FBF9F7]'
                     }`}
                   >
                     <td className={`px-4 py-3 text-sm ${isSelected ? 'text-white' : 'text-gray-900'}`}>{batch.id}</td>
                     <td className={`px-4 py-3 text-sm ${isSelected ? 'text-white' : 'text-gray-600'}`}>{batch.createdOn}</td>
                     <td className="px-4 py-3">
                       {batch.status === 'success' ? (
-                        <CheckCircle2 className={`w-5 h-5 ${isSelected ? 'text-white' : 'text-[#07011c]'}`} />
+                        <CheckCircle2 className={`w-5 h-5 ${isSelected ? 'text-white' : 'text-[#000000]'}`} />
                       ) : (
                         <AlertTriangle className={`w-5 h-5 ${isSelected ? 'text-red-300' : 'text-red-600'}`} />
                       )}
@@ -405,13 +405,13 @@ export default function ExecutionLogsPage() {
         </div>
 
         {/* Right Panel - Execution Summary */}
-        <div className="flex-1 flex flex-col overflow-hidden bg-[#FBF3EA]">
+        <div className="flex-1 flex flex-col overflow-hidden bg-[#FBF9F7]">
           <div className="p-4 border-b border-gray-200">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-semibold text-gray-900">
                 Execution Summary Batch #{selectedBatch}
               </h2>
-              <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-[#FBF3EA] rounded transition-all">
+              <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-[#FBF9F7] rounded transition-all">
                 <RotateCcw className="w-4 h-4" />
               </button>
             </div>
@@ -423,7 +423,7 @@ export default function ExecutionLogsPage() {
                   type="checkbox"
                   checked={showSSISLogs}
                   onChange={(e) => setShowSSISLogs(e.target.checked)}
-                  className="w-4 h-4 text-[#07011c] border-gray-300 rounded focus:ring-[#07011c]"
+                  className="w-4 h-4 text-[#000000] border-gray-300 rounded focus:ring-[#000000]"
                 />
                 <div className="flex items-center gap-1">
                   <span className="text-sm text-gray-700">SSIS Logs</span>
@@ -436,7 +436,7 @@ export default function ExecutionLogsPage() {
                   type="checkbox"
                   checked={showTransformLogs}
                   onChange={(e) => setShowTransformLogs(e.target.checked)}
-                  className="w-4 h-4 text-[#07011c] border-gray-300 rounded focus:ring-[#07011c]"
+                  className="w-4 h-4 text-[#000000] border-gray-300 rounded focus:ring-[#000000]"
                 />
                 <span className="text-sm text-gray-700">Transform Logs</span>
               </label>
@@ -446,12 +446,12 @@ export default function ExecutionLogsPage() {
                   type="checkbox"
                   checked={showTroubleshoot}
                   onChange={(e) => setShowTroubleshoot(e.target.checked)}
-                  className="w-4 h-4 text-[#07011c] border-gray-300 rounded focus:ring-[#07011c]"
+                  className="w-4 h-4 text-[#000000] border-gray-300 rounded focus:ring-[#000000]"
                 />
                 <span className="text-sm text-gray-700">Troubleshoot</span>
               </label>
 
-              <button className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-700 hover:bg-[#FBF3EA] rounded transition-all">
+              <button className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-700 hover:bg-[#FBF9F7] rounded transition-all">
                 <X className="w-4 h-4" />
                 Delete Instruction
               </button>
@@ -461,17 +461,17 @@ export default function ExecutionLogsPage() {
                   type="checkbox"
                   checked={showFailed}
                   onChange={(e) => setShowFailed(e.target.checked)}
-                  className="w-4 h-4 text-[#07011c] border-gray-300 rounded focus:ring-[#07011c]"
+                  className="w-4 h-4 text-[#000000] border-gray-300 rounded focus:ring-[#000000]"
                 />
                 <span className="text-sm text-gray-700">Failed ({failedCount})</span>
               </label>
 
-              <button className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-700 hover:bg-[#FBF3EA] rounded transition-all">
+              <button className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-700 hover:bg-[#FBF9F7] rounded transition-all">
                 <RefreshCw className="w-4 h-4" />
                 Re-Run
               </button>
 
-              <button className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-700 hover:bg-[#FBF3EA] rounded transition-all">
+              <button className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-700 hover:bg-[#FBF9F7] rounded transition-all">
                 <Info className="w-4 h-4" />
                 Instruction Logs
               </button>
@@ -484,7 +484,7 @@ export default function ExecutionLogsPage() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search..."
-                  className="pl-8 pr-3 py-1.5 border border-gray-300 rounded-lg bg-[#FBF3EA] focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none text-sm w-48"
+                  className="pl-8 pr-3 py-1.5 border border-gray-300 rounded-lg bg-[#FBF9F7] focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none text-sm w-48"
                 />
               </div>
             </div>
@@ -493,7 +493,7 @@ export default function ExecutionLogsPage() {
           {/* Execution Logs Table */}
           <div className="flex-1 overflow-y-auto">
             <table className="w-full">
-              <thead className="bg-[#FBF3EA] border-b border-gray-200 sticky top-0">
+              <thead className="bg-[#FBF9F7] border-b border-gray-200 sticky top-0">
                 <tr>
                   <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">#</th>
                   <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">ID</th>
@@ -504,7 +504,7 @@ export default function ExecutionLogsPage() {
                   <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Execution</th>
                 </tr>
               </thead>
-              <tbody className="bg-[#FBF3EA] divide-y divide-gray-200">
+              <tbody className="bg-[#FBF9F7] divide-y divide-gray-200">
                 {filteredLogs.map((log, index) => (
                   <tr key={log.id} className="/50 transition-colors">
                     <td className="px-4 py-3 text-sm text-gray-900">{log.id}</td>

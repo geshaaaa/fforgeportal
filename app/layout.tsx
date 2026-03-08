@@ -27,27 +27,19 @@ export default function RootLayout({
         const completed =
           window.localStorage.getItem("onboardingCompleted") === "true";
 
-        // If onboarding not completed, always redirect to onboarding page
-        if (!completed) {
-          if (pathname !== "/") {
-            router.replace("/");
-          }
+        // Allow access to landing page and onboarding page
+        if (pathname === "/" || pathname === "/onboarding") {
           return;
         }
 
-        // If onboarding is completed and user is on onboarding page
-        if (completed && pathname === "/") {
-          // Check if user intentionally navigated to onboarding via header link
-          const navigateToOnboarding = sessionStorage.getItem('navigateToOnboarding');
-          
-          if (navigateToOnboarding !== 'true') {
-            // Direct load - redirect to dashboard
-            router.replace("/dashboard");
-          } else {
-            // User clicked the onboarding link - allow access and clear flag
-            sessionStorage.removeItem('navigateToOnboarding');
-          }
+        // If onboarding not completed, redirect to landing page
+        if (!completed && pathname !== "/" && pathname !== "/onboarding") {
+          router.replace("/");
+          return;
         }
+
+        // If onboarding is completed and user is on landing/onboarding, allow it
+        // (they can access these pages even after completion)
       } catch (error) {
         console.error("Layout error:", error);
       }
@@ -65,7 +57,7 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <body className="bg-[#FBF3EA]">{children}</body>
+      <body className="bg-[#FBF9F7]">{children}</body>
     </html>
   );
 }

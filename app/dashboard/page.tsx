@@ -56,23 +56,23 @@ export default function DashboardPage() {
   ];
 
   const developedAreas = [
-    { label: 'Feed freshness', value: 82, color: 'bg-[#07011c]' },
+    { label: 'Feed freshness', value: 82, color: 'bg-[#000000]' },
     { label: 'Import reliability', value: 91, color: 'bg-green-600' },
-    { label: 'Export coverage', value: 74, color: 'bg-purple-600' },
+    { label: 'Export coverage', value: 74, color: 'bg-black' },
     { label: 'Channel health', value: 68, color: 'bg-orange-500' },
-    { label: 'Data quality', value: 88, color: 'bg-blue-500' },
+    { label: 'Data quality', value: 88, color: 'bg-black' },
   ];
 
   const maxValue = Math.max(...chartData.exports, ...chartData.imports);
 
   return (
-    <div className="min-h-screen bg-[#FBF3EA] flex relative">
+    <div className="min-h-screen bg-[#FBF9F7] flex relative">
       {/* Left Navigation Sidebar */}
-      <aside className={`${isSidebarOpen ? 'w-64' : 'w-20'} bg-[#FBF3EA] border-r border-gray-200 flex flex-col sticky top-0 h-screen transition-all duration-300 ease-in-out`}>
+      <aside className={`${isSidebarOpen ? 'w-64' : 'w-20'} bg-[#FBF9F7] border-r border-gray-200 flex flex-col sticky top-0 h-screen transition-all duration-300 ease-in-out`}>
         <div className="p-4 border-b border-gray-200">
           <div className="flex items-center justify-between mb-6">
-            <Link href="/" className={`flex items-center gap-3 ${mounted && !isSidebarOpen ? 'justify-center w-full' : ''}`}>
-              <div className="w-10 h-10 bg-gradient-to-br from-[#07011c] to-[#07011c] rounded-lg flex items-center justify-center hover:from-[#07011c] hover:to-[#07011c] transition-all duration-200 cursor-pointer shadow-md hover:shadow-lg flex-shrink-0">
+            <Link href="/dashboard" className={`flex items-center gap-3 ${mounted && !isSidebarOpen ? 'justify-center w-full' : ''}`}>
+              <div className="w-10 h-10 bg-gradient-to-br from-[#000000] to-[#000000] rounded-lg flex items-center justify-center hover:from-[#000000] hover:to-[#000000] transition-all duration-200 cursor-pointer shadow-md hover:shadow-lg flex-shrink-0">
                 <Building2 className="w-6 h-6 text-white" />
               </div>
               {(!mounted || isSidebarOpen) && (
@@ -85,27 +85,27 @@ export default function DashboardPage() {
           </div>
         </div>
         <nav className="flex-1 p-4 space-y-1">
-          <Link href="/dashboard" className={`flex items-center ${mounted && isSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-white bg-[#1a0d3d] rounded-lg transition-colors duration-200`}>
+          <Link href="/dashboard" className={`flex items-center ${mounted && isSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-white bg-[#000000] rounded-lg transition-colors duration-200`}>
             <BarChart3 className="w-5 h-5 flex-shrink-0" />
             {isSidebarOpen && <span>Dashboard</span>}
           </Link>
-          <Link href="/imports" className={`flex items-center ${mounted && isSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#07011c]  rounded-lg transition-colors duration-200`}>
+          <Link href="/imports" className={`flex items-center ${mounted && isSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#000000]  rounded-lg transition-colors duration-200`}>
             <Download className="w-5 h-5 flex-shrink-0" />
             {(!mounted || isSidebarOpen) && <span>Imports</span>}
           </Link>
-          <Link href="/exports" className={`flex items-center ${mounted && isSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#07011c]  rounded-lg transition-colors duration-200`}>
+          <Link href="/exports" className={`flex items-center ${mounted && isSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#000000]  rounded-lg transition-colors duration-200`}>
             <Upload className="w-5 h-5 flex-shrink-0" />
             {(!mounted || isSidebarOpen) && <span>Exports</span>}
           </Link>
-          <Link href="/sites" className={`flex items-center ${mounted && isSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#07011c]  rounded-lg transition-colors duration-200`}>
+          <Link href="/sites" className={`flex items-center ${mounted && isSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#000000]  rounded-lg transition-colors duration-200`}>
             <Building2 className="w-5 h-5 flex-shrink-0" />
             {(!mounted || isSidebarOpen) && <span>Sites</span>}
           </Link>
-          <Link href="/reports" className={`flex items-center ${mounted && isSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#07011c]  rounded-lg transition-colors duration-200`}>
+          <Link href="/reports" className={`flex items-center ${mounted && isSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#000000]  rounded-lg transition-colors duration-200`}>
             <FileText className="w-5 h-5 flex-shrink-0" />
             {(!mounted || isSidebarOpen) && <span>Reports</span>}
           </Link>
-          <Link href="/execution-logs" className={`flex items-center ${mounted && isSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#07011c]  rounded-lg transition-colors duration-200`}>
+          <Link href="/execution-logs" className={`flex items-center ${mounted && isSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#000000]  rounded-lg transition-colors duration-200`}>
             <Activity className="w-5 h-5 flex-shrink-0" />
             {(!mounted || isSidebarOpen) && <span>Execution Logs</span>}
           </Link>
@@ -115,7 +115,7 @@ export default function DashboardPage() {
       {/* Sidebar Toggle Button - Attached to sidebar edge */}
       <button
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-        className={`absolute ${isSidebarOpen ? 'left-64' : 'left-20'} top-1/2 -translate-y-1/2 z-30 bg-white border border-gray-300 ${isSidebarOpen ? 'rounded-r-lg rounded-l-none' : 'rounded-l-lg rounded-r-none'} p-2 shadow-lg hover:bg-[#FBF3EA] transition-all duration-300 ease-in-out hover:shadow-xl`}
+        className={`absolute ${isSidebarOpen ? 'left-64' : 'left-20'} top-1/2 -translate-y-1/2 z-30 bg-white border border-gray-300 ${isSidebarOpen ? 'rounded-r-lg rounded-l-none' : 'rounded-l-lg rounded-r-none'} p-2 shadow-lg hover:bg-[#FBF9F7] transition-all duration-300 ease-in-out hover:shadow-xl`}
         title={isSidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
       >
         {isSidebarOpen ? (
@@ -128,11 +128,11 @@ export default function DashboardPage() {
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
-        <header className="bg-[#FBF3EA] border-b border-gray-300 sticky top-0 z-20 shadow-sm">
+        <header className="bg-[#FBF9F7] border-b border-gray-300 sticky top-0 z-20 shadow-sm">
           <div className="px-4 sm:px-6 lg:px-10 py-5">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex items-center gap-4">
-                <div className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-[#07011c] via-[#1a0d3d] to-[#07011c] flex items-center justify-center shadow-lg ring-2 ring-[#07011c]/10">
+                <div className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-[#000000] via-[#000000] to-[#000000] flex items-center justify-center shadow-lg ring-2 ring-[#000000]/10">
                   <span className="text-lg font-bold text-white">FF</span>
                 </div>
                 <div>
@@ -146,18 +146,13 @@ export default function DashboardPage() {
                   <input
                     type="text"
                     placeholder="Search sites, channels, or feeds..."
-                    className="w-full pl-4 pr-10 py-2.5 rounded-xl bg-white border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#07011c]/20 focus:border-[#07011c] text-sm placeholder:text-gray-400 transition-all"
+                    className="w-full pl-4 pr-10 py-2.5 rounded-xl bg-white border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#000000]/20 focus:border-[#000000] text-sm placeholder:text-gray-400 transition-all"
                   />
                   <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400 font-medium">⌘K</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Link 
-                    href="/" 
-                    onClick={() => {
-                      if (typeof window !== 'undefined') {
-                        sessionStorage.setItem('navigateToOnboarding', 'true');
-                      }
-                    }}
+                    href="/onboarding" 
                     className="px-4 py-2.5 rounded-xl bg-white border border-gray-300 text-gray-700 text-xs sm:text-sm font-semibold shadow-sm hover:shadow-md hover:bg-gray-50 transition-all duration-200 flex items-center gap-1.5"
                   >
                     <FileText className="w-4 h-4" />
@@ -166,13 +161,13 @@ export default function DashboardPage() {
                   <select
                     value={timeRange}
                     onChange={(e) => setTimeRange(e.target.value as any)}
-                    className="px-4 py-2.5 border border-gray-300 rounded-xl bg-white text-xs sm:text-sm focus:ring-2 focus:ring-[#07011c]/20 focus:border-[#07011c] outline-none shadow-sm transition-all font-medium"
+                    className="px-4 py-2.5 border border-gray-300 rounded-xl bg-white text-xs sm:text-sm focus:ring-2 focus:ring-[#000000]/20 focus:border-[#000000] outline-none shadow-sm transition-all font-medium"
                   >
                     <option value="7d">Last 7 days</option>
                     <option value="30d">Last 30 days</option>
                     <option value="90d">Last 90 days</option>
                   </select>
-                  <button className="px-5 py-2.5 rounded-xl bg-[#07011c] text-white text-xs sm:text-sm font-semibold shadow-md hover:shadow-lg hover:bg-[#1a0d3d] transition-all duration-200 flex items-center gap-1.5">
+                  <button className="px-5 py-2.5 rounded-xl bg-[#000000] text-white text-xs sm:text-sm font-semibold shadow-md hover:shadow-lg hover:bg-[#000000] transition-all duration-200 flex items-center gap-1.5">
                     <Calendar className="w-4 h-4" />
                     Export summary
                   </button>
@@ -183,7 +178,7 @@ export default function DashboardPage() {
         </header>
 
         {/* Main Content */}
-        <main className="flex-1 overflow-y-auto px-4 sm:px-6 lg:px-10 py-8 bg-gradient-to-b from-[#FBF3EA] to-[#FBF3EA]/50">
+        <main className="flex-1 overflow-y-auto px-4 sm:px-6 lg:px-10 py-8 bg-gradient-to-b from-[#FBF9F7] to-[#FBF9F7]/50">
           <div className="grid gap-6 lg:grid-cols-[minmax(0,2.1fr)_minmax(0,1.2fr)]">
             {/* Left main column */}
             <div className="space-y-6">
@@ -192,7 +187,7 @@ export default function DashboardPage() {
                 {/* Profile / environment card */}
                 <div className="bg-white rounded-2xl border border-gray-200 shadow-md hover:shadow-xl transition-all duration-300 px-6 py-5 flex flex-col justify-between group">
                   <div className="flex items-center gap-3 mb-5">
-                    <div className="relative w-14 h-14 rounded-xl bg-gradient-to-br from-[#07011c] via-[#1a0d3d] to-[#07011c] flex items-center justify-center shadow-lg ring-2 ring-[#07011c]/10 group-hover:scale-105 transition-transform">
+                    <div className="relative w-14 h-14 rounded-xl bg-gradient-to-br from-[#000000] via-[#000000] to-[#000000] flex items-center justify-center shadow-lg ring-2 ring-[#000000]/10 group-hover:scale-105 transition-transform">
                       <span className="text-white text-base font-bold">FF</span>
                     </div>
                     <div>
@@ -217,7 +212,7 @@ export default function DashboardPage() {
                 </div>
 
                 {/* Prioritized imports */}
-                <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#FBF3EA] via-[#FBF3EA] to-[#FBF3EA] border border-white/80 shadow-lg hover:shadow-2xl transition-all duration-300 px-6 py-5 flex flex-col justify-between group">
+                <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#FBF9F7] via-[#FBF9F7] to-[#FBF9F7] border border-white/80 shadow-lg hover:shadow-2xl transition-all duration-300 px-6 py-5 flex flex-col justify-between group">
                   <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>
                   <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full -ml-12 -mb-12"></div>
                   <div className="relative flex items-center justify-between mb-6">
@@ -270,7 +265,7 @@ export default function DashboardPage() {
                     <h2 className="text-base font-bold text-gray-900">Feed Throughput</h2>
                     <p className="text-xs text-gray-600 mt-1">Imports vs exports across the last 12 months</p>
                   </div>
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-[#FBF3EA] px-4 py-1.5 text-xs font-semibold text-[#7a3a16] border border-gray-200">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-[#FBF9F7] px-4 py-1.5 text-xs font-semibold text-[#7a3a16] border border-gray-200">
                     <ArrowUp className="w-3.5 h-3.5" />
                     {metrics.totalProcessed.toLocaleString()} items processed
                   </span>
@@ -280,7 +275,7 @@ export default function DashboardPage() {
                     <div key={label} className="flex-1 flex flex-col items-center gap-2 group">
                       <div className="w-full flex flex-col justify-end gap-1.5 hover:opacity-80 transition-opacity" style={{ height: '200px' }}>
                         <div
-                          className="w-full rounded-t-lg bg-gradient-to-t from-[#07011c] via-[#1a0d3d] to-[#2d1a5c] shadow-md hover:shadow-lg transition-all cursor-pointer group-hover:scale-105"
+                          className="w-full rounded-t-lg bg-gradient-to-t from-[#000000] via-[#000000] to-[#000000] shadow-md hover:shadow-lg transition-all cursor-pointer group-hover:scale-105"
                           style={{ height: `${(chartData.exports[index] / maxValue) * 100}%` }}
                           title={`Exports: ${chartData.exports[index]}`}
                         />
@@ -297,7 +292,7 @@ export default function DashboardPage() {
                 <div className="mt-6 pt-4 border-t border-gray-200 flex items-center justify-between text-xs">
                   <div className="flex items-center gap-4">
                     <span className="flex items-center gap-2">
-                      <span className="w-4 h-2 rounded-full bg-gradient-to-r from-[#07011c] to-[#2d1a5c]" />
+                      <span className="w-4 h-2 rounded-full bg-gradient-to-r from-[#000000] to-[#000000]" />
                       <span className="text-gray-700 font-semibold">Exports</span>
                     </span>
                     <span className="flex items-center gap-2">
@@ -314,7 +309,7 @@ export default function DashboardPage() {
                 <div className="bg-white rounded-2xl border border-gray-200 shadow-md hover:shadow-xl transition-all duration-300 p-6">
                   <div className="flex items-center justify-between mb-5">
                     <h2 className="text-base font-bold text-gray-900">Recent Activity</h2>
-                    <Link href="/execution-logs" className="text-xs font-semibold text-[#07011c] hover:text-[#1a0d3d] hover:underline transition-colors">
+                    <Link href="/execution-logs" className="text-xs font-semibold text-[#000000] hover:text-[#000000] hover:underline transition-colors">
                       View all →
                     </Link>
                   </div>
@@ -322,15 +317,15 @@ export default function DashboardPage() {
                     {recentActivity.map((activity) => (
                       <div
                         key={activity.id}
-                        className="flex items-center gap-3 rounded-xl px-4 py-3 hover:bg-[#FBF3EA]/50 transition-all duration-200 border border-transparent hover:border-gray-200 group"
+                        className="flex items-center gap-3 rounded-xl px-4 py-3 hover:bg-[#FBF9F7]/50 transition-all duration-200 border border-transparent hover:border-gray-200 group"
                       >
                         <div
                           className={`flex h-10 w-10 items-center justify-center rounded-xl shadow-sm group-hover:scale-110 transition-transform ${
-                            activity.type === 'export' ? 'bg-purple-100' : 'bg-green-100'
+                            activity.type === 'export' ? 'bg-[#FBF9F7]' : 'bg-green-100'
                           }`}
                         >
                           {activity.type === 'export' ? (
-                            <Upload className="w-5 h-5 text-purple-600" />
+                            <Upload className="w-5 h-5 text-black" />
                           ) : (
                             <Download className="w-5 h-5 text-green-600" />
                           )}
@@ -408,7 +403,7 @@ export default function DashboardPage() {
               <div className="bg-white rounded-2xl border border-gray-200 shadow-md hover:shadow-xl transition-all duration-300 p-6">
                 <div className="flex items-center justify-between mb-5">
                   <h2 className="text-base font-bold text-gray-900">Today&apos;s Schedule</h2>
-                  <button className="text-xs font-semibold text-gray-500 hover:text-[#07011c] transition-colors">See all →</button>
+                  <button className="text-xs font-semibold text-gray-500 hover:text-[#000000] transition-colors">See all →</button>
                 </div>
                 <div className="space-y-4">
                   <div className="flex items-start gap-4 group">
@@ -416,7 +411,7 @@ export default function DashboardPage() {
                       <p className="font-bold text-gray-900 text-sm">08:00</p>
                       <p className="text-gray-400 text-xs">AM</p>
                     </div>
-                    <div className="flex-1 rounded-xl bg-[#FBF3EA] border border-gray-200 px-4 py-3 group-hover:shadow-md transition-all">
+                    <div className="flex-1 rounded-xl bg-[#FBF9F7] border border-gray-200 px-4 py-3 group-hover:shadow-md transition-all">
                       <p className="font-semibold text-gray-900 text-sm">Daily Google Shopping export</p>
                       <p className="mt-1 text-gray-600 text-xs">Potpourri & 3 other sites</p>
                     </div>
@@ -426,7 +421,7 @@ export default function DashboardPage() {
                       <p className="font-bold text-gray-900 text-sm">09:30</p>
                       <p className="text-gray-400 text-xs">AM</p>
                     </div>
-                    <div className="flex-1 rounded-xl bg-purple-50 border border-purple-200 px-4 py-3 group-hover:shadow-md transition-all">
+                    <div className="flex-1 rounded-xl bg-[#FBF9F7] border border-gray-300 px-4 py-3 group-hover:shadow-md transition-all">
                       <p className="font-semibold text-gray-900 text-sm">Inventory import window</p>
                       <p className="mt-1 text-gray-600 text-xs">Warehouse SFTP profile</p>
                     </div>
@@ -436,7 +431,7 @@ export default function DashboardPage() {
                       <p className="font-bold text-gray-900 text-sm">02:00</p>
                       <p className="text-gray-400 text-xs">PM</p>
                     </div>
-                    <div className="flex-1 rounded-xl bg-blue-50 border border-blue-200 px-4 py-3 group-hover:shadow-md transition-all">
+                    <div className="flex-1 rounded-xl bg-[#FBF9F7] border border-gray-300 px-4 py-3 group-hover:shadow-md transition-all">
                       <p className="font-semibold text-gray-900 text-sm">Channel health scan</p>
                       <p className="mt-1 text-gray-600 text-xs">Feed quality checks across sites</p>
                     </div>
@@ -469,10 +464,10 @@ export default function DashboardPage() {
               <div className="bg-white rounded-2xl border border-gray-200 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden">
                 <button
                   onClick={() => setShowImportConfig(!showImportConfig)}
-                  className="w-full flex items-center justify-between p-6 hover:bg-[#FBF3EA]/50 transition-colors"
+                  className="w-full flex items-center justify-between p-6 hover:bg-[#FBF9F7]/50 transition-colors"
                 >
                   <div className="flex items-center gap-3">
-                    <Download className="w-5 h-5 text-[#07011c]" />
+                    <Download className="w-5 h-5 text-[#000000]" />
                     <h2 className="text-base font-bold text-gray-900">Configure Import</h2>
                   </div>
                   <ChevronRight className={`w-5 h-5 text-gray-400 transition-transform ${showImportConfig ? 'rotate-90' : ''}`} />
@@ -483,7 +478,7 @@ export default function DashboardPage() {
                       <label className="block text-xs font-medium text-gray-700 mb-2">
                         Import Source Type <span className="text-red-500">*</span>
                       </label>
-                      <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none text-sm bg-white">
+                      <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none text-sm bg-white">
                         <option>SFTP</option>
                         <option>FTP</option>
                         <option>API</option>
@@ -497,7 +492,7 @@ export default function DashboardPage() {
                         </label>
                         <input
                           type="text"
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none text-sm"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none text-sm"
                           placeholder="sftp.example.com"
                         />
                       </div>
@@ -505,7 +500,7 @@ export default function DashboardPage() {
                         <label className="block text-xs font-medium text-gray-700 mb-2">Port</label>
                         <input
                           type="number"
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none text-sm"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none text-sm"
                           placeholder="22"
                         />
                       </div>
@@ -517,7 +512,7 @@ export default function DashboardPage() {
                         </label>
                         <input
                           type="text"
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none text-sm"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none text-sm"
                           placeholder="username"
                         />
                       </div>
@@ -527,7 +522,7 @@ export default function DashboardPage() {
                         </label>
                         <input
                           type="password"
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none text-sm"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none text-sm"
                           placeholder="••••••••"
                         />
                       </div>
@@ -538,7 +533,7 @@ export default function DashboardPage() {
                       </label>
                       <input
                         type="text"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none text-sm"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none text-sm"
                         placeholder="/data/imports"
                       />
                     </div>
@@ -547,7 +542,7 @@ export default function DashboardPage() {
                         <label className="block text-xs font-medium text-gray-700 mb-2">
                           File Format <span className="text-red-500">*</span>
                         </label>
-                        <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none text-sm bg-white">
+                        <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none text-sm bg-white">
                           <option>CSV</option>
                           <option>JSON</option>
                           <option>XML</option>
@@ -556,7 +551,7 @@ export default function DashboardPage() {
                       </div>
                       <div>
                         <label className="block text-xs font-medium text-gray-700 mb-2">Schedule</label>
-                        <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none text-sm bg-white">
+                        <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none text-sm bg-white">
                           <option>Daily</option>
                           <option>Hourly</option>
                           <option>Weekly</option>
@@ -564,7 +559,7 @@ export default function DashboardPage() {
                         </select>
                       </div>
                     </div>
-                    <button className="w-full px-4 py-2 bg-[#07011c] text-white rounded-lg hover:bg-[#1a0d3d] transition-all text-sm font-medium">
+                    <button className="w-full px-4 py-2 bg-[#000000] text-white rounded-lg hover:bg-[#000000] transition-all text-sm font-medium">
                       Save Import Configuration
                     </button>
                   </div>
@@ -575,10 +570,10 @@ export default function DashboardPage() {
               <div className="bg-white rounded-2xl border border-gray-200 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden">
                 <button
                   onClick={() => setShowExportConfig(!showExportConfig)}
-                  className="w-full flex items-center justify-between p-6 hover:bg-[#FBF3EA]/50 transition-colors"
+                  className="w-full flex items-center justify-between p-6 hover:bg-[#FBF9F7]/50 transition-colors"
                 >
                   <div className="flex items-center gap-3">
-                    <Upload className="w-5 h-5 text-[#07011c]" />
+                    <Upload className="w-5 h-5 text-[#000000]" />
                     <h2 className="text-base font-bold text-gray-900">Configure Export</h2>
                   </div>
                   <ChevronRight className={`w-5 h-5 text-gray-400 transition-transform ${showExportConfig ? 'rotate-90' : ''}`} />
@@ -589,7 +584,7 @@ export default function DashboardPage() {
                       <label className="block text-xs font-medium text-gray-700 mb-2">
                         Export Destination Type <span className="text-red-500">*</span>
                       </label>
-                      <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none text-sm bg-white">
+                      <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none text-sm bg-white">
                         <option>SFTP</option>
                         <option>FTP</option>
                         <option>Email</option>
@@ -604,7 +599,7 @@ export default function DashboardPage() {
                         </label>
                         <input
                           type="text"
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none text-sm"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none text-sm"
                           placeholder="sftp.example.com"
                         />
                       </div>
@@ -612,7 +607,7 @@ export default function DashboardPage() {
                         <label className="block text-xs font-medium text-gray-700 mb-2">Port</label>
                         <input
                           type="number"
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none text-sm"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none text-sm"
                           placeholder="22"
                         />
                       </div>
@@ -624,7 +619,7 @@ export default function DashboardPage() {
                         </label>
                         <input
                           type="text"
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none text-sm"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none text-sm"
                           placeholder="username"
                         />
                       </div>
@@ -634,7 +629,7 @@ export default function DashboardPage() {
                         </label>
                         <input
                           type="password"
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none text-sm"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none text-sm"
                           placeholder="••••••••"
                         />
                       </div>
@@ -645,7 +640,7 @@ export default function DashboardPage() {
                       </label>
                       <input
                         type="text"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none text-sm"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none text-sm"
                         placeholder="/data/exports"
                       />
                     </div>
@@ -654,7 +649,7 @@ export default function DashboardPage() {
                         <label className="block text-xs font-medium text-gray-700 mb-2">
                           Export Format <span className="text-red-500">*</span>
                         </label>
-                        <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none text-sm bg-white">
+                        <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none text-sm bg-white">
                           <option>CSV</option>
                           <option>JSON</option>
                           <option>XML</option>
@@ -663,7 +658,7 @@ export default function DashboardPage() {
                       </div>
                       <div>
                         <label className="block text-xs font-medium text-gray-700 mb-2">Schedule</label>
-                        <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none text-sm bg-white">
+                        <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none text-sm bg-white">
                           <option>Daily</option>
                           <option>Hourly</option>
                           <option>Weekly</option>
@@ -671,7 +666,7 @@ export default function DashboardPage() {
                         </select>
                       </div>
                     </div>
-                    <button className="w-full px-4 py-2 bg-[#07011c] text-white rounded-lg hover:bg-[#1a0d3d] transition-all text-sm font-medium">
+                    <button className="w-full px-4 py-2 bg-[#000000] text-white rounded-lg hover:bg-[#000000] transition-all text-sm font-medium">
                       Save Export Configuration
                     </button>
                   </div>
@@ -679,7 +674,7 @@ export default function DashboardPage() {
               </div>
 
               {/* Quick export CTA */}
-              <div className="relative overflow-hidden bg-gradient-to-br from-[#07011c] via-[#1a0d3d] to-[#2d1a5c] rounded-2xl text-white p-6 shadow-2xl hover:shadow-3xl transition-all duration-300 group">
+              <div className="relative overflow-hidden bg-gradient-to-br from-[#000000] via-[#000000] to-[#000000] rounded-2xl text-white p-6 shadow-2xl hover:shadow-3xl transition-all duration-300 group">
                 <div className="absolute top-0 right-0 w-40 h-40 bg-white/5 rounded-full -mr-20 -mt-20"></div>
                 <div className="absolute bottom-0 left-0 w-32 h-32 bg-white/5 rounded-full -ml-16 -mb-16"></div>
                 <div className="relative flex items-center justify-between mb-4">
@@ -689,7 +684,7 @@ export default function DashboardPage() {
                 <p className="text-xs text-white/90 mb-5 relative leading-relaxed">
                   Trigger an on-demand export for any site without leaving the dashboard.
                 </p>
-                <button className="w-full rounded-xl bg-white text-[#07011c] text-sm font-bold py-3 shadow-lg hover:bg-[#FBF3EA] hover:shadow-xl transition-all duration-200 group-hover:scale-105">
+                <button className="w-full rounded-xl bg-white text-[#000000] text-sm font-bold py-3 shadow-lg hover:bg-[#FBF9F7] hover:shadow-xl transition-all duration-200 group-hover:scale-105">
                   Open Exports Workspace
                 </button>
               </div>

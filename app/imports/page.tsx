@@ -222,13 +222,13 @@ export default function ImportsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FBF3EA] flex relative">
+    <div className="min-h-screen bg-[#FBF9F7] flex relative">
       {/* Left Navigation Sidebar */}
-      <aside className={`${mounted && isNavSidebarOpen ? 'w-64' : mounted ? 'w-20' : 'w-64'} bg-[#FBF3EA] border-r border-gray-200 flex flex-col sticky top-0 h-screen transition-all duration-300 ease-in-out`} suppressHydrationWarning>
+      <aside className={`${mounted && isNavSidebarOpen ? 'w-64' : mounted ? 'w-20' : 'w-64'} bg-[#FBF9F7] border-r border-gray-200 flex flex-col sticky top-0 h-screen transition-all duration-300 ease-in-out`} suppressHydrationWarning>
         <div className="p-4 border-b border-gray-200">
           <div className="flex items-center justify-between mb-6">
-            <Link href="/" className={`flex items-center gap-3 ${!isNavSidebarOpen ? 'justify-center w-full' : ''}`}>
-              <div className="w-10 h-10 bg-gradient-to-br from-[#07011c] to-[#07011c] rounded-lg flex items-center justify-center hover:from-[#07011c] hover:to-[#07011c] transition-all duration-200 cursor-pointer shadow-md hover:shadow-lg flex-shrink-0">
+            <Link href="/dashboard" className={`flex items-center gap-3 ${!isNavSidebarOpen ? 'justify-center w-full' : ''}`}>
+              <div className="w-10 h-10 bg-gradient-to-br from-[#000000] to-[#000000] rounded-lg flex items-center justify-center hover:from-[#000000] hover:to-[#000000] transition-all duration-200 cursor-pointer shadow-md hover:shadow-lg flex-shrink-0">
                 <Building2 className="w-6 h-6 text-white stroke-white" />
               </div>
               {isNavSidebarOpen && (
@@ -241,27 +241,27 @@ export default function ImportsPage() {
           </div>
         </div>
         <nav className="flex-1 p-4 space-y-1">
-          <Link href="/dashboard" className={`flex items-center ${isNavSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#07011c]  rounded-lg transition-colors duration-200`}>
+          <Link href="/dashboard" className={`flex items-center ${isNavSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#000000]  rounded-lg transition-colors duration-200`}>
             <BarChart3 className="w-5 h-5 flex-shrink-0" />
             {isNavSidebarOpen && <span>Dashboard</span>}
           </Link>
-          <Link href="/imports" className={`flex items-center ${isNavSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-white bg-[#1a0d3d] rounded-lg transition-colors duration-200`}>
+          <Link href="/imports" className={`flex items-center ${isNavSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-white bg-[#000000] rounded-lg transition-colors duration-200`}>
             <Download className="w-5 h-5 flex-shrink-0" />
             {isNavSidebarOpen && <span>Imports</span>}
           </Link>
-          <Link href="/exports" className={`flex items-center ${isNavSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#07011c]  rounded-lg transition-colors duration-200`}>
+          <Link href="/exports" className={`flex items-center ${isNavSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#000000]  rounded-lg transition-colors duration-200`}>
             <Upload className="w-5 h-5 flex-shrink-0" />
             {isNavSidebarOpen && <span>Exports</span>}
           </Link>
-          <Link href="/sites" className={`flex items-center ${isNavSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#07011c]  rounded-lg transition-colors duration-200`}>
+          <Link href="/sites" className={`flex items-center ${isNavSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#000000]  rounded-lg transition-colors duration-200`}>
             <Building2 className="w-5 h-5 flex-shrink-0" />
             {isNavSidebarOpen && <span>Sites</span>}
           </Link>
-          <Link href="/reports" className={`flex items-center ${isNavSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#07011c]  rounded-lg transition-colors duration-200`}>
+          <Link href="/reports" className={`flex items-center ${isNavSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#000000]  rounded-lg transition-colors duration-200`}>
             <FileText className="w-5 h-5 flex-shrink-0" />
             {isNavSidebarOpen && <span>Reports</span>}
           </Link>
-          <Link href="/execution-logs" className={`flex items-center ${isNavSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#07011c]  rounded-lg transition-colors duration-200`}>
+          <Link href="/execution-logs" className={`flex items-center ${isNavSidebarOpen ? 'gap-3 px-4' : 'justify-center px-2'} py-2.5 text-sm font-medium text-gray-700 hover:text-[#000000]  rounded-lg transition-colors duration-200`}>
             <Activity className="w-5 h-5 flex-shrink-0" />
             {isNavSidebarOpen && <span>Execution Logs</span>}
           </Link>
@@ -271,7 +271,7 @@ export default function ImportsPage() {
       {/* Sidebar Toggle Button - Attached to sidebar edge */}
       <button
         onClick={() => setIsNavSidebarOpen(!isNavSidebarOpen)}
-        className={`absolute ${mounted && isNavSidebarOpen ? 'left-64' : mounted ? 'left-20' : 'left-64'} top-1/2 -translate-y-1/2 z-30 bg-[#FBF3EA] border border-gray-300 ${mounted && isNavSidebarOpen ? 'rounded-r-lg rounded-l-none' : 'rounded-l-lg rounded-r-none'} p-2 shadow-md hover:bg-[#FBF3EA] transition-all duration-300 ease-in-out hover:shadow-lg`}
+        className={`absolute ${mounted && isNavSidebarOpen ? 'left-64' : mounted ? 'left-20' : 'left-64'} top-1/2 -translate-y-1/2 z-30 bg-[#FBF9F7] border border-gray-300 ${mounted && isNavSidebarOpen ? 'rounded-r-lg rounded-l-none' : 'rounded-l-lg rounded-r-none'} p-2 shadow-md hover:bg-[#FBF9F7] transition-all duration-300 ease-in-out hover:shadow-lg`}
         title={isNavSidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
         suppressHydrationWarning
       >
@@ -285,7 +285,7 @@ export default function ImportsPage() {
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
-        <header className="bg-[#FBF3EA] border-b border-gray-200 sticky top-0 z-20 shadow-sm">
+        <header className="bg-[#FBF9F7] border-b border-gray-200 sticky top-0 z-20 shadow-sm">
           <div className="px-4 sm:px-6 lg:px-8 py-4">
             <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
               <div>
@@ -303,7 +303,7 @@ export default function ImportsPage() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search sites..."
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400"
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none transition-all duration-200 hover:border-gray-400"
                 />
               </div>
               
@@ -313,7 +313,7 @@ export default function ImportsPage() {
                   <select
                     value={statusFilter}
                     onChange={(e) => setStatusFilter(e.target.value as any)}
-                    className="pl-10 pr-8 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-[#FBF3EA] text-sm"
+                    className="pl-10 pr-8 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-[#FBF9F7] text-sm"
                   >
                     <option value="all">All Status</option>
                     <option value="active">Active</option>
@@ -326,7 +326,7 @@ export default function ImportsPage() {
                   <select
                     value={importTypeFilter}
                     onChange={(e) => setImportTypeFilter(e.target.value as any)}
-                    className="pl-10 pr-8 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-[#FBF3EA] text-sm"
+                    className="pl-10 pr-8 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-[#FBF9F7] text-sm"
                   >
                     <option value="all">All Types</option>
                     <option value="SFTP">SFTP</option>
@@ -337,10 +337,10 @@ export default function ImportsPage() {
                 </div>
                 
                 <Link 
-                  href="/" 
+                  href="/dashboard" 
                   onClick={() => {
                     if (typeof window !== 'undefined') {
-                      sessionStorage.setItem('navigateToOnboarding', 'true');
+                      
                     }
                   }}
                   className="px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-700 text-sm font-medium hover:bg-gray-50 transition-all duration-200 flex items-center gap-1.5 shadow-sm"
@@ -353,7 +353,7 @@ export default function ImportsPage() {
               {/* Add Import Configuration Button */}
               <button
                 onClick={() => openDrawer()}
-                className="flex items-center justify-center gap-2 px-4 py-2 bg-[#07011c] text-white rounded-lg hover:bg-[#07011c] active:bg-[#07011c] transition-all duration-200 shadow-sm hover:shadow-md font-medium whitespace-nowrap"
+                className="flex items-center justify-center gap-2 px-4 py-2 bg-[#000000] text-white rounded-lg hover:bg-[#000000] active:bg-[#000000] transition-all duration-200 shadow-sm hover:shadow-md font-medium whitespace-nowrap"
               >
                 <Plus className="w-4 h-4" />
                 <span className="hidden sm:inline">Add Import Configuration</span>
@@ -369,7 +369,7 @@ export default function ImportsPage() {
         {/* Slider Toggle Button - Always visible, positioned outside sidebar */}
         <button
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-          className={`absolute ${isSidebarOpen ? 'left-full sm:left-80 lg:left-96 -ml-8' : 'left-0'} top-1/2 -translate-y-1/2 z-30 bg-[#FBF3EA] border border-gray-300 ${isSidebarOpen ? 'rounded-l-lg' : 'rounded-r-lg'} p-2 shadow-md hover:bg-[#FBF3EA] transition-all duration-300 ease-in-out hover:shadow-lg`}
+          className={`absolute ${isSidebarOpen ? 'left-full sm:left-80 lg:left-96 -ml-8' : 'left-0'} top-1/2 -translate-y-1/2 z-30 bg-[#FBF9F7] border border-gray-300 ${isSidebarOpen ? 'rounded-l-lg' : 'rounded-r-lg'} p-2 shadow-md hover:bg-[#FBF9F7] transition-all duration-300 ease-in-out hover:shadow-lg`}
           title={isSidebarOpen ? 'Hide Sidebar' : 'Show Sidebar'}
         >
           {isSidebarOpen ? (
@@ -380,7 +380,7 @@ export default function ImportsPage() {
         </button>
 
         {/* Left Sidebar - Sites List */}
-        <aside className={`${isSidebarOpen ? 'w-full sm:w-80 lg:w-96' : 'w-0'} border-r border-gray-200 bg-[#FBF3EA] overflow-y-auto transition-all duration-300 ease-in-out relative`}>
+        <aside className={`${isSidebarOpen ? 'w-full sm:w-80 lg:w-96' : 'w-0'} border-r border-gray-200 bg-[#FBF9F7] overflow-y-auto transition-all duration-300 ease-in-out relative`}>
           <div className={`p-3 space-y-1.5 ${isSidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
             <h2 className="text-sm font-semibold text-gray-700 mb-2 px-2">Sites</h2>
             {filteredSites.map((site) => {
@@ -391,8 +391,8 @@ export default function ImportsPage() {
                 onClick={() => setSelectedSite(site.id)}
                 className={`p-2.5 rounded-lg border cursor-pointer transition-all duration-200 ${
                   isSelected
-                    ? 'bg-[#1a0d3d] border-[#2d1a5c] shadow-md text-white'
-                    : 'bg-[#FBF3EA] border-gray-200 hover:border-[#2d1a5c] /50 hover:shadow-sm'
+                    ? 'bg-[#000000] border-[#000000] shadow-md text-white'
+                    : 'bg-[#FBF9F7] border-gray-200 hover:border-[#000000] /50 hover:shadow-sm'
                 }`}
               >
                 <div className="flex items-start justify-between mb-1">
@@ -408,7 +408,7 @@ export default function ImportsPage() {
                           : 'bg-white/20 text-white'
                         : site.status === 'active'
                           ? 'bg-green-100 text-green-700'
-                          : 'bg-[#FBF3EA] text-gray-700'
+                          : 'bg-[#FBF9F7] text-gray-700'
                     }`}>
                       {site.status === 'active' ? 'Active' : 'Paused'}
                     </span>
@@ -430,14 +430,14 @@ export default function ImportsPage() {
                   <div className="flex items-center gap-0.5">
                     <button
                       onClick={(e) => { e.stopPropagation(); }}
-                      className={`p-1 rounded transition-all duration-200 ${isSelected ? 'text-white/70 hover:text-white' : 'text-gray-400 hover:text-[#07011c]'}`}
+                      className={`p-1 rounded transition-all duration-200 ${isSelected ? 'text-white/70 hover:text-white' : 'text-gray-400 hover:text-[#000000]'}`}
                       title="Manage site"
                     >
                       <Settings className="w-3.5 h-3.5" />
                     </button>
                     <button
                       onClick={(e) => { e.stopPropagation(); }}
-                      className={`p-1 rounded transition-all duration-200 ${isSelected ? 'text-white/70 hover:text-white' : 'text-gray-400 hover:text-[#07011c]'}`}
+                      className={`p-1 rounded transition-all duration-200 ${isSelected ? 'text-white/70 hover:text-white' : 'text-gray-400 hover:text-[#000000]'}`}
                       title="View logs"
                     >
                       <Eye className="w-3.5 h-3.5" />
@@ -454,7 +454,7 @@ export default function ImportsPage() {
           {currentSite && (
             <>
               {/* Site Header Strip */}
-              <div className="bg-[#FBF3EA] border-b border-gray-200 px-4 sm:px-6 lg:px-8 py-4">
+              <div className="bg-[#FBF9F7] border-b border-gray-200 px-4 sm:px-6 lg:px-8 py-4">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                   <div className="flex items-center gap-3">
                     <div>
@@ -472,16 +472,16 @@ export default function ImportsPage() {
                         onClick={(e) => e.stopPropagation()}
                         className="sr-only peer"
                       />
-                      <div className="w-11 h-6 bg-[#FBF3EA] peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#2d1a5c] rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-[#FBF3EA] after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#07011c]"></div>
+                      <div className="w-11 h-6 bg-[#FBF9F7] peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#000000] rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-[#FBF9F7] after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#000000]"></div>
                     </label>
                   </div>
                   
                   <div className="flex items-center gap-3">
-                    <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-[#FBF3EA] hover:border-gray-400 active:bg-[#FBF3EA] transition-all duration-200 font-medium text-sm">
+                    <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-[#FBF9F7] hover:border-gray-400 active:bg-[#FBF9F7] transition-all duration-200 font-medium text-sm">
                       <Server className="w-4 h-4" />
                       Test Connection
                     </button>
-                    <button className="flex items-center gap-2 px-4 py-2 bg-[#07011c] text-white rounded-lg hover:bg-[#07011c] active:bg-[#07011c] transition-all duration-200 shadow-sm hover:shadow-md font-medium text-sm">
+                    <button className="flex items-center gap-2 px-4 py-2 bg-[#000000] text-white rounded-lg hover:bg-[#000000] active:bg-[#000000] transition-all duration-200 shadow-sm hover:shadow-md font-medium text-sm">
                       <Play className="w-4 h-4" />
                       Run Import Now
                     </button>
@@ -490,7 +490,7 @@ export default function ImportsPage() {
               </div>
 
               {/* Section Tabs */}
-              <div className="border-b border-gray-200 bg-[#FBF3EA]">
+              <div className="border-b border-gray-200 bg-[#FBF9F7]">
                 <div className="flex space-x-1 px-4 sm:px-6 lg:px-8">
                   {[
                     { id: 'profiles', label: 'SFTP/FTP Profiles', icon: Server },
@@ -504,7 +504,7 @@ export default function ImportsPage() {
                         onClick={() => setActiveSection(section.id as any)}
                         className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-all duration-200 whitespace-nowrap ${
                           activeSection === section.id
-                            ? 'border-[#07011c] text-[#07011c]'
+                            ? 'border-[#000000] text-[#000000]'
                             : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                         }`}
                       >
@@ -528,7 +528,7 @@ export default function ImportsPage() {
                           setSelectedSftpProfile(null);
                           setIsSftpModalOpen(true);
                         }}
-                        className="flex items-center gap-2 px-4 py-2 bg-[#07011c] text-white rounded-lg hover:bg-[#07011c] transition-all duration-200"
+                        className="flex items-center gap-2 px-4 py-2 bg-[#000000] text-white rounded-lg hover:bg-[#000000] transition-all duration-200"
                       >
                         <Plus className="w-4 h-4" />
                         Add Profile
@@ -537,7 +537,7 @@ export default function ImportsPage() {
 
                     {/* Search Bar */}
                     <div className="flex items-center gap-2">
-                      <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-[#FBF3EA] rounded transition-all">
+                      <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-[#FBF9F7] rounded transition-all">
                         <RotateCcw className="w-4 h-4" />
                       </button>
                       <div className="relative flex-1">
@@ -547,17 +547,17 @@ export default function ImportsPage() {
                           value={sftpSearchQuery}
                           onChange={(e) => setSftpSearchQuery(e.target.value)}
                           placeholder="Search All Fields"
-                          className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
+                          className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none"
                         />
                         <Filter className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                       </div>
                     </div>
 
                     {/* Profiles Table */}
-                <div className="bg-[#FBF3EA] rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                <div className="bg-[#FBF9F7] rounded-lg border border-gray-200 shadow-sm overflow-hidden">
                   <div className="overflow-x-auto">
                     <table className="w-full">
-                      <thead className="bg-[#FBF3EA] border-b border-gray-200">
+                      <thead className="bg-[#FBF9F7] border-b border-gray-200">
                         <tr>
                               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Ac...</th>
                               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Id</th>
@@ -569,7 +569,7 @@ export default function ImportsPage() {
                               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">DestinationPath</th>
                         </tr>
                       </thead>
-                      <tbody className="bg-[#FBF3EA] divide-y divide-gray-200">
+                      <tbody className="bg-[#FBF9F7] divide-y divide-gray-200">
                             {sftpProfiles
                               .filter(profile => 
                                 Object.values(profile).some(val => 
@@ -614,7 +614,7 @@ export default function ImportsPage() {
                           setSelectedJoinFile(null);
                           setIsJoinFileModalOpen(true);
                         }}
-                        className="flex items-center gap-2 px-4 py-2 bg-[#07011c] text-white rounded-lg hover:bg-[#07011c] transition-all duration-200"
+                        className="flex items-center gap-2 px-4 py-2 bg-[#000000] text-white rounded-lg hover:bg-[#000000] transition-all duration-200"
                       >
                         <Plus className="w-4 h-4" />
                         Add Join File
@@ -623,7 +623,7 @@ export default function ImportsPage() {
 
                     {/* Search Bar */}
                     <div className="flex items-center gap-2">
-                      <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-[#FBF3EA] rounded transition-all">
+                      <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-[#FBF9F7] rounded transition-all">
                         <RotateCcw className="w-4 h-4" />
                                 </button>
                       <div className="relative flex-1">
@@ -633,17 +633,17 @@ export default function ImportsPage() {
                           value={joinFileSearchQuery}
                           onChange={(e) => setJoinFileSearchQuery(e.target.value)}
                           placeholder="Search All Fields"
-                          className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
+                          className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none"
                         />
                         <Filter className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                               </div>
                     </div>
 
                     {/* Join Files Table */}
-                    <div className="bg-[#FBF3EA] rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                    <div className="bg-[#FBF9F7] rounded-lg border border-gray-200 shadow-sm overflow-hidden">
                       <div className="overflow-x-auto">
                         <table className="w-full">
-                          <thead className="bg-[#FBF3EA] border-b border-gray-200">
+                          <thead className="bg-[#FBF9F7] border-b border-gray-200">
                             <tr>
                               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Ac...</th>
                               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Id</th>
@@ -654,7 +654,7 @@ export default function ImportsPage() {
                               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">ModifiedOn</th>
                             </tr>
                           </thead>
-                          <tbody className="bg-[#FBF3EA] divide-y divide-gray-200">
+                          <tbody className="bg-[#FBF9F7] divide-y divide-gray-200">
                             {joinFiles
                               .filter(file => 
                                 Object.values(file).some(val => 
@@ -693,7 +693,7 @@ export default function ImportsPage() {
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <h2 className="text-xl font-bold text-gray-900">Field Mapping</h2>
-                      <button className="flex items-center gap-2 px-4 py-2 bg-[#07011c] text-white rounded-lg hover:bg-[#07011c] transition-all duration-200">
+                      <button className="flex items-center gap-2 px-4 py-2 bg-[#000000] text-white rounded-lg hover:bg-[#000000] transition-all duration-200">
                         <Save className="w-4 h-4" />
                         Save
                       </button>
@@ -701,7 +701,7 @@ export default function ImportsPage() {
 
                     {/* Search Bar */}
                     <div className="flex items-center gap-2">
-                      <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-[#FBF3EA] rounded transition-all">
+                      <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-[#FBF9F7] rounded transition-all">
                         <RotateCcw className="w-4 h-4" />
                       </button>
                       <div className="relative flex-1">
@@ -711,17 +711,17 @@ export default function ImportsPage() {
                           value={fieldMappingSearchQuery}
                           onChange={(e) => setFieldMappingSearchQuery(e.target.value)}
                           placeholder="Search All Fields"
-                          className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
+                          className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none"
                         />
                         <Filter className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                       </div>
                     </div>
 
                     {/* Field Mapping Table */}
-                  <div className="bg-[#FBF3EA] rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                  <div className="bg-[#FBF9F7] rounded-lg border border-gray-200 shadow-sm overflow-hidden">
                     <div className="overflow-x-auto">
                       <table className="w-full">
-                        <thead className="bg-[#FBF3EA] border-b border-gray-200">
+                        <thead className="bg-[#FBF9F7] border-b border-gray-200">
                           <tr>
                               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">ID</th>
                               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Mapped?</th>
@@ -730,7 +730,7 @@ export default function ImportsPage() {
                               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">XML Parent</th>
                           </tr>
                         </thead>
-                        <tbody className="bg-[#FBF3EA] divide-y divide-gray-200">
+                        <tbody className="bg-[#FBF9F7] divide-y divide-gray-200">
                             {fieldMappings
                               .filter(mapping => 
                                 Object.values(mapping).some(val => 
@@ -742,7 +742,7 @@ export default function ImportsPage() {
                                   <td className="px-4 py-3 text-sm text-gray-900">{mapping.id}</td>
                                   <td className="px-4 py-3">
                                     {mapping.isMapped ? (
-                                      <CheckCircle2 className="w-5 h-5 text-[#07011c]" />
+                                      <CheckCircle2 className="w-5 h-5 text-[#000000]" />
                                     ) : (
                                       <Circle className="w-5 h-5 text-gray-300" />
                                     )}
@@ -768,12 +768,12 @@ export default function ImportsPage() {
       {isSftpModalOpen && (
         <div className="fixed inset-0 z-50 overflow-hidden">
           <div className="absolute inset-0 bg-black bg-opacity-50" onClick={() => setIsSftpModalOpen(false)}></div>
-          <div className="absolute right-0 top-0 h-full w-full sm:w-[600px] bg-[#FBF3EA] shadow-2xl flex flex-col">
+          <div className="absolute right-0 top-0 h-full w-full sm:w-[600px] bg-[#FBF9F7] shadow-2xl flex flex-col">
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
               <h2 className="text-xl font-semibold text-gray-900">Edit Record</h2>
               <button
                 onClick={() => setIsSftpModalOpen(false)}
-                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-[#FBF3EA] rounded transition-all"
+                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-[#FBF9F7] rounded transition-all"
               >
                 <XCircle className="w-5 h-5" />
               </button>
@@ -785,7 +785,7 @@ export default function ImportsPage() {
                   <input
                     type="text"
                     defaultValue={selectedSftpProfile?.id || ''}
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none"
                   />
                 </div>
                 <div>
@@ -793,12 +793,12 @@ export default function ImportsPage() {
                   <input
                     type="text"
                     defaultValue={selectedSftpProfile?.displayName || ''}
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Protocol <span className="text-red-500">*</span></label>
-                  <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none cursor-pointer bg-[#FBF3EA]">
+                  <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none cursor-pointer bg-[#FBF9F7]">
                     <option>SFTP</option>
                     <option>FTP</option>
                   </select>
@@ -808,7 +808,7 @@ export default function ImportsPage() {
                   <input
                     type="text"
                     defaultValue={selectedSftpProfile?.serverName || ''}
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none"
                   />
                 </div>
                 <div>
@@ -816,28 +816,28 @@ export default function ImportsPage() {
                   <input
                     type="text"
                     defaultValue={selectedSftpProfile?.userName || ''}
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Pwd <span className="text-red-500">*</span></label>
                   <input
                     type="password"
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">hostkey <span className="text-red-500">*</span></label>
                   <input
                     type="text"
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Operation <span className="text-red-500">*</span></label>
                   <input
                     type="text"
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none"
                   />
                 </div>
                 <div>
@@ -845,7 +845,7 @@ export default function ImportsPage() {
                   <input
                     type="text"
                     defaultValue={selectedSftpProfile?.sourcePath || ''}
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none"
                   />
                 </div>
                 <div>
@@ -853,14 +853,14 @@ export default function ImportsPage() {
                   <input
                     type="text"
                     defaultValue={selectedSftpProfile?.destinationPath || ''}
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Schedule <span className="text-red-500">*</span></label>
                   <input
                     type="text"
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none"
                   />
                 </div>
                 <div>
@@ -868,7 +868,7 @@ export default function ImportsPage() {
                     <input
                       type="checkbox"
                       defaultChecked={selectedSftpProfile?.isActive || false}
-                      className="w-4 h-4 text-[#07011c] border-gray-300 rounded focus:ring-[#07011c]"
+                      className="w-4 h-4 text-[#000000] border-gray-300 rounded focus:ring-[#000000]"
                     />
                     <span className="text-sm text-gray-700">isActive</span>
                   </label>
@@ -878,13 +878,13 @@ export default function ImportsPage() {
             <div className="border-t border-gray-200 p-6 flex items-center justify-end gap-3">
               <button
                 onClick={() => setIsSftpModalOpen(false)}
-                className="px-6 py-2.5 text-gray-700 border border-gray-300 rounded-lg hover:bg-[#FBF3EA] transition-all font-medium"
+                className="px-6 py-2.5 text-gray-700 border border-gray-300 rounded-lg hover:bg-[#FBF9F7] transition-all font-medium"
               >
                 Cancel
               </button>
               <button
                 onClick={() => setIsSftpModalOpen(false)}
-                className="px-6 py-2.5 bg-[#07011c] text-white rounded-lg hover:bg-[#07011c] transition-all font-medium"
+                className="px-6 py-2.5 bg-[#000000] text-white rounded-lg hover:bg-[#000000] transition-all font-medium"
               >
                 Save
               </button>
@@ -897,12 +897,12 @@ export default function ImportsPage() {
       {isJoinFileModalOpen && (
         <div className="fixed inset-0 z-50 overflow-hidden">
           <div className="absolute inset-0 bg-black bg-opacity-50" onClick={() => setIsJoinFileModalOpen(false)}></div>
-          <div className="absolute right-0 top-0 h-full w-full sm:w-[600px] bg-[#FBF3EA] shadow-2xl flex flex-col">
+          <div className="absolute right-0 top-0 h-full w-full sm:w-[600px] bg-[#FBF9F7] shadow-2xl flex flex-col">
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
               <h2 className="text-xl font-semibold text-gray-900">Edit Record</h2>
               <button
                 onClick={() => setIsJoinFileModalOpen(false)}
-                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-[#FBF3EA] rounded transition-all"
+                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-[#FBF9F7] rounded transition-all"
               >
                 <XCircle className="w-5 h-5" />
               </button>
@@ -914,7 +914,7 @@ export default function ImportsPage() {
                   <input
                     type="text"
                     defaultValue={selectedJoinFile?.id || ''}
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none"
                   />
                 </div>
                 <div>
@@ -922,25 +922,25 @@ export default function ImportsPage() {
                   <input
                     type="text"
                     defaultValue={selectedJoinFile?.displayName || ''}
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Internal Name (DO ...) <span className="text-red-500">*</span></label>
                   <input
                     type="text"
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">SFTP/FTP Source</label>
-                  <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none cursor-pointer bg-[#FBF3EA]">
+                  <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none cursor-pointer bg-[#FBF9F7]">
                     <option>Select...</option>
                   </select>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Source of Join File</label>
-                  <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none cursor-pointer bg-[#FBF3EA]">
+                  <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none cursor-pointer bg-[#FBF9F7]">
                     <option>Select...</option>
                   </select>
                 </div>
@@ -949,19 +949,19 @@ export default function ImportsPage() {
                   <input
                     type="text"
                     defaultValue={selectedJoinFile?.fileName || ''}
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Location of File (If N...) <span className="text-red-500">*</span></label>
                   <input
                     type="text"
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Separator <span className="text-red-500">*</span></label>
-                  <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none cursor-pointer bg-[#FBF3EA]">
+                  <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none cursor-pointer bg-[#FBF9F7]">
                     <option>TAB</option>
                     <option>,</option>
                     <option>PIPE</option>
@@ -972,7 +972,7 @@ export default function ImportsPage() {
                   <label className="block text-sm font-medium text-gray-700 mb-2">Field Mapping) <span className="text-red-500">*</span></label>
                   <textarea
                     rows={4}
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none resize-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none resize-none"
                   />
                 </div>
                 <div>
@@ -980,21 +980,21 @@ export default function ImportsPage() {
                   <input
                     type="text"
                     defaultValue={selectedJoinFile?.joinTableName || ''}
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Schedule Info <span className="text-red-500">*</span></label>
                   <input
                     type="text"
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none"
                   />
                 </div>
                 <div className="space-y-2">
                   <label className="flex items-center gap-2">
                     <input
                       type="checkbox"
-                      className="w-4 h-4 text-[#07011c] border-gray-300 rounded focus:ring-[#07011c]"
+                      className="w-4 h-4 text-[#000000] border-gray-300 rounded focus:ring-[#000000]"
                     />
                     <span className="text-sm text-gray-700">Use Bulk Load</span>
                   </label>
@@ -1002,7 +1002,7 @@ export default function ImportsPage() {
                     <input
                       type="checkbox"
                       defaultChecked={selectedJoinFile?.isActive || false}
-                      className="w-4 h-4 text-[#07011c] border-gray-300 rounded focus:ring-[#07011c]"
+                      className="w-4 h-4 text-[#000000] border-gray-300 rounded focus:ring-[#000000]"
                     />
                     <span className="text-sm text-gray-700">isActive</span>
                   </label>
@@ -1012,13 +1012,13 @@ export default function ImportsPage() {
             <div className="border-t border-gray-200 p-6 flex items-center justify-end gap-3">
               <button
                 onClick={() => setIsJoinFileModalOpen(false)}
-                className="px-6 py-2.5 text-gray-700 border border-gray-300 rounded-lg hover:bg-[#FBF3EA] transition-all font-medium"
+                className="px-6 py-2.5 text-gray-700 border border-gray-300 rounded-lg hover:bg-[#FBF9F7] transition-all font-medium"
               >
                 Cancel
               </button>
               <button
                 onClick={() => setIsJoinFileModalOpen(false)}
-                className="px-6 py-2.5 bg-[#07011c] text-white rounded-lg hover:bg-[#07011c] transition-all font-medium"
+                className="px-6 py-2.5 bg-[#000000] text-white rounded-lg hover:bg-[#000000] transition-all font-medium"
               >
                 Save
               </button>
@@ -1034,14 +1034,14 @@ export default function ImportsPage() {
             className="absolute inset-0 bg-black bg-opacity-50 transition-opacity duration-300 ease-out"
             onClick={closeDrawer}
           ></div>
-          <div className="relative w-full max-w-3xl max-h-[90vh] bg-[#FBF3EA] rounded-lg shadow-2xl flex flex-col animate-scale-in">
+          <div className="relative w-full max-w-3xl max-h-[90vh] bg-[#FBF9F7] rounded-lg shadow-2xl flex flex-col animate-scale-in">
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
               <h2 className="text-xl font-semibold text-gray-900">
                 {selectedConfig ? 'Edit Import Configuration' : 'Add Import Configuration'}
               </h2>
               <button
                 onClick={closeDrawer}
-                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-[#FBF3EA] rounded transition-all duration-200"
+                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-[#FBF9F7] rounded transition-all duration-200"
               >
                 <XCircle className="w-5 h-5" />
               </button>
@@ -1064,7 +1064,7 @@ export default function ImportsPage() {
                       onClick={() => setActiveTab(tab.id as any)}
                       className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-all duration-200 whitespace-nowrap ${
                         activeTab === tab.id
-                          ? 'border-[#07011c] text-[#07011c]'
+                          ? 'border-[#000000] text-[#000000]'
                           : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                       }`}
                     >
@@ -1084,7 +1084,7 @@ export default function ImportsPage() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">Host</label>
                     <input
                       type="text"
-                      className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400"
+                      className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none transition-all duration-200 hover:border-gray-400"
                       placeholder="sftp.example.com"
                     />
                   </div>
@@ -1093,13 +1093,13 @@ export default function ImportsPage() {
                       <label className="block text-sm font-medium text-gray-700 mb-2">Port</label>
                       <input
                         type="number"
-                        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400"
+                        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none transition-all duration-200 hover:border-gray-400"
                         placeholder="22"
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">Auth Type</label>
-                      <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-[#FBF3EA]">
+                      <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-[#FBF9F7]">
                         <option>Password</option>
                         <option>SSH Key</option>
                       </select>
@@ -1109,7 +1109,7 @@ export default function ImportsPage() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">Username</label>
                     <input
                       type="text"
-                      className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400"
+                      className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none transition-all duration-200 hover:border-gray-400"
                       placeholder="username"
                     />
                   </div>
@@ -1117,7 +1117,7 @@ export default function ImportsPage() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">Password / Key</label>
                     <input
                       type="password"
-                      className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400"
+                      className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none transition-all duration-200 hover:border-gray-400"
                       placeholder="••••••••"
                     />
                   </div>
@@ -1127,7 +1127,7 @@ export default function ImportsPage() {
                       <Folder className="w-5 h-5 text-gray-400" />
                       <input
                         type="text"
-                        className="flex-1 px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400"
+                        className="flex-1 px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none transition-all duration-200 hover:border-gray-400"
                         placeholder="/data/imports"
                       />
                     </div>
@@ -1141,7 +1141,7 @@ export default function ImportsPage() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">Filename Pattern</label>
                     <input
                       type="text"
-                      className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400"
+                      className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none transition-all duration-200 hover:border-gray-400"
                       placeholder="sales_*.csv"
                     />
                     <p className="text-xs text-gray-500 mt-1">Use * as wildcard</p>
@@ -1150,7 +1150,7 @@ export default function ImportsPage() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">Allowed Extensions</label>
                     <input
                       type="text"
-                      className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400"
+                      className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none transition-all duration-200 hover:border-gray-400"
                       placeholder="csv, xlsx, json"
                     />
                   </div>
@@ -1159,13 +1159,13 @@ export default function ImportsPage() {
                       <label className="block text-sm font-medium text-gray-700 mb-2">Delimiter</label>
                       <input
                         type="text"
-                        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400"
+                        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none transition-all duration-200 hover:border-gray-400"
                         placeholder=","
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">Encoding</label>
-                      <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-[#FBF3EA]">
+                      <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-[#FBF9F7]">
                         <option>UTF-8</option>
                         <option>ASCII</option>
                         <option>ISO-8859-1</option>
@@ -1174,7 +1174,7 @@ export default function ImportsPage() {
                   </div>
                   <div>
                     <label className="flex items-center gap-2">
-                      <input type="checkbox" className="w-4 h-4 text-[#07011c] border-gray-300 rounded focus:ring-[#07011c]" />
+                      <input type="checkbox" className="w-4 h-4 text-[#000000] border-gray-300 rounded focus:ring-[#000000]" />
                       <span className="text-sm text-gray-700">Has header row</span>
                     </label>
                   </div>
@@ -1187,7 +1187,7 @@ export default function ImportsPage() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">Column Mapping</label>
                     <textarea
                       rows={6}
-                      className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400"
+                      className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none transition-all duration-200 hover:border-gray-400"
                       placeholder="source_column:target_column"
                     />
                   </div>
@@ -1195,13 +1195,13 @@ export default function ImportsPage() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">Mandatory Fields</label>
                     <input
                       type="text"
-                      className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400"
+                      className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none transition-all duration-200 hover:border-gray-400"
                       placeholder="id, name, email"
                     />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Duplicate Handling</label>
-                    <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-[#FBF3EA]">
+                    <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-[#FBF9F7]">
                       <option>Skip duplicates</option>
                       <option>Update existing</option>
                       <option>Create new record</option>
@@ -1214,7 +1214,7 @@ export default function ImportsPage() {
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Frequency</label>
-                    <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-[#FBF3EA]">
+                    <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-[#FBF9F7]">
                       <option>Daily</option>
                       <option>Hourly</option>
                       <option>Weekly</option>
@@ -1226,12 +1226,12 @@ export default function ImportsPage() {
                       <label className="block text-sm font-medium text-gray-700 mb-2">Time</label>
                       <input
                         type="time"
-                        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400"
+                        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none transition-all duration-200 hover:border-gray-400"
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">Timezone</label>
-                      <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-[#FBF3EA]">
+                      <select className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none transition-all duration-200 hover:border-gray-400 cursor-pointer bg-[#FBF9F7]">
                         <option>UTC</option>
                         <option>America/New_York</option>
                         <option>America/Chicago</option>
@@ -1243,7 +1243,7 @@ export default function ImportsPage() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">Cutoff Time</label>
                     <input
                       type="time"
-                      className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400"
+                      className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none transition-all duration-200 hover:border-gray-400"
                       placeholder="Optional"
                     />
                   </div>
@@ -1254,23 +1254,23 @@ export default function ImportsPage() {
                 <div className="space-y-4">
                   <div>
                     <label className="flex items-center gap-2 mb-4">
-                      <input type="checkbox" className="w-4 h-4 text-[#07011c] border-gray-300 rounded focus:ring-[#07011c]" />
+                      <input type="checkbox" className="w-4 h-4 text-[#000000] border-gray-300 rounded focus:ring-[#000000]" />
                       <span className="text-sm font-medium text-gray-700">Email on Success</span>
                     </label>
                     <input
                       type="email"
-                      className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400"
+                      className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none transition-all duration-200 hover:border-gray-400"
                       placeholder="email@example.com"
                     />
                   </div>
                   <div>
                     <label className="flex items-center gap-2 mb-4">
-                      <input type="checkbox" defaultChecked className="w-4 h-4 text-[#07011c] border-gray-300 rounded focus:ring-[#07011c]" />
+                      <input type="checkbox" defaultChecked className="w-4 h-4 text-[#000000] border-gray-300 rounded focus:ring-[#000000]" />
                       <span className="text-sm font-medium text-gray-700">Email on Failure</span>
                     </label>
                     <input
                       type="email"
-                      className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#07011c] focus:border-[#07011c] outline-none transition-all duration-200 hover:border-gray-400"
+                      className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#000000] focus:border-[#000000] outline-none transition-all duration-200 hover:border-gray-400"
                       placeholder="email@example.com"
                     />
                   </div>
@@ -1282,13 +1282,13 @@ export default function ImportsPage() {
             <div className="border-t border-gray-200 p-6 flex items-center justify-end gap-3">
               <button
                 onClick={closeDrawer}
-                className="px-6 py-2.5 text-gray-700 border border-gray-300 rounded-lg hover:bg-[#FBF3EA] hover:border-gray-400 active:bg-[#FBF3EA] transition-all duration-200 font-medium"
+                className="px-6 py-2.5 text-gray-700 border border-gray-300 rounded-lg hover:bg-[#FBF9F7] hover:border-gray-400 active:bg-[#FBF9F7] transition-all duration-200 font-medium"
               >
                 Cancel
               </button>
               <button
                 onClick={closeDrawer}
-                className="px-6 py-2.5 bg-[#07011c] text-white rounded-lg hover:bg-[#07011c] active:bg-[#07011c] transition-all duration-200 shadow-sm hover:shadow-md font-medium"
+                className="px-6 py-2.5 bg-[#000000] text-white rounded-lg hover:bg-[#000000] active:bg-[#000000] transition-all duration-200 shadow-sm hover:shadow-md font-medium"
               >
                 Save Configuration
               </button>
