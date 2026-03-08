@@ -106,9 +106,11 @@ export default function OnboardingPage() {
 
         {/* Main Body */}
         <main className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-8">
-          <div className="w-full max-w-3xl mx-auto space-y-8">
-            {/* Centered Content */}
-            <div className="space-y-8">
+          <div className="w-full max-w-7xl mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              {/* Left Column - Main Content (Centered) */}
+              <div className="lg:col-span-2 flex justify-center">
+                <div className="w-full max-w-2xl space-y-8">
               {/* Step 1: Company Profile */}
               {currentStep === 1 && (
                 <section className="bg-[#FBF3EA] rounded-lg shadow-sm border border-gray-300 p-6 hover:shadow-md transition-shadow duration-200">
@@ -310,59 +312,61 @@ export default function OnboardingPage() {
                   </div>
                 </section>
               )}
-            </div>
-
-            {/* Checklist - Below the form */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-              {/* Onboarding Checklist */}
-              <div className="bg-[#FBF3EA] rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">Onboarding Checklist</h2>
-                <div className="space-y-3">
-                  {checklistItems.map((item) => (
-                    <div key={item.id} className="flex items-center gap-3 p-2 rounded-lg transition-colors duration-200 cursor-default group">
-                      {item.completed ? (
-                        <CheckCircle2 className="w-5 h-5 text-[#07011c] flex-shrink-0 group-hover:scale-110 transition-transform duration-200" />
-                      ) : (
-                        <Circle className="w-5 h-5 text-gray-300 flex-shrink-0 group-hover:text-[#3d2470] transition-colors duration-200" />
-                      )}
-                      <span className={`text-sm flex-1 ${item.completed ? 'text-gray-900 line-through' : 'text-gray-700'}`}>
-                        {item.label}
-                      </span>
-                    </div>
-                  ))}
                 </div>
               </div>
 
-              {/* What You'll Need Panel */}
-              <div className="bg-gradient-to-br from-[#1a0d3d] to-[#1a0d3d] rounded-lg border border-[#2d1a5c] p-6 hover:from-[#1a0d3d] hover:to-[#07011c]-200 hover:shadow-md transition-all duration-200 text-white">
-                <h2 className="text-lg font-semibold text-white mb-4">What You&apos;ll Need</h2>
-                <div className="space-y-4">
-                  <div className="flex items-start gap-3 p-2 rounded-lg hover:bg-[#FBF3EA]/50 transition-colors duration-200 group">
-                    <Server className="w-5 h-5 text-white mt-0.5 flex-shrink-0 group-hover:scale-110 transition-transform duration-200" />
-                    <div>
-                      <p className="text-sm font-medium text-white">SFTP Details</p>
-                      <p className="text-xs text-gray-100">Host, username, password, and port information</p>
-                    </div>
+              {/* Right Column - Checklist / Summary */}
+              <div className="lg:col-span-1 space-y-6">
+                {/* Onboarding Checklist */}
+                <div className="bg-[#FBF3EA] rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200">
+                  <h2 className="text-lg font-semibold text-gray-900 mb-4">Onboarding Checklist</h2>
+                  <div className="space-y-3">
+                    {checklistItems.map((item) => (
+                      <div key={item.id} className="flex items-center gap-3 p-2 rounded-lg transition-colors duration-200 cursor-default group">
+                        {item.completed ? (
+                          <CheckCircle2 className="w-5 h-5 text-[#07011c] flex-shrink-0 group-hover:scale-110 transition-transform duration-200" />
+                        ) : (
+                          <Circle className="w-5 h-5 text-gray-300 flex-shrink-0 group-hover:text-[#3d2470] transition-colors duration-200" />
+                        )}
+                        <span className={`text-sm flex-1 ${item.completed ? 'text-gray-900 line-through' : 'text-gray-700'}`}>
+                          {item.label}
+                        </span>
+                      </div>
+                    ))}
                   </div>
-                  <div className="flex items-start gap-3 p-2 rounded-lg hover:bg-[#FBF3EA]/50 transition-colors duration-200 group">
-                    <FileText className="w-5 h-5 text-white mt-0.5 flex-shrink-0 group-hover:scale-110 transition-transform duration-200" />
-                    <div>
-                      <p className="text-sm font-medium text-white">Sample Import File</p>
-                      <p className="text-xs text-gray-100">Example file showing expected format and structure</p>
+                </div>
+
+                {/* What You'll Need Panel */}
+                <div className="bg-gradient-to-br from-[#1a0d3d] to-[#1a0d3d] rounded-lg border border-[#2d1a5c] p-6 hover:from-[#1a0d3d] hover:to-[#07011c]-200 hover:shadow-md transition-all duration-200 text-white">
+                  <h2 className="text-lg font-semibold text-white mb-4">What You&apos;ll Need</h2>
+                  <div className="space-y-4">
+                    <div className="flex items-start gap-3 p-2 rounded-lg hover:bg-[#FBF3EA]/50 transition-colors duration-200 group">
+                      <Server className="w-5 h-5 text-white mt-0.5 flex-shrink-0 group-hover:scale-110 transition-transform duration-200" />
+                      <div>
+                        <p className="text-sm font-medium text-white">SFTP Details</p>
+                        <p className="text-xs text-gray-100">Host, username, password, and port information</p>
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex items-start gap-3 p-2 rounded-lg hover:bg-[#FBF3EA]/50 transition-colors duration-200 group">
-                    <Download className="w-5 h-5 text-white mt-0.5 flex-shrink-0 group-hover:scale-110 transition-transform duration-200" />
-                    <div>
-                      <p className="text-sm font-medium text-white">Export Destination Credentials</p>
-                      <p className="text-xs text-gray-100">Access details for where exports will be delivered</p>
+                    <div className="flex items-start gap-3 p-2 rounded-lg hover:bg-[#FBF3EA]/50 transition-colors duration-200 group">
+                      <FileText className="w-5 h-5 text-white mt-0.5 flex-shrink-0 group-hover:scale-110 transition-transform duration-200" />
+                      <div>
+                        <p className="text-sm font-medium text-white">Sample Import File</p>
+                        <p className="text-xs text-gray-100">Example file showing expected format and structure</p>
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex items-start gap-3 p-2 rounded-lg hover:bg-[#FBF3EA]/50 transition-colors duration-200 group">
-                    <FileCode className="w-5 h-5 text-white mt-0.5 flex-shrink-0 group-hover:scale-110 transition-transform duration-200" />
-                    <div>
-                      <p className="text-sm font-medium text-white">Format Specs</p>
-                      <p className="text-xs text-gray-100">CSV/JSON/XML schema and field definitions</p>
+                    <div className="flex items-start gap-3 p-2 rounded-lg hover:bg-[#FBF3EA]/50 transition-colors duration-200 group">
+                      <Download className="w-5 h-5 text-white mt-0.5 flex-shrink-0 group-hover:scale-110 transition-transform duration-200" />
+                      <div>
+                        <p className="text-sm font-medium text-white">Export Destination Credentials</p>
+                        <p className="text-xs text-gray-100">Access details for where exports will be delivered</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3 p-2 rounded-lg hover:bg-[#FBF3EA]/50 transition-colors duration-200 group">
+                      <FileCode className="w-5 h-5 text-white mt-0.5 flex-shrink-0 group-hover:scale-110 transition-transform duration-200" />
+                      <div>
+                        <p className="text-sm font-medium text-white">Format Specs</p>
+                        <p className="text-xs text-gray-100">CSV/JSON/XML schema and field definitions</p>
+                      </div>
                     </div>
                   </div>
                 </div>
